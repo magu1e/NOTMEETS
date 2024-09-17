@@ -1,0 +1,51 @@
+@import "../../node_modules/bootstrap/scss//functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+//Reemplaza colores originarios de bs
+$customColors : (
+  "primary": #5471CF,
+);
+$theme-colors: map-merge($theme-colors, $customColors);
+
+//Colors
+$primary: #5471CF;
+$background: #17181E;
+$surface: #1B1C25;
+$accent: #404cf7;
+$misc: #4a5392;
+
+//General
+$body-bg: $background;
+$body-color: $white;
+
+$xs: map-get($grid-breakpoints, xs);
+$sm: map-get($grid-breakpoints, sm);
+$md: map-get($grid-breakpoints, md);
+$lg: map-get($grid-breakpoints, lg);
+$xl: map-get($grid-breakpoints, xl);
+
+//Borders
+$border-color: $misc;
+
+//Text
+$font-family-sans-serif: 'Inter', sans-serif;
+$font-family-base: $font-family-sans-serif;
+$h1-font-size: $font-size-base * 2;
+$h2-font-size: $font-size-base * 1.80;
+$h3-font-size: $font-size-base * 1.60;
+$h4-font-size: $font-size-base * 1.40;
+$h5-font-size: $font-size-base * 1.20;
+$h6-font-size: $font-size-base;
+$link-color: $accent;
+$link-hover-color: shift-color($link-color, $link-shade-percentage);
+
+//Cards
+$card-spacer-y: 3rem;
+$card-spacer-x: 2rem;
+$card-bg: $surface;
+$card-border-color: $misc;
+$card-border-radius: $border-radius-xl;
+
+//Inputs
+$input-focus-box-shadow: 0 $focus-ring-blur $focus-ring-width $primary;
+$input-focus-border-color: $accent;

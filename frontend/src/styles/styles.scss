@@ -1,0 +1,119 @@
+// CUSTOM VARIABLES
+@import "./custom-variables.scss";
+// BOOTSTRAP 5
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+//FONTS
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+//ICONS
+@import url("https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined");
+
+//STYLES
+//Utility
+.h-100vh {
+  height: 100vh;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body, 
+.content {
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+//Text
+.material-sm {
+  font-size: 16px;
+}
+
+//Components
+.form-floating {
+  label {
+    color: $secondary;
+  }
+}
+
+.btn {
+  border-radius: $border-radius-pill !important;
+  padding: map-get($spacers, 2) map-get($spacers, 4);
+}
+
+//Custom
+@mixin brand-text {
+  overflow-y: hidden;
+  &::after,
+  &::before {
+    position: fixed;
+    bottom: -22%;
+    font-family: $font-family-base;
+    font-size: 20rem;
+    font-weight: bolder;
+    transform: rotate(-90deg);
+    transform-origin: top left;
+    line-height: 0.6;
+  }
+}
+
+//Login
+.brand-text {
+  @include brand-text;
+  &::before {
+    content: "NOT";
+    color: $white;
+    left: 0;
+  }
+  &::after {
+    content: "MEETS";
+    color: $primary;
+    left: 14.5rem;
+  }
+}
+
+#auth {
+  width: 100vw;
+  height: 100vh;
+  background-color: #1d203d;
+  background-image: linear-gradient(90deg, #1f2138 0%, #14151a 80%);
+  .card {
+    position: fixed;
+    z-index: $zindex-fixed;
+    transition: 0.2s ease;
+    width: 450px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+      rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+      rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px !important;
+    @media (min-width: $md) {
+      right: 25%;
+    }
+    @media (max-width: $md) {
+      width: 90%;
+      left: 50%;
+      translate: -50%;
+    }
+  }
+  #login {
+    opacity: 0.4;
+    top: 0;
+    transform: translateY(-100%) !important;
+    &.show {
+      opacity: 1;
+      top: 50%;
+      transform: translateY(-50%) !important;
+    }
+  }
+  #register {
+    opacity: 0.4;
+    bottom: 0;
+    transform: translateY(100%) !important;
+    &.show {
+      opacity: 1;
+      bottom: 50%;
+      transform: translateY(50%) !important;
+    }
+  }
+}
+
