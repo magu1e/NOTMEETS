@@ -1,0 +1,46 @@
+# Archivos de configuración de usuario
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de compilación
+bin/
+obj/
+
+# Archivos de caché
+*.cache
+*.log
+*.tmp
+*.pid
+
+# Configuración del entorno de desarrollo
+.vscode/
+.idea/
+
+# Archivos de Entity Framework
+*.db
+*.sqlite
+*.sdf
+*.mdf
+*.ldf
+
+# Archivos generados por Visual Studio
+*.suo
+*.user
+*.userosscache
+*.ncb
+*.suo
+
+# Configuración del entorno de ASP.NET Core
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+
+# Otros archivos generados
+*.pdb
+*.dll
+*.exe
+
+# Archivos de dependencias locales
+packages/
