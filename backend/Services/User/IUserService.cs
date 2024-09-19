@@ -1,10 +1,9 @@
 ﻿using backend.DTOs.User;
-
-namespace backend.Services
+namespace backend.Services.User
 {
     public interface IUserService
     {
-        //Firmas de los metodos de las peticiones del controller
+        //Firmas de los metodos con logica del UserService
         bool UserAuth(AuthUserDTO userDto); //Login usuario
         void AddUser(AddUserDTO userDto); //Registro usuario
         void UpdateUser(GetUserDTO userDto); //Modificaicon usuario

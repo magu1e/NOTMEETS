@@ -13,5 +13,15 @@
 
         //public List<Notification> Notifications { get; set; }
 
+        public User (int id, string username, string password, string email, string location, string role) 
+        {
+            Id = id;
+            Username = username;
+            Password = password;
+            Email = email;
+            Location = location;
+            Role = role;
+        }
+
     }
 }

@@ -1,10 +1,10 @@
 ﻿using backend.DTOs.User;
 
-namespace backend.Repositories
+namespace backend.Repositories.User
 {
     public interface IUserRepository
     {
-        //Firmas de los metodos de las peticiones del controller
+        //Firmas de los metodos de consulta del UserRepository
         bool UserAuth(AuthUserDTO userDto); //Auth usuario
         void AddUser(AddUserDTO userDto); //Registro usuario
         void UpdateUser(GetUserDTO userDto); //Modificaicon usuario

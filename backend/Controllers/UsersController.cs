@@ -1,5 +1,5 @@
 ﻿using backend.DTOs.User;
-using backend.Services;
+using backend.Services.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -56,14 +56,14 @@ namespace backend.Controllers
             }
         }
 
-        //hasta aca
+
 
         [HttpPut("update")]
         public IActionResult Update([FromBody] GetUserDTO userDto)
         {
             if (userDto == null)
             {
-                return BadRequest("Invalid user data.");
+                return BadRequest("Datos de usuario inválidos.");
             }
 
             try

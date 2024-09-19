@@ -1,8 +1,7 @@
 ﻿using backend.Data;
-using backend.Models;
 using backend.DTOs.User;
 
-namespace backend.Repositories
+namespace backend.Repositories.User
 {
     public class UserRepository : IUserRepository
     {
@@ -44,7 +43,7 @@ namespace backend.Repositories
             var user = _context.Users.Find(userDto.Id);
             if (user != null)
             {
-                user.Username = (userDto.Username);
+                user.Username = userDto.Username;
                 user.Email = userDto.Email;
                 user.Location = userDto.Location;
                 user.Role = userDto.Role;

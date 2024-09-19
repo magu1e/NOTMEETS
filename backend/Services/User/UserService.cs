@@ -1,7 +1,7 @@
 ﻿using backend.DTOs.User;
-using backend.Repositories;
+using backend.Repositories.User;
 
-namespace backend.Services
+namespace backend.Services.User
 {
     public class UserService : IUserService
     {
