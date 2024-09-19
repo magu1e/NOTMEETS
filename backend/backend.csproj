@@ -19,6 +19,7 @@
   <ItemGroup>
     <Folder Include="Mappings\" />
     <Folder Include="Middlewares\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

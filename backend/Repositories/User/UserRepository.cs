@@ -1,5 +1,9 @@
 ﻿using backend.Data;
 using backend.DTOs.User;
+using System.Data;
+
+//Renombra para evitar conflictos con el 'User' del namespace
+using UserClass = backend.Models.User;
 
 namespace backend.Repositories.User
 {
@@ -11,6 +15,7 @@ namespace backend.Repositories.User
         public UserRepository(ApiContext context)
         {
             _context = context;
+
         }
 
 
@@ -23,22 +28,24 @@ namespace backend.Repositories.User
 
 
 
-        public void AddUser(AddUserDTO userDto)
+        public UserClass AddUser(AddUserDTO userDto)
         {
-            var user = new User
-            {
-                Username = userDto.Username,
-                Password = userDto.Password,
-                Email = userDto.Email,
-                Location = userDto.Location,
-            };
+            var user = new UserClass
+             (
+                username: userDto.Username,
+                password: userDto.Password,
+                email: userDto.Email,
+                location: userDto.Location,
+                role: userDto.Role
+            );
             _context.Users.Add(user);
             _context.SaveChanges();
+            return user;
         }
 
 
 
-        public void UpdateUser(GetUserDTO userDto)
+        public UserClass? UpdateUser(GetUserDTO userDto)
         {
             var user = _context.Users.Find(userDto.Id);
             if (user != null)
@@ -48,11 +55,14 @@ namespace backend.Repositories.User
                 user.Location = userDto.Location;
                 user.Role = userDto.Role;
                 _context.SaveChanges();
+                return user;
             }
+            return null;
         }
 
 
-        public void DeleteUser(int id)
+
+        public bool DeleteUser(int id)
         {
             var user = _context.Users.Find(id);
             if (user != null)
@@ -60,37 +70,22 @@ namespace backend.Repositories.User
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
+            return true;
         }
 
 
 
         public IEnumerable<GetUserDTO> GetAllUsers()
         {
-            return _context.Users.Select(u => new GetUserDTO
-            {
-                Id = u.Id,
-                Username = u.Username,
-                Email = u.Email,
-                Location = u.Location,
-                Role = u.Role,
-            }).ToList();
+            return _context.Users.Select(u => new GetUserDTO(u)).ToList();
         }
-
-
 
         public GetUserDTO? GetUserById(int id)
         {
             var user = _context.Users.Find(id);
             if (user != null)
             {
-                return new GetUserDTO
-                {
-                    Id = user.Id,
-                    Username = user.Username,
-                    Email = user.Email,
-                    Location = user.Location,
-                    Role = user.Role,
-                };
+                return new GetUserDTO(user);
             }
             return null;
         }
@@ -102,14 +97,11 @@ namespace backend.Repositories.User
             var user = _context.Users.Find(id);
             if (user != null)
             {
-                return new GetUserRoleDTO
-                {
-                    Id = user.Id,
-                    Role = user.Role
-                };
+                return new GetUserRoleDTO(user.Username, user.Role);
+
             }
             return null;
         }
     }
-}
 
+ }

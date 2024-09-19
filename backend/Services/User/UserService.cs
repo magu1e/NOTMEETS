@@ -1,5 +1,7 @@
 ﻿using backend.DTOs.User;
 using backend.Repositories.User;
+//Renombra para evitar conflictos con el 'User' del namespace
+using UserClass = backend.Models.User;
 
 namespace backend.Services.User
 {
@@ -17,41 +19,48 @@ namespace backend.Services.User
             return _userRepository.UserAuth(userDto);
         }
 
-        public void AddUser(AddUserDTO userDto)
+
+
+        public UserClass AddUser(AddUserDTO userDto)
         {
-            // Valida los datos del registro
+            // Valida los datos del registro y de no existir lanza excepcion y sale 
             if (string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.Email))
             {
                 throw new ArgumentException("Faltan completar campos.");
             }
-            _userRepository.AddUser(userDto);
+            UserClass userAdded = _userRepository.AddUser(userDto);
+            return userAdded;
         }
 
-        public void UpdateUser(GetUserDTO userDto)
+
+
+        public UserClass? UpdateUser(GetUserDTO userDto)
         {
-            // Valida que exista el usuario
+            // Valida que exista el usuario y de no existir lanza excepcion y sale 
             var user = _userRepository.GetUserById(userDto.Id);
             if (user == null)
             {
                 throw new KeyNotFoundException("No se ha encontrado el usuario.");
             }
-            _userRepository.UpdateUser(userDto);
+            UserClass? userUpdated = _userRepository.UpdateUser(userDto);
+            return userUpdated;
         }
 
-        public void DeleteUser(int id)
+
+
+        public bool DeleteUser(int id)
         {
+            // Valida que exista el usuario y de no existir lanza excepcion y sale 
             var user = _userRepository.GetUserById(id);
             if (user == null)
             {
                 throw new KeyNotFoundException("No se ha encontrado el usuario.");
             }
-            _userRepository.DeleteUser(id);
+            bool userDeleted = _userRepository.DeleteUser(id);
+            return userDeleted;
         }
 
-        public IEnumerable<GetUserDTO> GetAllUsers()
-        {
-            return _userRepository.GetAllUsers();
-        }
+
 
         public GetUserDTO GetUserById(int id)
         {
@@ -63,6 +72,12 @@ namespace backend.Services.User
             return user;
         }
 
+
+
+        public IEnumerable<GetUserDTO> GetAllUsers()
+        {
+            return _userRepository.GetAllUsers();
+        }
         public GetUserRoleDTO GetUserRole(int id)
         {
             var userRole = _userRepository.GetUserRole(id);

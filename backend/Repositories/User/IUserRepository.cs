@@ -1,4 +1,6 @@
 ﻿using backend.DTOs.User;
+//Renombra para evitar conflictos con el 'User' del namespace
+using UserClass = backend.Models.User;
 
 namespace backend.Repositories.User
 {
@@ -6,9 +8,9 @@ namespace backend.Repositories.User
     {
         //Firmas de los metodos de consulta del UserRepository
         bool UserAuth(AuthUserDTO userDto); //Auth usuario
-        void AddUser(AddUserDTO userDto); //Registro usuario
-        void UpdateUser(GetUserDTO userDto); //Modificaicon usuario
-        void DeleteUser(int id); //Borrado usuario
+        UserClass AddUser(AddUserDTO userDto); //Registro usuario
+        UserClass? UpdateUser(GetUserDTO userDto); //Modificaicon usuario
+        bool DeleteUser(int id); //Borrado usuario
         IEnumerable<GetUserDTO> GetAllUsers(); //Obtener todos los usuarios
         GetUserDTO? GetUserById(int id); //Obtener un usuario 
         GetUserRoleDTO? GetUserRole(int id); //Obtener rol del usuario

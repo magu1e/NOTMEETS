@@ -31,7 +31,7 @@ namespace backend.Controllers
             }
             else
             {
-                return Unauthorized("Ha fallado la autenticación");
+                return Unauthorized("No existe el usuario o los datos incorrectos.");
             }
         }
 
@@ -47,8 +47,8 @@ namespace backend.Controllers
 
             try
             {
-                _userService.AddUser(userDto);
-                return CreatedAtAction(nameof(GetUserById), new { id = userDto.Id }, userDto);
+                _userService.AddUser(userDto);              
+                return CreatedAtAction(nameof(GetUserById), new { id = userDto.Id }, userDto); // Indica que la operacion fue exitosa y devuelve el usuario creado
             }
             catch (ArgumentException ex)
             {
@@ -69,7 +69,7 @@ namespace backend.Controllers
             try
             {
                 _userService.UpdateUser(userDto);
-                return NoContent(); // No content to return after successful update
+                return NoContent(); // Indica que la operacion fue exitosa pero no devuelve nada
             }
             catch (KeyNotFoundException ex)
             {
@@ -85,7 +85,7 @@ namespace backend.Controllers
             try
             {
                 _userService.DeleteUser(id);
-                return NoContent(); // No content to return after successful deletion
+                return NoContent();
             }
             catch (KeyNotFoundException ex)
             {

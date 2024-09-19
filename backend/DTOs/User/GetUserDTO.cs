@@ -1,4 +1,7 @@
-﻿namespace backend.DTOs.User
+﻿using System.Data;
+using UserClass = backend.Models.User;
+
+namespace backend.DTOs.User
 {
     public class GetUserDTO
     {
@@ -9,6 +12,12 @@
         public string Role { get; set; }
 
         //public List<Reservation> Reservations { get; set; }
-
+        public GetUserDTO(UserClass user)
+        {
+            Username = user.Username;
+            Email = user.Email;
+            Location = user.Location;
+            Role = user.Role;
+        }
     }
 }
