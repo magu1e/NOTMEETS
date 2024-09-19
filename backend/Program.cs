@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using Microsoft.Extensions.Configuration;
+using backend.Repositories.User;
+using backend.Services.User; 
 
 namespace backend
 {
@@ -17,9 +19,14 @@ namespace backend
             builder.Services.AddDbContext<ApiContext>(opciones =>
                 opciones.UseSqlServer(builder.Configuration.GetConnectionString("BackendDb")));
 
-
-
+            //Inyecta services
+            builder.Services.AddScoped<IUserService, UserService>();
+            //Inyecta repositories
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            //Inyecta controllers
             builder.Services.AddControllers();
+
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -36,7 +43,6 @@ namespace backend
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
