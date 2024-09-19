@@ -17,6 +17,8 @@ obj/
 # Configuración del entorno de desarrollo
 .vscode/
 .idea/
+.vs/
+obj/
 
 # Archivos de Entity Framework
 *.db
