@@ -2,13 +2,14 @@
 {
     public class GetUserRoleDTO
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public string Username { get; set; }
         public string Role { get; set; }
 
 
-        public GetUserRoleDTO(string username, string role)
+        public GetUserRoleDTO(int id, string username, string role)
         {
+            Id = id;
             Username = username;
             Role = role;
         }

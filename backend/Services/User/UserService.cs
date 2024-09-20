@@ -1,5 +1,8 @@
-﻿using backend.DTOs.User;
+﻿using backend.Data;
+using backend.DTOs.User;
 using backend.Repositories.User;
+using Microsoft.EntityFrameworkCore;
+
 //Renombra para evitar conflictos con el 'User' del namespace
 using UserClass = backend.Models.User;
 
@@ -8,10 +11,12 @@ namespace backend.Services.User
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ApiContext _context;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, ApiContext context)
         {
             _userRepository = userRepository;
+            _context = context;
         }
 
         public bool UserAuth(AuthUserDTO userDto)
@@ -23,28 +28,46 @@ namespace backend.Services.User
 
         public UserClass AddUser(AddUserDTO userDto)
         {
-            // Valida los datos del registro y de no existir lanza excepcion y sale 
-            if (string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.Email))
+            // Valida que los campos esten completos y que no sean null
+            bool invalidFields = string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.Location);
+            // Busca en la base si el username ya existe
+            bool userAlreadyExists = _context.Users.Any(u => u.Username == userDto.Username);
+            if (invalidFields || userAlreadyExists)
             {
-                throw new ArgumentException("Faltan completar campos.");
+                if (invalidFields)
+                {
+                    throw new ArgumentException("Faltan completar campos.");
+                }
+                else
+                {
+                    throw new ArgumentException("El nombre de usuario ya existe.");
+                }
             }
             UserClass userAdded = _userRepository.AddUser(userDto);
             return userAdded;
         }
 
 
-
-        public UserClass? UpdateUser(GetUserDTO userDto)
-        {
-            // Valida que exista el usuario y de no existir lanza excepcion y sale 
-            var user = _userRepository.GetUserById(userDto.Id);
-            if (user == null)
-            {
-                throw new KeyNotFoundException("No se ha encontrado el usuario.");
-            }
-            UserClass? userUpdated = _userRepository.UpdateUser(userDto);
-            return userUpdated;
-        }
+        //TODO -> fixear
+        //public UserClass? UpdateUser(GetUserDTO userDto)
+        //{
+        //    var user = _userRepository.GetUserById(userDto.Id);
+        //    var newUsernameAlreadyExists = _context.Users.Any(u => u.Username == userDto.Username);
+        //    // Valida que exista y que no mande un nombre ya en uso
+        //    if (user == null || newUsernameAlreadyExists)
+        //    {
+        //        if (user == null)
+        //        {
+        //            throw new KeyNotFoundException("No se ha encontrado el usuario.");
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentException("Ya existe ese nombre de usuario.");
+        //        }
+        //    }
+        //    UserClass? userUpdated = _userRepository.UpdateUser(user);
+        //    return userUpdated;
+        //}
 
 
 
@@ -76,16 +99,23 @@ namespace backend.Services.User
 
         public IEnumerable<GetUserDTO> GetAllUsers()
         {
-            return _userRepository.GetAllUsers();
+            var users = _userRepository.GetAllUsers();
+            if (users.Count() == 0) 
+            {
+                throw new KeyNotFoundException("No hay usuarios cargados.");
+            }
+            return users;
         }
+
+
         public GetUserRoleDTO GetUserRole(int id)
         {
-            var userRole = _userRepository.GetUserRole(id);
-            if (userRole == null)
+            var user = _userRepository.GetUserRole(id);
+            if (user == null)
             {
                 throw new KeyNotFoundException("No se ha encontrado el usuario.");
             }
-            return userRole;
+            return user;
         }
     }
 }

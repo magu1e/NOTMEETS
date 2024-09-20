@@ -44,21 +44,22 @@ namespace backend.Repositories.User
         }
 
 
+        //TODO -> fixear
+        //public UserClass? UpdateUser(GetUserDTO userDto)
+        //{
+        //    var user = _context.Users.Find(userDto.Id);
+        //    if (user == null)
+        //    {
+        //        return null;
+        //    }
+        //    user.Username = userDto.Username;
+        //    user.Email = userDto.Email;
+        //    user.Location = userDto.Location;
+        //    user.Role = userDto.Role;
+        //    _context.SaveChanges();
+        //    return user;
 
-        public UserClass? UpdateUser(GetUserDTO userDto)
-        {
-            var user = _context.Users.Find(userDto.Id);
-            if (user != null)
-            {
-                user.Username = userDto.Username;
-                user.Email = userDto.Email;
-                user.Location = userDto.Location;
-                user.Role = userDto.Role;
-                _context.SaveChanges();
-                return user;
-            }
-            return null;
-        }
+        //}
 
 
 
@@ -80,6 +81,8 @@ namespace backend.Repositories.User
             return _context.Users.Select(u => new GetUserDTO(u)).ToList();
         }
 
+
+
         public GetUserDTO? GetUserById(int id)
         {
             var user = _context.Users.Find(id);
@@ -97,7 +100,7 @@ namespace backend.Repositories.User
             var user = _context.Users.Find(id);
             if (user != null)
             {
-                return new GetUserRoleDTO(user.Username, user.Role);
+                return new GetUserRoleDTO(user.Id, user.Username, user.Role);
 
             }
             return null;

@@ -1,6 +1,7 @@
 ﻿using backend.DTOs.User;
 using backend.Services.User;
 using Microsoft.AspNetCore.Mvc;
+using UserClass = backend.Models.User;
 
 namespace backend.Controllers
 {
@@ -47,8 +48,8 @@ namespace backend.Controllers
 
             try
             {
-                _userService.AddUser(userDto);              
-                return CreatedAtAction(nameof(GetUserById), new { id = userDto.Id }, userDto); // Indica que la operacion fue exitosa y devuelve el usuario creado
+                UserClass user = _userService.AddUser(userDto);              
+                return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user); // Indica que la operacion fue exitosa y devuelve el usuario creado
             }
             catch (ArgumentException ex)
             {
@@ -57,25 +58,25 @@ namespace backend.Controllers
         }
 
 
+        //TODO -> fixear
+        //[HttpPut("update")]
+        //public IActionResult Update([FromBody] GetUserDTO userDto)
+        //{
+        //    if (userDto == null)
+        //    {
+        //        return BadRequest("Datos de usuario inválidos.");
+        //    }
 
-        [HttpPut("update")]
-        public IActionResult Update([FromBody] GetUserDTO userDto)
-        {
-            if (userDto == null)
-            {
-                return BadRequest("Datos de usuario inválidos.");
-            }
-
-            try
-            {
-                _userService.UpdateUser(userDto);
-                return NoContent(); // Indica que la operacion fue exitosa pero no devuelve nada
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+        //    try
+        //    {
+        //        _userService.UpdateUser(userDto);
+        //        return NoContent(); // Indica que la operacion fue exitosa pero no devuelve nada
+        //    }
+        //    catch (KeyNotFoundException ex)
+        //    {
+        //        return NotFound(ex.Message);
+        //    }
+        //}
 
 
 
@@ -85,7 +86,7 @@ namespace backend.Controllers
             try
             {
                 _userService.DeleteUser(id);
-                return NoContent();
+                return Ok("Usuario eliminado");
             }
             catch (KeyNotFoundException ex)
             {
@@ -98,8 +99,16 @@ namespace backend.Controllers
         [HttpGet("all")]
         public IActionResult GetAllUsers()
         {
-            var users = _userService.GetAllUsers();
-            return Ok(users);
+            try
+            {
+                var users = _userService.GetAllUsers();
+                return Ok(users);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+       
         }
 
 

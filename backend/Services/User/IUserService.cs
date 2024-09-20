@@ -9,7 +9,8 @@ namespace backend.Services.User
         //Firmas de los metodos con logica del UserService
         bool UserAuth(AuthUserDTO userDto); //Login usuario
         UserClass AddUser(AddUserDTO userDto); //Registro usuario
-        UserClass? UpdateUser(GetUserDTO userDto); //Modificaicon usuario
+        //TODO -> fixear
+        //UserClass? UpdateUser(GetUserDTO userDto); //Modificaicon usuario
         bool DeleteUser(int id); //Borrado usuario
         IEnumerable<GetUserDTO> GetAllUsers(); //Obtener todos los usuarios
         GetUserDTO? GetUserById(int id); //Obtener un usuario
