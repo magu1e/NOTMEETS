@@ -2,31 +2,40 @@ using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using Microsoft.Extensions.Configuration;
 using backend.Repositories.User;
-using backend.Services.User; 
+using backend.Services.User;
 
 namespace backend
 {
     public class Program
     {
-
-
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
-            //Acceso y direccion de la base de datos
+            // Acceso y direcci�n de la base de datos
             builder.Services.AddDbContext<ApiContext>(opciones =>
                 opciones.UseSqlServer(builder.Configuration.GetConnectionString("BackendDb")));
 
-            //Inyecta services
+            // Inyecta services
             builder.Services.AddScoped<IUserService, UserService>();
-            //Inyecta repositories
+            // Inyecta repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            //Inyecta controllers
+            // Inyecta controllers
             builder.Services.AddControllers();
 
-            
+            // Agregar CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -41,6 +50,9 @@ namespace backend
             }
 
             app.UseHttpsRedirection();
+
+            // Usar CORS
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 
