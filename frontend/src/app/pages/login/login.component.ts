@@ -1,33 +1,34 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, of, throwError } from 'rxjs';
+import { catchError, of } from 'rxjs';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 
+
+
 export class LoginComponent {
   loginForm: FormGroup;
   registerForm: FormGroup;
+  invalidCredentials: string | null = null;
   isRegistering = false;
 
-  // Mensajes de error
-  usernameError: string | null = null;
-  passwordError: string | null = null;
-  emailError: string | null = null;
-  credentialsErrorMessage: string | null = null;
+  //Endpoints
+  authEndpoint = 'https://localhost:7252/api/User/auth';
+  registerEndpoint = 'https://localhost:7252/api/User/register';
 
-  // Datos mockeados
-  private mockUser = { username: 'user1234', password: 'asd1234' };
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
-    // Inicializar el formulario con los controles
+  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
+    // Inicializar los formularios con sus controles y validators
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -36,102 +37,106 @@ export class LoginComponent {
     this.registerForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(8)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      //location: [1]
     });
   }
 
-  // Valida credenciales ingresadas en el back (mock)
-  private authenticate(username: string, password: string): any {
-    if (username === this.mockUser.username && password === this.mockUser.password) {
-      console.log('Usuario logueado!')
-      return { user: this.mockUser };
-    } else {
-      throw new Error('El usuario o la contraseña ingresada son incorrectos.');
+  //Reset forms y errores
+  clearErrorMessages() {
+    this.invalidCredentials = null;
+    this.loginForm.reset();
+    this.registerForm.reset();
+  }
+
+  //Validaciones de campos
+  hasError(fieldName: string, errorType?: string): any {
+    const input = this.loginForm.get(fieldName);
+    if (errorType) {
+      return input?.touched && input?.hasError(errorType);
     }
+    return input?.touched && input?.invalid;
   }
 
-  // Login
-  private login(username: string, password: string): Observable<any> {
-    try {
-      return of(this.authenticate(username, password));
-    } catch (error) {
-      return throwError(() => error);
-    }
+  //Mejora: atajar el error en caso de que el back no responda (actualmente devuelve "usuario o contraseña incorrectos")
+  userAuthRequest(user: any) {
+    this.http.post(this.authEndpoint, user, { observe: 'response' }) // observa la respuesta completa y no solo el body
+      .pipe(
+        catchError(error => {// Verifica errores de de la solicitud
+          console.error('Error en la petición :', error);
+          console.log('entro al catcherror ')
+          return of(null);
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('antes del 200')
+          if (response && response.status === 200) { // Verifica que la response de 200
+            console.log('despues del 200')
+            console.log('Autenticación exitosa');
+            this.router.navigate(['/home']);
+            this.clearErrorMessages();
+          } else { // Si la response no da 200 devuelve error
+            console.log('paso al else ')
+            this.invalidCredentials = "Usuario o contraseña incorrectos.";
+            console.error('Error de autenticación: ' + this.invalidCredentials, response?.status);
+          }
+        },
+      });
   }
 
-  //Registro
-  private register(username: string, email: string, password: string) {
-    console.log('Usuario registrado!')
-  }
+    //Mejora: atajar el error en caso de que el back no responda (actualmente devuelve "usuario o contraseña incorrectos")
+    // userRegisterRequest(user: any) {
+    //   this.http.post(this.registerEndpoint, user, { observe: 'response' }) // observa la respuesta completa y no solo el body
+    //     .pipe(
+    //       catchError(error => {// Verifica errores de de la solicitud
+    //         console.error('Error en la petición :', error);
+    //         return of(null);
+    //       })
+    //     )
+    //     .subscribe({
+    //       next: (response) => {
+    //         if (response && response.status === 200) { // Verifica que la response de 200
+    //           console.log('Autenticación exitosa');
+    //           this.router.navigate(['/home']);
+    //           this.clearErrorMessages();
+    //         } else { // Si la response no da 200 devuelve error
+    //           this.invalidCredentials = "Usuario o contraseña incorrectos.";
+    //           console.error('Error de autenticación: ' + this.invalidCredentials, response?.status);
+    //         }
+    //       },
+    //     });
+    // }
 
-  //Obtener mensaje de error
-  getErrorMessage(formGroup: FormGroup, controlName: string): string | null {
-    const control = formGroup.get(controlName);
-    if (control && control.errors) {
-      if (control.errors['required']) {
-        return 'Este campo es obligatorio';
-      }
-      if (control.errors['minlength']) {
-        const requiredLength = control.errors['minlength'].requiredLength;
-        return `Debe tener al menos ${requiredLength} caracteres`;
-      }
-      if (control.errors['email']) {
-        return 'Ingrese un correo electrónico válido';
-      }
-    }
-    return null;
-  }
-
-  clearErrors() {
-    this.usernameError = null;
-    this.passwordError = null;
-    this.emailError = null;
-    this.credentialsErrorMessage = null;
-  }
 
   onSubmit(state: string) {
-    switch (state) {
-      case 'login':
-        //Valida fomulario
-        console.log('Formulario correctamente cargado? -> ' + this.loginForm.valid )
-        if (this.loginForm.valid) {
-          const { username, password } = this.loginForm.value;
-          //Valida credenciales
-          this.login(username, password).subscribe({
-            next: () => {
-              this.router.navigate(['/home']);
-              this.clearErrors();
-            },
-            error: (error: any) => {
-              this.credentialsErrorMessage = error.message;
-              console.log('Error de credenciales -> '+ this.credentialsErrorMessage)
-            }
-          });
-        } else {
-          this.usernameError = this.getErrorMessage(this.loginForm, 'username');
-          this.passwordError = this.getErrorMessage(this.loginForm, 'password');
-        }
-        break;
+    const { username, password } = this.loginForm.value;
+    const { regUsername, regPassword, regEmail, regLocation } = this.registerForm.value;
 
-      case 'register':
-        // Valida formulario
-        if (this.registerForm.valid) {
-          const { username, email, password } = this.registerForm.value;
-          this.register(username, email, password);
-          this.clearErrors();
-        } else {
-          // Muestra los errores si el formulario es inválido
-          this.usernameError = this.getErrorMessage(this.registerForm, 'username');
-          this.emailError = this.getErrorMessage(this.registerForm, 'email');
-          this.passwordError = this.getErrorMessage(this.registerForm, 'password');
-        }
-        break;
+    switch  (state) {
+      case 'login' :
+      if (this.loginForm.valid) {
+        console.log('despues del 200')
+        this.userAuthRequest({ username, password });
+      } else {
+        this.loginForm.markAllAsTouched(); 
+      }
+      break;
+      
+      case 'register': 
+      if (this.registerForm.valid) {
+        //this.userRegisterRequest({ regUsername, regPassword, regEmail, regLocation });
+      } else {
+        //this.loginForm.markAllAsTouched(); 
+      }
+      break;
     }
   }
 
   // Switch forms Login-Registro
   toggleForm() {
     this.isRegistering = !this.isRegistering;
-    this.clearErrors();
+    this.clearErrorMessages();
   }
+  
 }

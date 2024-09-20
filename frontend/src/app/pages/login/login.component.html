@@ -1,31 +1,45 @@
 <section id="auth" class="overflow-y-hidden">
     <div class="brand-text"></div>
 
-    <!-- Card login -->
     <div id="login" class="card shadow-lg show" [ngClass]="{'show': !isRegistering}">
         <div class="card-body">
             <h1 class="mb-5">Ingresar</h1>
 
-            <form [formGroup]="loginForm">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit('login')">
                 <div class="form-floating mb-4">
-                    <input formControlName="username" id="loginUsername"  type="text" class="form-control mb-2"  placeholder="Usuario">
+                    <input 
+                        formControlName="username" 
+                        id="loginUsername"  
+                        type="text" 
+                        [ngClass]="{'is-invalid' : hasError('username')}"
+                        class="form-control mb-2"  
+                        placeholder="Usuario"
+                        required>
                     <label for="loginUsername">Usuario</label>
-                    <div  *ngIf="loginForm.get('password')?.errors">
-                        <small *ngIf="loginForm.get('username')?.errors?.['required']" class="text-danger d-block mb-4"> {{ usernameError }}</small>
+                    <div *ngIf="hasError('username')">
+                        <small *ngIf="hasError('username', 'required')" class="text-danger">El usuario es requerido.</small>
                     </div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input formControlName="password" id="loginPassword"  type="password" class="form-control mb-2" placeholder="Password">
+                    <input 
+                    formControlName="password" 
+                    id="loginPassword"
+                    type="password" 
+                    [ngClass]="{'is-invalid' : hasError('password')}"
+                    class="form-control mb-2" 
+                    placeholder="Password"
+                    required>
                     <label for="loginPassword">Contraseña</label>
-                    <div *ngIf="loginForm.get('password')?.errors">
-                        <small #errorMessage *ngIf="loginForm.get('password')?.errors?.['required']" class="text-danger d-block mb-4">{{ passwordError }}</small>
+                    <div *ngIf="hasError('password')">
+                        <small *ngIf="hasError('password', 'required')" class="text-danger">La contraseña es requerida.</small>
                     </div>
                 </div>
-                <small *ngIf="credentialsErrorMessage" class="text-danger d-block mb-4">{{ credentialsErrorMessage }}</small>
+                <div *ngIf="invalidCredentials" class="mb-4">
+                    <small class="text-danger">{{ invalidCredentials }}</small>
+                </div>
                 <button 
-                    type="button" 
-                    class="btn btn-lg w-100 btn-primary" 
-                    (click)="onSubmit('login')">                
+                    type="submit" 
+                    class="btn btn-lg w-100 btn-primary">                
                     Ingresar
                 </button>
             </form>
@@ -37,40 +51,48 @@
         </div>
     </div>
 
-    <!-- Card registro -->
+
     <div id="register" class="card shadow-lg" [ngClass]="{'show': isRegistering}">
         <div class="card-body">
             <h1 class="mb-5">Regístrate</h1>
             
-            <form [formGroup]="registerForm">
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit('register')">
                 <div class="form-floating mb-4">
                     <input formControlName="username" id="registerUsername" type="text" class="form-control mb-2" placeholder="Usuario">
                     <label for="registerUsername">Usuario</label>
-                    <div *ngIf="registerForm.get('username')?.errors">
-                        <small *ngIf="registerForm.get('username')?.errors?.['required']" class="text-danger d-block mb-4"> {{ usernameError }}</small>
-                        <small *ngIf="registerForm.get('username')?.errors?.['minLength']" class="text-danger d-block mb-4"> {{ usernameError }}</small>
-                    </div>
-                </div>
-                <div class="form-floating mb-4">
-                    <input formControlName="email" id="registerEmail" type="email" class="form-control mb-2" placeholder="Correo electrónico">
-                    <label for="registerEmail">Correo electrónico</label>
-                    <div *ngIf="registerForm.get('email')?.errors">
-                        <small *ngIf="registerForm.get('email')?.errors?.['required']" class="text-danger d-block mb-4"> {{ emailError }}</small>
-                        <small *ngIf="registerForm.get('email')?.errors?.['email']" class="text-danger d-block mb-4"> {{ emailError }}</small>
+                    <div *ngIf="hasError('username')">
+                        <small *ngIf="hasError('username', 'required')" class="text-danger">El usuario es requerido.</small>
+                        <small *ngIf="hasError('username', 'minLength')" class="text-danger">El usuario debe tener como mínimo 8 caracteres.</small>
                     </div>
                 </div>
                 <div class="form-floating mb-4">
                     <input formControlName="password" id="registerPassword" type="password" class="form-control mb-2" placeholder="Password">
                     <label for="registerPassword">Contraseña</label>
-                    <div *ngIf="registerForm.get('password')?.errors">
-                        <small *ngIf="registerForm.get('password')?.errors?.['required']" class="text-danger d-block mb-4"> {{ passwordError }}</small>
-                        <small *ngIf="registerForm.get('password')?.errors?.['minLength']" class="text-danger d-block mb-4"> {{ passwordError }}</small>
+                    <div *ngIf="hasError('password')">
+                        <small *ngIf="hasError('password', 'required')" class="text-danger">El usuario es requerido.</small>
+                        <small *ngIf="hasError('password', 'minLength')" class="text-danger">La contraseña debe tener como mínimo 8 caracteres.</small>
                     </div>
                 </div>
+                <div class="form-floating mb-4">
+                    <input formControlName="email" id="registerEmail" type="email" class="form-control mb-2" placeholder="Correo electrónico">
+                    <label for="registerEmail">Correo electrónico</label>
+                    <div *ngIf="hasError('email')">
+                        <small *ngIf="hasError('email', 'required')" class="text-danger">El usuario es requerido.</small>
+                        <small *ngIf="hasError('email', 'email')" class="text-danger">Formato de correo inválido.</small>
+                    </div>
+                </div>
+                <div class="form-floating mb-4">
+                    <select formControlName="location" id="registerLocation" type="text" class="form-select mb-2" placeholder="Ubicación">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                    <label for="registerLocation">Piso</label>
+                </div>
                 <button 
-                    type="button" 
-                    class="btn btn-lg w-100 btn-primary mb-4" 
-                    (click)="onSubmit('register')">
+                    type="submit" 
+                    class="btn btn-lg w-100 btn-primary mb-4">
                     Registrarme
                 </button>
             </form>
