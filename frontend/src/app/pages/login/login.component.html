@@ -11,13 +11,13 @@
                         formControlName="username" 
                         id="loginUsername"  
                         type="text" 
-                        [ngClass]="{'is-invalid' : hasError('username')}"
+                        [ngClass]="{'is-invalid' : hasError(loginForm,'username')}"
                         class="form-control mb-2"  
                         placeholder="Usuario"
                         required>
                     <label for="loginUsername">Usuario</label>
-                    <div *ngIf="hasError('username')">
-                        <small *ngIf="hasError('username', 'required')" class="text-danger">El usuario es requerido.</small>
+                    <div *ngIf="hasError(loginForm,'username')">
+                        <small *ngIf="hasError(loginForm,'username','required')" class="text-danger">El usuario es requerido.</small>
                     </div>
                 </div>
                 <div class="form-floating mb-4">
@@ -25,13 +25,13 @@
                     formControlName="password" 
                     id="loginPassword"
                     type="password" 
-                    [ngClass]="{'is-invalid' : hasError('password')}"
+                    [ngClass]="{'is-invalid' : hasError(loginForm,'password')}"
                     class="form-control mb-2" 
                     placeholder="Password"
                     required>
                     <label for="loginPassword">Contraseña</label>
-                    <div *ngIf="hasError('password')">
-                        <small *ngIf="hasError('password', 'required')" class="text-danger">La contraseña es requerida.</small>
+                    <div *ngIf="hasError(loginForm,'password')">
+                        <small *ngIf="hasError(loginForm,'password','required')" class="text-danger">La contraseña es requerida.</small>
                     </div>
                 </div>
                 <div *ngIf="invalidCredentials" class="mb-4">
@@ -58,31 +58,53 @@
             
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit('register')">
                 <div class="form-floating mb-4">
-                    <input formControlName="username" id="registerUsername" type="text" class="form-control mb-2" placeholder="Usuario">
+                    <input 
+                        formControlName="username" 
+                        id="registerUsername" 
+                        type="text" 
+                        [ngClass]="{'is-invalid' : hasError(registerForm,'username')}"
+                        class="form-control mb-2" 
+                        placeholder="Usuario"
+                        required>
                     <label for="registerUsername">Usuario</label>
-                    <div *ngIf="hasError('username')">
-                        <small *ngIf="hasError('username', 'required')" class="text-danger">El usuario es requerido.</small>
-                        <small *ngIf="hasError('username', 'minLength')" class="text-danger">El usuario debe tener como mínimo 8 caracteres.</small>
+                    <div *ngIf="hasError(registerForm,'username')">
+                        <small *ngIf="hasError(registerForm,'username','required')" class="text-danger">El usuario es requerido.</small>
+                        <small *ngIf="hasError(registerForm,'username','minlength')" class="text-danger">El usuario debe tener como mínimo 8 caracteres.</small>
                     </div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input formControlName="password" id="registerPassword" type="password" class="form-control mb-2" placeholder="Password">
+                    <input 
+                        formControlName="password" 
+                        id="registerPassword" 
+                        type="password" 
+                        [ngClass]="{'is-invalid' : hasError(registerForm,'password')}"
+                        class="form-control mb-2" 
+                        placeholder="Password"
+                        required>
                     <label for="registerPassword">Contraseña</label>
-                    <div *ngIf="hasError('password')">
-                        <small *ngIf="hasError('password', 'required')" class="text-danger">El usuario es requerido.</small>
-                        <small *ngIf="hasError('password', 'minLength')" class="text-danger">La contraseña debe tener como mínimo 8 caracteres.</small>
+                    <div *ngIf="hasError(registerForm,'password')">
+                        <small *ngIf="hasError(registerForm,'password','required')" class="text-danger">El usuario es requerido.</small>
+                        <small *ngIf="hasError(registerForm,'password','minlength')" class="text-danger">La contraseña debe tener como mínimo 8 caracteres.</small>
                     </div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input formControlName="email" id="registerEmail" type="email" class="form-control mb-2" placeholder="Correo electrónico">
+                    <input 
+                        formControlName="email" 
+                        id="registerEmail" 
+                        type="email" 
+                        [ngClass]="{'is-invalid' : hasError(registerForm,'email')}"
+                        class="form-control mb-2" 
+                        placeholder="Correo electrónico"
+                        required>
                     <label for="registerEmail">Correo electrónico</label>
-                    <div *ngIf="hasError('email')">
-                        <small *ngIf="hasError('email', 'required')" class="text-danger">El usuario es requerido.</small>
-                        <small *ngIf="hasError('email', 'email')" class="text-danger">Formato de correo inválido.</small>
+                    <div *ngIf="hasError(registerForm,'email')">
+                        <small *ngIf="hasError(registerForm,'email', 'required')" class="text-danger">El usuario es requerido.</small>
+                        <small *ngIf="hasError(registerForm,'email', 'email')" class="text-danger">Formato de correo inválido.</small>
                     </div>
                 </div>
                 <div class="form-floating mb-4">
-                    <select formControlName="location" id="registerLocation" type="text" class="form-select mb-2" placeholder="Ubicación">
+                    <select 
+                    formControlName="location" id="registerLocation" type="text" class="form-select mb-2" placeholder="Ubicación" required>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>

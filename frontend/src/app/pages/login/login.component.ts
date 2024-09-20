@@ -38,7 +38,7 @@ export class LoginComponent {
       username: ['', [Validators.required, Validators.minLength(8)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      //location: [1]
+      location: [1]
     });
   }
 
@@ -50,10 +50,11 @@ export class LoginComponent {
   }
 
   //Validaciones de campos
-  hasError(fieldName: string, errorType?: string): any {
-    const input = this.loginForm.get(fieldName);
+  hasError(form: FormGroup, fieldName: string, errorType?: string): any {
+    const input = form.get(fieldName);
     if (errorType) {
       return input?.touched && input?.hasError(errorType);
+
     }
     return input?.touched && input?.invalid;
   }
@@ -81,57 +82,58 @@ export class LoginComponent {
       });
   }
 
-    //Mejora: atajar el error en caso de que el back no responda (actualmente devuelve "usuario o contraseña incorrectos")
-    // userRegisterRequest(user: any) {
-    //   this.http.post(this.registerEndpoint, user, { observe: 'response' }) // observa la respuesta completa y no solo el body
-    //     .pipe(
-    //       catchError(error => {// Verifica errores de de la solicitud
-    //         console.error('Error en la petición :', error);
-    //         return of(null);
-    //       })
-    //     )
-    //     .subscribe({
-    //       next: (response) => {
-    //         if (response && response.status === 200) { // Verifica que la response de 200
-    //           console.log('Autenticación exitosa');
-    //           this.router.navigate(['/home']);
-    //           this.clearErrorMessages();
-    //         } else { // Si la response no da 200 devuelve error
-    //           this.invalidCredentials = "Usuario o contraseña incorrectos.";
-    //           console.error('Error de autenticación: ' + this.invalidCredentials, response?.status);
-    //         }
-    //       },
-    //     });
-    // }
+  //Mejora: atajar el error en caso de que el back no responda (actualmente devuelve "usuario o contraseña incorrectos")
+  userRegisterRequest(user: any) {
+    this.http.post(this.registerEndpoint, user, { observe: 'response' }) // observa la respuesta completa y no solo el body
+      .pipe(
+        catchError(error => {// Verifica errores de de la solicitud
+          console.error('Error en la petición :', error);
+          return of(null);
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          if (response && response.status === 200) { // Verifica que la response de 200
+            console.log('Autenticación exitosa');
+            this.router.navigate(['/home']);
+            this.clearErrorMessages();
+          } else { // Si la response no da 200 devuelve error
+            this.invalidCredentials = "Usuario o contraseña incorrectos.";
+            console.error('Error de autenticación: ' + this.invalidCredentials, response?.status);
+          }
+        },
+      });
+  }
 
 
   onSubmit(state: string) {
-    const { username, password } = this.loginForm.value;
-    const { regUsername, regPassword, regEmail, regLocation } = this.registerForm.value;
+    switch (state) {
+      case 'login':
+        if (this.loginForm.valid) {
+          const { username, password } = this.loginForm.value;
+          this.userAuthRequest({ username, password });
+        } else {
+          this.loginForm.markAllAsTouched();
+        }
+        break;
 
-    switch  (state) {
-      case 'login' :
-      if (this.loginForm.valid) {
-        this.userAuthRequest({ username, password });
-      } else {
-        this.loginForm.markAllAsTouched(); 
-      }
-      break;
-      
-      case 'register': 
-      if (this.registerForm.valid) {
-       //this.userRegisterRequest({ regUsername, regPassword, regEmail, regLocation });
-      } else {
-      //this.loginForm.markAllAsTouched(); 
-      }
-      break;
+      case 'register':
+        if (this.registerForm.valid) {
+          const { username, password, email, location }  = this.registerForm.value;
+          this.userRegisterRequest({ username, password, email, location });
+        } else {
+          this.registerForm.markAllAsTouched();
+        }
+        break;
     }
   }
+
+  
 
   // Switch forms Login-Registro
   toggleForm() {
     this.isRegistering = !this.isRegistering;
     this.clearErrorMessages();
   }
-  
+
 }
