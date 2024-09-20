@@ -21,18 +21,18 @@ namespace backend.Controllers
         {
             if (userDto == null)
             {
-                return BadRequest("Datos de usuario inválidos.");
+                return BadRequest(new { message = "Datos de usuario inválidos." });
             }
 
             var isAuthenticated = _userService.UserAuth(userDto);
 
             if (isAuthenticated)
             {
-                return Ok("Autenticacion exitosa.");
+                return Ok( new { message = "Autenticacion exitosa." });
             }
             else
             {
-                return Unauthorized("No existe el usuario o los datos incorrectos.");
+                return Unauthorized(new { message = "No existe el usuario o los datos incorrectos." });
             }
         }
 
