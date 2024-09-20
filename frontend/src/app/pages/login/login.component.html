@@ -116,6 +116,9 @@
                     </select>
                     <label for="registerLocation">Ubicación</label>
                 </div>
+                <div *ngIf="invalidRegister" class="mb-4">
+                    <small class="text-danger">{{ invalidRegister }}</small>
+                </div>
                 <button 
                     type="submit" 
                     class="btn btn-lg w-100 btn-primary mb-4">
