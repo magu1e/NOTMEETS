@@ -7,7 +7,7 @@ namespace backend.DTOs.User
         public int Id { get; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public string Location { get; set; }
+        public int Location { get; set; }
         public string Role { get; set; }
 
         public UpdateUserDTO(UserClass user) 
