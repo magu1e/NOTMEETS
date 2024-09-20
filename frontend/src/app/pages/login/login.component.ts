@@ -64,20 +64,16 @@ export class LoginComponent {
       .pipe(
         catchError(error => {// Verifica errores de de la solicitud
           console.error('Error en la petición :', error);
-          console.log('entro al catcherror ')
           return of(null);
         })
       )
       .subscribe({
         next: (response) => {
-          console.log('antes del 200')
           if (response && response.status === 200) { // Verifica que la response de 200
-            console.log('despues del 200')
             console.log('Autenticación exitosa');
             this.router.navigate(['/home']);
             this.clearErrorMessages();
           } else { // Si la response no da 200 devuelve error
-            console.log('paso al else ')
             this.invalidCredentials = "Usuario o contraseña incorrectos.";
             console.error('Error de autenticación: ' + this.invalidCredentials, response?.status);
           }
@@ -116,7 +112,6 @@ export class LoginComponent {
     switch  (state) {
       case 'login' :
       if (this.loginForm.valid) {
-        console.log('despues del 200')
         this.userAuthRequest({ username, password });
       } else {
         this.loginForm.markAllAsTouched(); 
@@ -125,9 +120,9 @@ export class LoginComponent {
       
       case 'register': 
       if (this.registerForm.valid) {
-        //this.userRegisterRequest({ regUsername, regPassword, regEmail, regLocation });
+       //this.userRegisterRequest({ regUsername, regPassword, regEmail, regLocation });
       } else {
-        //this.loginForm.markAllAsTouched(); 
+      //this.loginForm.markAllAsTouched(); 
       }
       break;
     }
