@@ -29,7 +29,7 @@ namespace backend.Services.User
         public UserClass AddUser(AddUserDTO userDto)
         {
             // Valida que los campos esten completos y que no sean null
-            bool invalidFields = string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.Location);
+            bool invalidFields = string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.Email);
             // Busca en la base si el username ya existe
             bool userAlreadyExists = _context.Users.Any(u => u.Username == userDto.Username);
             if (invalidFields || userAlreadyExists)

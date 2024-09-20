@@ -43,7 +43,7 @@ namespace backend.Controllers
         {
             if (userDto == null)
             {
-                return BadRequest("Datos de usuario inválidos.");
+                return BadRequest(new { message = "Datos de usuario inválidos." });
             }
 
             try
@@ -86,7 +86,7 @@ namespace backend.Controllers
             try
             {
                 _userService.DeleteUser(id);
-                return Ok("Usuario eliminado");
+                return Ok(new { message = "Usuario eliminado" });
             }
             catch (KeyNotFoundException ex)
             {
