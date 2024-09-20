@@ -17,8 +17,8 @@ import { catchError, of } from 'rxjs';
 
 
 export class LoginComponent {
-  loginForm: FormGroup;
-  registerForm: FormGroup;
+  loginForm!: FormGroup;
+  registerForm!: FormGroup;
   invalidCredentials: string | null = null;
   isRegistering = false;
 
@@ -26,9 +26,8 @@ export class LoginComponent {
   authEndpoint = 'https://localhost:7252/api/User/auth';
   registerEndpoint = 'https://localhost:7252/api/User/register';
 
-
-  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
-    // Inicializar los formularios con sus controles y validators
+  //Inicializa formularios
+  initForms() {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -38,29 +37,34 @@ export class LoginComponent {
       username: ['', [Validators.required, Validators.minLength(8)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      location: [1]
+      location: [1, [Validators.required]]
     });
   }
 
-  //Reset forms y errores
-  clearErrorMessages() {
-    this.invalidCredentials = null;
-    this.loginForm.reset();
-    this.registerForm.reset();
+  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
+    this.initForms();
   }
+
+
+  //Reset forms y errores
+  resetForm() {
+    this.invalidCredentials = null;
+    this.initForms();
+  }
+
 
   //Validaciones de campos
   hasError(form: FormGroup, fieldName: string, errorType?: string): any {
     const input = form.get(fieldName);
     if (errorType) {
       return input?.touched && input?.hasError(errorType);
-
     }
     return input?.touched && input?.invalid;
   }
 
+
   //Mejora: atajar el error en caso de que el back no responda (actualmente devuelve "usuario o contraseña incorrectos")
-  userAuthRequest(user: any) {
+  authRequest(user: any) {
     this.http.post(this.authEndpoint, user, { observe: 'response' }) // observa la respuesta completa y no solo el body
       .pipe(
         catchError(error => {// Verifica errores de de la solicitud
@@ -73,7 +77,7 @@ export class LoginComponent {
           if (response && response.status === 200) { // Verifica que la response de 200
             console.log('Autenticación exitosa');
             this.router.navigate(['/home']);
-            this.clearErrorMessages();
+            this.resetForm();
           } else { // Si la response no da 200 devuelve error
             this.invalidCredentials = "Usuario o contraseña incorrectos.";
             console.error('Error de autenticación: ' + this.invalidCredentials, response?.status);
@@ -82,8 +86,9 @@ export class LoginComponent {
       });
   }
 
+
   //Mejora: atajar el error en caso de que el back no responda (actualmente devuelve "usuario o contraseña incorrectos")
-  userRegisterRequest(user: any) {
+  registerRequest(user: any) {
     this.http.post(this.registerEndpoint, user, { observe: 'response' }) // observa la respuesta completa y no solo el body
       .pipe(
         catchError(error => {// Verifica errores de de la solicitud
@@ -96,7 +101,7 @@ export class LoginComponent {
           if (response && response.status === 200) { // Verifica que la response de 200
             console.log('Autenticación exitosa');
             this.router.navigate(['/home']);
-            this.clearErrorMessages();
+            this.resetForm();
           } else { // Si la response no da 200 devuelve error
             this.invalidCredentials = "Usuario o contraseña incorrectos.";
             console.error('Error de autenticación: ' + this.invalidCredentials, response?.status);
@@ -111,7 +116,7 @@ export class LoginComponent {
       case 'login':
         if (this.loginForm.valid) {
           const { username, password } = this.loginForm.value;
-          this.userAuthRequest({ username, password });
+          this.authRequest({ username, password });
         } else {
           this.loginForm.markAllAsTouched();
         }
@@ -120,7 +125,7 @@ export class LoginComponent {
       case 'register':
         if (this.registerForm.valid) {
           const { username, password, email, location }  = this.registerForm.value;
-          this.userRegisterRequest({ username, password, email, location });
+          this.registerRequest({ username, password, email, location });
         } else {
           this.registerForm.markAllAsTouched();
         }
@@ -129,11 +134,9 @@ export class LoginComponent {
   }
 
   
-
   // Switch forms Login-Registro
   toggleForm() {
     this.isRegistering = !this.isRegistering;
-    this.clearErrorMessages();
+    this.resetForm();
   }
-
 }
