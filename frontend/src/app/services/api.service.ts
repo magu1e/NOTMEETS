@@ -20,12 +20,12 @@ export class ApiService {
   private baseUrl = 'https://localhost:7252/api';
   private userUrl = `${this.baseUrl}/User`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   //USER REQUESTS
 
+  //Auth
   // Verifica errores de de la solicitud, de no haber devuelve el observable con la response
-  //USER REQUESTS
   authRequest(user: any): Observable<ApiResponse> {
     return this.http.post(`${this.userUrl}/auth`, user, { observe: 'response' })
       .pipe(
@@ -35,12 +35,23 @@ export class ApiService {
       );
   }
 
+  //Register
   registerRequest(user: any): Observable<ApiResponse> {
     return this.http.post(`${this.userUrl}/register`, user, { observe: 'response' })
       .pipe(
-        catchError( error => {
+        catchError(error => {
           return of({ status: error.status, error: error.error } as ApiResponse);
         })
       );
   }
-}
+
+  //GetUserRole
+   getUserRoleRequest(userId: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.userUrl}/role/${userId}`, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+} 
