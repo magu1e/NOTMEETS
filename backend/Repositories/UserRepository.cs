@@ -1,11 +1,9 @@
 ﻿using backend.Data;
-using backend.DTOs.User;
+using backend.DTOs;
+using backend.Models;
 using System.Data;
 
-//Renombra para evitar conflictos con el 'User' del namespace
-using UserClass = backend.Models.User;
-
-namespace backend.Repositories.User
+namespace backend.Repositories
 {
     public class UserRepository : IUserRepository
     {
@@ -20,9 +18,9 @@ namespace backend.Repositories.User
 
 
 
-        public object? UserAuth(AuthUserDTO userDto)
+        public object? UserAuth(UserDTO userDto)
         {
-            UserClass? user = _context.Users.FirstOrDefault(u => u.Username == userDto.Username && u.Password == userDto.Password);
+            User? user = _context.Users.FirstOrDefault(u => u.Username == userDto.Username && u.Password == userDto.Password);
             if (user == null)
             {
                 return null;
@@ -39,9 +37,9 @@ namespace backend.Repositories.User
 
 
 
-        public UserClass AddUser(AddUserDTO userDto)
+        public User AddUser(UserDTO userDto)
         {
-            var user = new UserClass
+            var user = new User
              (
                 username: userDto.Username,
                 password: userDto.Password,
@@ -56,7 +54,7 @@ namespace backend.Repositories.User
 
 
         //TODO -> fixear
-        //public UserClass? UpdateUser(GetUserDTO userDto)
+        //public User? UpdateUser(GetUserDTO userDto)
         //{
         //    var user = _context.Users.Find(userDto.Id);
         //    if (user == null)
@@ -87,31 +85,31 @@ namespace backend.Repositories.User
 
 
 
-        public IEnumerable<GetUserDTO> GetAllUsers()
+        public IEnumerable<UserDTO> GetAllUsers()
         {
-            return _context.Users.Select(u => new GetUserDTO(u)).ToList();
+            return _context.Users.Select(u => new UserDTO(u)).ToList();
         }
 
 
 
-        public GetUserDTO? GetUserById(int id)
+        public UserDTO? GetUserById(int id)
         {
             var user = _context.Users.Find(id);
             if (user != null)
             {
-                return new GetUserDTO(user);
+                return new UserDTO(user);
             }
             return null;
         }
 
 
 
-        public GetUserRoleDTO? GetUserRole(int id)
+        public UserDTO? GetUserRole(int id)
         {
             var user = _context.Users.Find(id);
             if (user != null)
             {
-                return new GetUserRoleDTO(user.Id, user.Username, user.Role);
+                return new UserDTO(user.Id, user.Username, user.Role);
 
             }
             return null;

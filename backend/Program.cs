@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using Microsoft.Extensions.Configuration;
-using backend.Repositories.User;
-using backend.Services.User;
+using backend.Repositories;
+using backend.Services;
 
 namespace backend
 {

@@ -1,12 +1,16 @@
 ﻿using backend.Data;
-using backend.DTOs.User;
-using backend.Repositories.User;
+using backend.DTOs;
+using backend.Models;
+using backend.Repositories;
+
+
+
 
 
 //Renombra para evitar conflictos con el 'User' del namespace
 using UserClass = backend.Models.User;
 
-namespace backend.Services.User
+namespace backend.Services
 {
     public class UserService : IUserService
     {
@@ -19,14 +23,14 @@ namespace backend.Services.User
             _context = context;
         }
 
-        public object? UserAuth(AuthUserDTO userDto)
+        public object? UserAuth(UserDTO userDto)
         {
             return _userRepository.UserAuth(userDto);
         }
 
 
 
-        public UserClass AddUser(AddUserDTO userDto)
+        public UserClass AddUser(UserDTO userDto)
         {
             // Valida que los campos esten completos y que no sean null
             bool invalidFields = string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.Email);
@@ -85,7 +89,7 @@ namespace backend.Services.User
 
 
 
-        public GetUserDTO GetUserById(int id)
+        public UserDTO GetUserById(int id)
         {
             var user = _userRepository.GetUserById(id);
             if (user == null)
@@ -97,10 +101,10 @@ namespace backend.Services.User
 
 
 
-        public IEnumerable<GetUserDTO> GetAllUsers()
+        public IEnumerable<UserDTO> GetAllUsers()
         {
             var users = _userRepository.GetAllUsers();
-            if (users.Count() == 0) 
+            if (users.Count() == 0)
             {
                 throw new KeyNotFoundException("No hay usuarios cargados.");
             }
@@ -108,7 +112,7 @@ namespace backend.Services.User
         }
 
 
-        public GetUserRoleDTO GetUserRole(int id)
+        public UserDTO GetUserRole(int id)
         {
             var user = _userRepository.GetUserRole(id);
             if (user == null)

@@ -1,7 +1,7 @@
-﻿using backend.DTOs.User;
-using backend.Services.User;
+﻿using backend.DTOs;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
-using UserClass = backend.Models.User;
+using backend.Models;
 
 namespace backend.Controllers
 {
@@ -17,7 +17,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("auth")]
-        public IActionResult UserAuth([FromBody] AuthUserDTO userDto)
+        public IActionResult UserAuth([FromBody] UserDTO userDto)
         {
             if (userDto == null)
             {
@@ -39,7 +39,7 @@ namespace backend.Controllers
 
 
         [HttpPost("register")]
-        public IActionResult AddUser([FromBody] AddUserDTO userDto)
+        public IActionResult AddUser([FromBody] UserDTO userDto)
         {
             if (userDto == null)
             {
@@ -48,7 +48,7 @@ namespace backend.Controllers
 
             try
             {
-                UserClass user = _userService.AddUser(userDto);              
+                User user = _userService.AddUser(userDto);              
                 return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user); // Indica que la operacion fue exitosa y devuelve el usuario creado
             }
             catch (ArgumentException ex)
@@ -60,7 +60,7 @@ namespace backend.Controllers
 
         //TODO -> fixear
         //[HttpPut("update")]
-        //public IActionResult Update([FromBody] GetUserDTO userDto)
+        //public IActionResult Update([FromBody] UserDTO userDto)
         //{
         //    if (userDto == null)
         //    {
