@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ApiService, ApiResponse } from '../../api.service'
+import { ApiService, ApiResponse } from '../../services/api.service'
 
 @Component({
   selector: 'app-login',
@@ -67,19 +67,37 @@ export class LoginComponent {
     return input?.touched && input?.invalid;
   }
 
-  auth(user: any) {
-    this.apiService.authRequest(user)
-      .subscribe((response: ApiResponse) => {
-        if (response.status === 200) {
-          console.log('Autenticación exitosa', response.status);
-          this.router.navigate(['/home']);
-          this.resetForm();
-        } else {
-          this.invalidCredentials = response.error?.message;
-          console.log(response)
-        }
-      });
+  //Redirige según el rol
+  redirect(userRole: string) {
+    if (userRole !== 'admin') {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/administration']);
+    }
   }
+
+  //Obtiene rol del usuario autorizado
+  getRole(userId: number) {
+    this.apiService.getUserRoleRequest(userId).subscribe((roleResponse: ApiResponse) => {
+      const userRole = roleResponse.body.role;
+      this.redirect(userRole);
+    });
+  }
+
+  auth(user: any) {
+    this.apiService.authRequest(user).subscribe((response: ApiResponse) => {
+      if (response.status === 200) {
+        console.log('Autenticación exitosa', response.status);
+        const userId = response.body.user.id;
+        this.getRole(userId);
+        this.resetForm();
+      } else {
+        this.invalidCredentials = response.error?.message;
+        console.log(response);
+      }
+    });
+  }
+
 
   register(user: any) {
     this.apiService.registerRequest(user)
