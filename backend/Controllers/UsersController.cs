@@ -24,11 +24,11 @@ namespace backend.Controllers
                 return BadRequest(new { message = "Datos de usuario inválidos." });
             }
 
-            var isAuthenticated = _userService.UserAuth(userDto);
+            var user = _userService.UserAuth(userDto);
 
-            if (isAuthenticated)
+            if (user != null )
             {
-                return Ok( new { message = "Autenticacion exitosa." });
+                return Ok( new { message = "Autenticacion exitosa.", user });
             }
             else
             {

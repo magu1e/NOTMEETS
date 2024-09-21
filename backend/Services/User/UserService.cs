@@ -19,7 +19,7 @@ namespace backend.Services.User
             _context = context;
         }
 
-        public bool UserAuth(AuthUserDTO userDto)
+        public UserClass? UserAuth(AuthUserDTO userDto)
         {
             return _userRepository.UserAuth(userDto);
         }

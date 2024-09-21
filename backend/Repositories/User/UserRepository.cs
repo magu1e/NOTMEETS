@@ -20,10 +20,9 @@ namespace backend.Repositories.User
 
 
 
-        public bool UserAuth(AuthUserDTO userDto)
+        public UserClass? UserAuth(AuthUserDTO userDto)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == userDto.Username && u.Password == userDto.Password);
-            return user != null;
+            return _context.Users.FirstOrDefault(u => u.Username == userDto.Username && u.Password == userDto.Password);
         }
 
 
