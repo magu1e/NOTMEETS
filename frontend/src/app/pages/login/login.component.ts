@@ -44,7 +44,6 @@ export class LoginComponent {
     this.initForms()
   }
 
-
   // Switch forms Login-Registro
   toggleForm() {
     this.isRegistering = !this.isRegistering;
@@ -84,6 +83,7 @@ export class LoginComponent {
     });
   }
 
+
   auth(user: any) {
     this.apiService.authRequest(user).subscribe((response: ApiResponse) => {
       if (response.status === 200) {
@@ -97,7 +97,6 @@ export class LoginComponent {
       }
     });
   }
-
 
   register(user: any) {
     this.apiService.registerRequest(user)
