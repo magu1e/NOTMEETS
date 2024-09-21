@@ -45,7 +45,7 @@ namespace backend.Repositories
                 password: userDto.Password,
                 email: userDto.Email,
                 location: userDto.Location,
-                role: userDto.Role
+                role: userDto?.Role ?? "user"
             );
             _context.Users.Add(user);
             _context.SaveChanges();

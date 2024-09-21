@@ -15,6 +15,11 @@ namespace backend.DTOs
 
         //public List<Notification>? Notifications { get; set; }
 
+        //Default constructor
+        public UserDTO()
+        {
+        }
+
         //Auth
         public UserDTO(string username, string password)
         {

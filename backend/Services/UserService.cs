@@ -4,12 +4,6 @@ using backend.Models;
 using backend.Repositories;
 
 
-
-
-
-//Renombra para evitar conflictos con el 'User' del namespace
-using UserClass = backend.Models.User;
-
 namespace backend.Services
 {
     public class UserService : IUserService
@@ -30,7 +24,7 @@ namespace backend.Services
 
 
 
-        public UserClass AddUser(UserDTO userDto)
+        public User AddUser(UserDTO userDto)
         {
             // Valida que los campos esten completos y que no sean null
             bool invalidFields = string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.Email);
@@ -47,7 +41,7 @@ namespace backend.Services
                     throw new ArgumentException("El nombre de usuario ya existe.");
                 }
             }
-            UserClass userAdded = _userRepository.AddUser(userDto);
+            User userAdded = _userRepository.AddUser(userDto);
             return userAdded;
         }
 
