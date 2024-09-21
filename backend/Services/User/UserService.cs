@@ -1,7 +1,7 @@
 ﻿using backend.Data;
 using backend.DTOs.User;
 using backend.Repositories.User;
-using Microsoft.EntityFrameworkCore;
+
 
 //Renombra para evitar conflictos con el 'User' del namespace
 using UserClass = backend.Models.User;

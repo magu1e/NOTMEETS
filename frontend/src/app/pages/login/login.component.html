@@ -34,8 +34,8 @@
                         <small *ngIf="hasError(loginForm,'password','required')" class="text-danger">La contraseña es requerida.</small>
                     </div>
                 </div>
-                <div *ngIf="invalidCredentials" class="mb-4">
-                    <small class="text-danger">{{ invalidCredentials }}</small>
+                <div *ngIf="invalidCredentials" class="mb-4 text-center">
+                    <small class="text-danger ">{{ invalidCredentials }}</small>
                 </div>
                 <button 
                     type="submit" 
@@ -116,7 +116,7 @@
                     </select>
                     <label for="registerLocation">Ubicación</label>
                 </div>
-                <div *ngIf="invalidRegister" class="mb-4">
+                <div *ngIf="invalidRegister" class="mb-4 text-center">
                     <small class="text-danger">{{ invalidRegister }}</small>
                 </div>
                 <button 

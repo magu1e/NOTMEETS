@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { Component, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, of } from 'rxjs';
-
+import { ApiService, ApiResponse } from '../../api.service'
 
 @Component({
   selector: 'app-login',
@@ -15,17 +14,15 @@ import { catchError, of } from 'rxjs';
 })
 
 
-
+@Injectable({
+  providedIn: 'root',
+})
 export class LoginComponent {
   loginForm!: FormGroup;
   registerForm!: FormGroup;
-  invalidCredentials: string | null = null;
-  invalidRegister: string | null = null;
+  invalidCredentials?: string | null = null;
+  invalidRegister?: string | null = null;
   isRegistering = false;
-
-  //Endpoints
-  authEndpoint = 'https://localhost:7252/api/User/auth';
-  registerEndpoint = 'https://localhost:7252/api/User/register';
 
 
   //Inicializa formularios
@@ -43,7 +40,7 @@ export class LoginComponent {
     });
   }
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private apiService: ApiService) {
     this.initForms()
   }
 
@@ -70,54 +67,40 @@ export class LoginComponent {
     return input?.touched && input?.invalid;
   }
 
-
-  //Mejora: atajar el error en caso de que el back no responda (actualmente devuelve "usuario o contraseña incorrectos")
-  authRequest(user: any) {
-    this.http.post(this.authEndpoint, user, { observe: 'response' }) // observa la respuesta completa y no solo el body
-      .pipe(
-        catchError(error => {// Verifica errores de de la solicitud
-          this.invalidCredentials = error.error.message;
-          return of(null);
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          if (response && response.status === 200) { // Verifica que la response de 200
-            console.log('Autenticación exitosa');
-            this.router.navigate(['/home']);
-            this.resetForm();
-          }
-        },
+  auth(user: any) {
+    this.apiService.authRequest(user)
+      .subscribe((response: ApiResponse) => {
+        if (response.status === 200) {
+          console.log('Autenticación exitosa', response.status);
+          this.router.navigate(['/home']);
+          this.resetForm();
+        } else {
+          this.invalidCredentials = response.error?.message;
+          console.log(response)
+        }
       });
   }
 
-
-  registerRequest(user: any) {
-    this.http.post(this.registerEndpoint, user, { observe: 'response' }) // observa la respuesta completa y no solo el body
-      .pipe(
-        catchError(error => {// Verifica errores de de la solicitud
-          this.invalidRegister = error.error;
-          return of(null);
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          if (response && response.status === 201) { // Verifica que la response de 201
-            console.log('Usuario creado exitosamente');
-            this.router.navigate(['/home']);
-            this.resetForm();
-          }
-        },
+  register(user: any) {
+    this.apiService.registerRequest(user)
+      .subscribe((response: ApiResponse) => {
+        if (response.status === 201) { // Manejo de respuesta exitosa
+          console.log('Usuario creado exitosamente', response.status);
+          this.router.navigate(['/home']);
+          this.resetForm();
+        } else { // Manejo de error
+          this.invalidRegister = response.error;
+          ;
+        }
       });
   }
-
 
   onSubmit(state: string) {
     switch (state) {
       case 'login':
         if (this.loginForm.valid) {
           const { username, password } = this.loginForm.value;
-          this.authRequest({ username, password });
+          this.auth({ username, password });
         } else {
           this.loginForm.markAllAsTouched();
         }
@@ -125,7 +108,7 @@ export class LoginComponent {
       case 'register':
         if (this.registerForm.valid) {
           const { username, password, email, location } = this.registerForm.value;
-          this.registerRequest({ username, password, email, location });
+          this.register({ username, password, email, location });
         } else {
           this.registerForm.markAllAsTouched();
         }
