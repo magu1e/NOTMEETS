@@ -7,7 +7,7 @@ namespace backend.Services.User
     public interface IUserService
     {
         //Firmas de los metodos con logica del UserService
-        UserClass? UserAuth(AuthUserDTO userDto); //Login usuario
+        object? UserAuth(AuthUserDTO userDto); //Login usuario
         UserClass AddUser(AddUserDTO userDto); //Registro usuario
         //TODO -> fixear
         //UserClass? UpdateUser(GetUserDTO userDto); //Modificaicon usuario

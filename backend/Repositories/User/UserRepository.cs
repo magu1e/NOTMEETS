@@ -20,9 +20,21 @@ namespace backend.Repositories.User
 
 
 
-        public UserClass? UserAuth(AuthUserDTO userDto)
+        public object? UserAuth(AuthUserDTO userDto)
         {
-            return _context.Users.FirstOrDefault(u => u.Username == userDto.Username && u.Password == userDto.Password);
+            UserClass? user = _context.Users.FirstOrDefault(u => u.Username == userDto.Username && u.Password == userDto.Password);
+            if (user == null)
+            {
+                return null;
+            }
+            return new
+            {
+                id = user.Id,
+                username = user.Username,
+                email = user.Email,
+                location = user.Location,
+                role = user.Role
+            };
         }
 
 
@@ -106,4 +118,4 @@ namespace backend.Repositories.User
         }
     }
 
- }
+}

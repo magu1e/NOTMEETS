@@ -7,7 +7,7 @@ namespace backend.Repositories.User
     public interface IUserRepository
     {
         //Firmas de los metodos de consulta del UserRepository
-        UserClass? UserAuth(AuthUserDTO userDto); //Auth usuario
+        object? UserAuth(AuthUserDTO userDto); //Auth usuario
         UserClass AddUser(AddUserDTO userDto); //Registro usuario
         //TODO -> fixear
         //UserClass? UpdateUser(GetUserDTO userDto); //Modificaicon usuario
