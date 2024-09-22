@@ -13,10 +13,13 @@ $background: #17181E;
 $surface: #1B1C25;
 $accent: #404cf7;
 $misc: #4a5392;
+$disabled-misc: rgba(lighten($accent, 20), 0.8);
 
 //General
 $body-bg: $background;
 $body-color: $white;
+
+$text-muted: rgba(lighten($misc, 20), 0.8);
 
 $xs: map-get($grid-breakpoints, xs);
 $sm: map-get($grid-breakpoints, sm);
@@ -41,15 +44,14 @@ $link-hover-color: shift-color($link-color, $link-shade-percentage);
 
 //Dropdowns 
 $dropdown-link-hover-bg: rgba($misc, .1);
-$dropdown-padding-x:  0;
 $dropdown-border-color:  $misc;
 $dropdown-header-color: rgba(lighten($misc, 30), .8);
 $dropdown-link-active-bg: $dropdown-link-hover-bg;
 
 
 
-$dropdown-item-padding-y: $spacer * .9;
-$dropdown-item-padding-x: $spacer * 1.8;
+$dropdown-item-padding-y: $spacer * .5;
+$dropdown-item-padding-x: $spacer * 1.5;
 
 //Cards
 $card-spacer-y: 3rem;
@@ -64,8 +66,9 @@ $input-focus-border-color: $accent;
 $input-color: $body-color;
 
 $form-check-input-checked-bg-color: $accent;
+$form-check-label-disabled-opacity: .2; 
 
-
+$form-select-indicator: none;
 
 //Navbar
 $navbar-padding-y: $spacer * 3.5;

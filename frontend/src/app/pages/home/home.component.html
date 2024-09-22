@@ -4,166 +4,133 @@
 
             <h1 class="mb-4">Buscar salas</h1>
 
-            <div class="row align-items-center mb-3">
-                <div class="col">
-                    <div class="form-floating">
-                        <input formControlName="date" id="date" type="date" class="form-control"
-                            placeholder="Fecha">
-                        <label for="date">Fecha de la reserva</label>
+            <form [formGroup]="roomFilters" (ngSubmit)="onSubmit()">
+                <div class="row align-items-center mb-3">
+                    <div class="col-lg col-md-4">
+                        <div class="form-floating mb-3">
+                            <input formControlName="date" id="date" type="date" class="form-control"
+                                placeholder="Fecha">
+                            <label for="date">Fecha de la reserva</label>
+                        </div>
+                    </div>
+                    <div class="col-lg col-md-4">
+                        <div class="form-floating mb-3">
+                            <input formControlName="startTime" id="startTime" type="time" class="form-control"
+                                placeholder="startTime" required>
+                            <label for="startTime">Hora de inicio</label>
+                        </div>
+                    </div>
+                    <div class="col-lg col-md-4">
+                        <div class="form-floating mb-3">
+                            <input formControlName="endTime" id="endTime" type="time" class="form-control"
+                                placeholder="endTime" required>
+                            <label for="endTime">Hora de fin</label>
+                        </div>
+                    </div>
+                    <div class="col-lg col-md-4">
+                        <div class="form-floating mb-3">
+                            <input formControlName="capacity" id="capacity" type="number" class="form-control"
+                                placeholder="capacity" required>
+                            <label for="capacity">Capacidad</label>
+                        </div>
+                    </div>
+                    <div class="col-lg col-md-4">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="priority" aria-label="priority">
+                                <option value="low">Baja</option>
+                                <option value="mid">Media</option>
+                                <option value="high">Alta</option>
+                            </select>
+                            <label for="priority">Prioridad de reunión</label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto mb-3">
+                        <button type="submit" role="button" class="btn btn-primary">Buscar</button>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="form-floating">
-                        <input formControlName="horaInicio" id="horaInicio" type="text" class="form-control"
-                            placeholder="horaInicio" required>
-                        <label for="horaInicio">Hora de inicio</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                        <input formControlName="horaFin" id="horaFin" type="text" class="form-control"
-                            placeholder="horaFin" required>
-                        <label for="horaFin">Hora de fin</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                        <input formControlName="capacity" id="capacity" type="text" class="form-control"
-                            placeholder="capacity" required>
-                        <label for="capacity">Capacidad</label>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <button class="btn btn-primary">Buscar</button>
-                </div>
-            </div>
+            </form>
 
 
-            <table class="table table-stripped table-hover">
+            <table class="table table-stripped table-hover ">
                 <thead>
                     <tr>
                         <th scope="col"></th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Ubicación</th>
                         <th scope="col">Capacidad</th>
-                        <th scope="col">Disponibilidad</th>
+                        <th scope="col">Horarios</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr *ngFor="let room of roomsMock; let i = index">
                         <td>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <input class="form-check-input" type="checkbox" [attr.id]="'check-item-' + room.id"
+                                    onclick="addRoomToBooking(room)">
                             </div>
                         </td>
-                        <td class="fw-semibold">Sala 1</td>
+                        <td class="fw-semibold">{{ room.name }}</td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <span class="material-symbols-rounded me-2">stairs_2</span>
-                                <span>Piso 1</span>
+                                <span>Piso {{room.location}}</span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <span class="material-symbols-rounded me-2">group</span>
-                                <span>38</span>
+                                <span>{{room.capacity}}</span>
                             </div>
                         </td>
                         <td>
-                            <div class="dropdown">
-                                <button class="btn btn-sm dropdown-toggle py-1 px-3" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0, 15"
-                                    data-bs-auto-close="outside">
-                                    <span>14:00hs - 15:00hs</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <div class="dropdown-header">
-                                        <span>Selecciona los horarios a reservar</span>
-                                    </div>
-                                    <li class="dropdown-item">
-                                        <div class="form-check">
-                                            <input class="form-check-input me-3" type="checkbox" value=""
-                                                id="flexCheckDefault">
-                                            <label for="">14:00hs - 15:00hs</label>
-                                        </div>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <div class="form-check">
-                                            <input class="form-check-input me-3" type="checkbox" value=""
-                                                id="flexCheckDefault">
-                                            <label for="">14:00hs - 15:00hs</label>
-                                        </div>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <div class="form-check">
-                                            <input class="form-check-input me-3" type="checkbox" value=""
-                                                id="flexCheckDefault">
-                                            <label for="">14:00hs - 15:00hs</label>
-                                        </div>
-                                    </li>
-                                </ul>
+                            <!-- <div class="form-wrapper">
+                                <select class="form-select form-select-custom" id="priority" aria-label="priority">
+                                    <ng-container *ngFor="let schedule of schedules; let j=index">
+                                        <option [attr.value]="schedule" >{{schedule}}</option>
+                                    </ng-container>
+                                </select>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            </div>
-                        </td>
-                        <td class="fw-semibold">Sala 1</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <span class="material-symbols-rounded me-2">stairs_2</span>
-                                <span>Piso 1</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <span class="material-symbols-rounded me-2">group</span>
-                                <span>38</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-sm dropdown-toggle py-1 px-3" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0, 15"
-                                    data-bs-auto-close="outside">
-                                    <span>14:00hs - 15:00hs</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <div class="dropdown-header">
-                                        <span>Selecciona los horarios a reservar</span>
-                                    </div>
-                                    <li class="dropdown-item">
-                                        <div class="form-check">
-                                            <input class="form-check-input me-3" type="checkbox" value=""
-                                                id="flexCheckDefault">
-                                            <label for="">14:00hs - 15:00hs</label>
-                                        </div>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <div class="form-check">
-                                            <input class="form-check-input me-3" type="checkbox" value=""
-                                                id="flexCheckDefault">
-                                            <label for="">14:00hs - 15:00hs</label>
-                                        </div>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <div class="form-check">
-                                            <input class="form-check-input me-3" type="checkbox" value=""
-                                                id="flexCheckDefault">
-                                            <label for="">14:00hs - 15:00hs</label>
-                                        </div>
-                                    </li>
-                                </ul>
+                            <div class="form-wrapper">
+                                <select class="form-select form-select-custom" id="priority" aria-label="priority">
+                                    <ng-container *ngFor="let schedule of schedules; let j=index">
+                                        <option [attr.value]="schedule" >{{schedule}}</option>
+                                    </ng-container>
+                                </select>
+                            </div> -->
+                            <div class="d-flex">
+                                <div class="dropdown me-4">
+                                    <button class="dropdown-toggle btn btn-sm px-3 py-2" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0, 15"
+                                        [disabled]="">
+                                        <span>{{ room['selectedStartTime'] }}</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li *ngFor="let schedule of schedules; let j=index" class="dropdown-item"
+                                            (click)="selectTime(room, 'start', schedule)">
+                                            {{schedule}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="dropdown-toggle btn btn-sm px-3 py-2" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0, 15"
+                                        [disabled]="">
+                                        <span> {{ room['selectedEndTime'] }}</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li *ngFor="let schedule of schedules; let j=index" class="dropdown-item"
+                                            (click)="selectTime(room, 'end', schedule)">
+                                            {{schedule}}
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-
-
         </div>
+
+
     </div>
 </section>

@@ -32,17 +32,17 @@ body {
 .mat-sm {
   font-size: 20px;
 }
-
-//Components
-.form-floating {
-  label {
-    color: $secondary;
-  }
+.text-muted {
+  color: $text-muted !important;
 }
 
+//Components
 .btn {
   border-radius: $border-radius-pill !important;
   padding: map-get($spacers, 2) map-get($spacers, 4);
+  &:disabled {
+    color: $disabled-misc !important;
+  }
 }
 
 .btn-icon {
@@ -58,15 +58,20 @@ body {
 .dropdown {
   .dropdown-toggle {
     @extend .d-flex, .align-items-center;
+    position: relative;
     background-color: darken($surface, 3);
+    padding: .8rem 1.3rem !important;
     &.btn.show {
-      &,
-      &:active {
+      &, &:active {
         border-color: $misc !important;
       }
     }
     &::after {
       content: "\e313";
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
       font-family: "Material Symbols Rounded";
       border: none;
       @extend .mat-sm;
@@ -74,9 +79,6 @@ body {
   }
   .dropdown-menu {
     @extend .shadow;
-    .dropdown-header {
-      white-space: normal;
-    }
     .dropdown-item {
       &:has(.form-check-input:checked) {
         background-color: darken($misc, 20) !important;
@@ -91,11 +93,14 @@ body {
 //Forms
 .form-floating {
   position: relative;
+  label {
+    color: $secondary;
+  }
   .form-control {
     &[type="date"] {
       padding-right: 0;
       &::-webkit-calendar-picker-indicator {
-        /* Oculta el ícono predeterminado de calendarios */
+        /* Oculta el ícono predeterminado */
         opacity: 0;
       }
       &::after {
@@ -109,6 +114,66 @@ body {
         color: $misc;
       }
     }
+    &[type="time"] {
+      padding-right: 0;
+      &::-webkit-calendar-picker-indicator {
+        /* Oculta el ícono predeterminado */
+        opacity: 0;
+      }
+      &::after {
+        content: "\e8b5"; /* Icono reloj custom */
+        font-family: "Material Symbols Rounded";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: $misc;
+      }
+    }
+    &[type="number"] {
+      &::-webkit-inner-spin-button {
+        &,
+        &:focus {
+          -webkit-appearance: none;
+          margin: 0;
+          appearance: none;
+          -moz-appearance: textfield;
+        }
+      }
+    }
+  }
+}
+.form-check-input {
+  &:disabled {
+    ~ label {
+      color: $text-muted;
+      text-decoration:line-through;
+    }
+  }
+}
+
+.form-wrapper {
+  position: relative !important;
+  width: fit-content;
+  .form-select-custom {
+    border: none !important;
+    border-radius: $border-radius-pill;
+    min-width: 130px;
+    padding: .8rem 1.6rem;
+    box-shadow: none !important;
+  }  
+  &::after {
+    position: absolute;
+    content: "\e313"; /* Icono del calendario custom */
+    font-family: "Material Symbols Rounded";
+    font-size: 24px;
+    right: 10px;
+    top: 50%;
+    opacity: 1;
+    transform: translateY(-50%);
+    color: $white;
+
   }
 }
 
@@ -121,23 +186,9 @@ body {
     padding-top: 0.8rem;
     padding-bottom: 0.8rem;
     font-size: $font-size-sm;
-    color: rgba(lighten($misc, 20), 0.8);
+    color: $text-muted;
   }
   tr {
-    td {
-      .material-symbols-rounded {
-        font-variation-settings: 
-        "FILL" 0, 
-        "wght" 300, 
-        "GRAD" 0, 
-        "opsz" 24 !important;
-      }
-    }
-    &:hover {
-      .dropdown-toggle {
-        background-color: transparent;
-      }
-    }
     &:has(.form-check-input:checked) {
       td {
         background-color: $table-hover-bg;
@@ -176,7 +227,43 @@ body {
   }
 }
 
-//
+//Scrollbar
+body {
+  $sb-track-color: darken($background, 5);
+  $sb-thumb-color: $misc;
+  $sb-size: 7px;
+
+  ::-webkit-scrollbar {
+    width: $sb-size;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $sb-track-color;
+    border-radius: 20px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $sb-thumb-color;
+    border-radius: 20px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+      scrollbar-color: $sb-thumb-color $sb-track-color;
+  }
+}
+
+//Search rooms
+#search-rooms {
+  table {
+    .dropdown-toggle {
+      min-width: 110px;
+    }
+    .dropdown-menu {
+      max-height: 240px;
+      overflow: auto;
+    }
+  }
+}
 
 //Login
 .brand-text {
