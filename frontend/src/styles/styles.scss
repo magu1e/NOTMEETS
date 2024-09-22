@@ -5,7 +5,7 @@
 //FONTS
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 //ICONS
-@import url("https://fonts.googleapis.com/icon?family=Material+Symbols+rounded");
+@import url("https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded");
 
 //STYLES
 //Utility
@@ -323,3 +323,5 @@ body {
     }
   }
 }
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
