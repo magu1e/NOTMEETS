@@ -12,14 +12,26 @@ namespace backend.Controllers
     {
         public ApiContext apiContext { get; set; }
         [HttpPost("nuevareserva")]
-        public IActionResult Reserva([FromBody] Reserva reservaDto)
+        public IActionResult Reserva([FromBody] NuevareservaDTO reservaDto)
         {
+
             if (reservaDto == null)
             {
                 return BadRequest(new { message = "Datos de reseva inválidos." });
 
             }
-            apiContext.Reservacioes.Add(reservaDto);
+
+            Reserva r = new Reserva();
+
+            //query busco sala de la reserva
+            r.prioridad = reservaDto.prioridad;
+
+
+
+            r.Sala = apiContext.Salas.Where(s => s.Id == reservaDto.idsala).First();
+
+
+            apiContext.Reservacioes.Add(r);
 
             //Con esta instrucccion guarda en base de datos//
 
@@ -28,9 +40,9 @@ namespace backend.Controllers
 
 
             return Ok("Reseva exitosa.");
-       
 
-            
+
+
         }
         public ReservaController(ApiContext context)
         {
@@ -38,7 +50,7 @@ namespace backend.Controllers
 
 
         }
+
+
     }
-
-
 }

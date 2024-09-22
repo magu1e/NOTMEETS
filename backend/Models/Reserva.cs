@@ -10,6 +10,11 @@ namespace backend.Models
 
         public Sala Sala { get; set; }
 
+        public int prioridad { get; set; }
+        public User usuario { get; set; }
+        public DateTime fechainico { get; set; }
+        public DateTime fechafin { get; set; }
+
 
     }
 
