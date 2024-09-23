@@ -26,7 +26,7 @@ namespace backend.Models
 
         
 
-        // Constructor para inicializar me da error room debe crear en roon y ver que pasa aqui lo de arriba esta ok
+        // Constructor para inicializar 
         public Booking(string user, Room room, string priority, DateTime startDate, DateTime endDate)
         {
             User = user;
