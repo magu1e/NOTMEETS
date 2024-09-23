@@ -88,6 +88,7 @@ export class LoginComponent {
     this.apiService.authRequest(user).subscribe((response: ApiResponse) => {
       if (response.status === 200) {
         console.log('Autenticación exitosa', response.status);
+        //Implementar toast success
         const userId = response.body.user.id;
         this.getRole(userId);
         this.resetForm();

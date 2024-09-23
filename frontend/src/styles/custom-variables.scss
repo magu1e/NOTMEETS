@@ -2,10 +2,6 @@
 @import "../../node_modules/bootstrap/scss/variables";
 
 //Reemplaza colores originarios de bs
-$customColors : (
-  "primary": #5471CF,
-);
-$theme-colors: map-merge($theme-colors, $customColors);
 
 //Colors
 $primary: #5471CF;
@@ -14,6 +10,12 @@ $surface: #1B1C25;
 $accent: #404cf7;
 $misc: #4a5392;
 $disabled-misc: rgba(lighten($accent, 20), 0.8);
+
+$customColors : (
+  "primary": #5471CF,
+  "dark": darken($background, 5),
+);
+$theme-colors: map-merge($theme-colors, $customColors);
 
 //General
 $body-bg: $background;

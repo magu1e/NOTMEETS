@@ -37,6 +37,7 @@ body {
 }
 
 //Components
+//Buttons
 .btn {
   border-radius: $border-radius-pill !important;
   padding: map-get($spacers, 2) map-get($spacers, 4);
@@ -55,14 +56,23 @@ body {
   }
 }
 
+.btn-dark {
+  &:hover,
+  &:active {
+    background-color: darken($dark, 12) !important;
+  }
+}
+
+//Dropdown
 .dropdown {
   .dropdown-toggle {
     @extend .d-flex, .align-items-center;
     position: relative;
     background-color: darken($surface, 3);
-    padding: .8rem 1.3rem !important;
+    padding: 0.8rem 1.3rem !important;
     &.btn.show {
-      &, &:active {
+      &,
+      &:active {
         border-color: $misc !important;
       }
     }
@@ -148,7 +158,7 @@ body {
   &:disabled {
     ~ label {
       color: $text-muted;
-      text-decoration:line-through;
+      text-decoration: line-through;
     }
   }
 }
@@ -160,9 +170,9 @@ body {
     border: none !important;
     border-radius: $border-radius-pill;
     min-width: 130px;
-    padding: .8rem 1.6rem;
+    padding: 0.8rem 1.6rem;
     box-shadow: none !important;
-  }  
+  }
   &::after {
     position: absolute;
     content: "\e313"; /* Icono del calendario custom */
@@ -173,12 +183,25 @@ body {
     opacity: 1;
     transform: translateY(-50%);
     color: $white;
-
   }
 }
 
 .card {
   @extend .shadow;
+}
+
+.floating-card {
+  @extend .shadow;
+  position: fixed;
+  max-width: fit-content;
+  transition: 0.2s ease;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  transform-origin: 50% 50%;
+  &.show {
+    transform: translate(-50%, -25%) !important;
+  }
 }
 
 .table {
@@ -206,7 +229,7 @@ body {
     bottom: -26%;
     font-family: $font-family-base;
     font-size: 20rem;
-    font-weight: bolder;
+    font-weight: 700;
     transform: rotate(-90deg);
     transform-origin: top left;
     line-height: 0.6;
@@ -248,7 +271,7 @@ body {
   }
 
   @supports not selector(::-webkit-scrollbar) {
-      scrollbar-color: $sb-thumb-color $sb-track-color;
+    scrollbar-color: $sb-thumb-color $sb-track-color;
   }
 }
 
@@ -323,5 +346,3 @@ body {
     }
   }
 }
-/* Importing Bootstrap SCSS file. */
-@import 'bootstrap/scss/bootstrap';

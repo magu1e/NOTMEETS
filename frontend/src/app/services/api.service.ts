@@ -19,6 +19,7 @@ export class ApiService {
   //Endpoints
   private baseUrl = 'https://localhost:7252/api';
   private userUrl = `${this.baseUrl}/User`;
+  private bookingUrl = `${this.baseUrl}/Booking`;
 
   constructor(private http: HttpClient) { }
 
@@ -46,7 +47,7 @@ export class ApiService {
   }
 
   //GetUserRole
-   getUserRoleRequest(userId: number): Observable<ApiResponse> {
+  getUserRoleRequest(userId: number): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.userUrl}/role/${userId}`, { observe: 'response' })
       .pipe(
         catchError(error => {
@@ -54,4 +55,13 @@ export class ApiService {
         })
       );
   }
+
+   makeBookingRequest(rooms: any[]): Observable<ApiResponse> {
+    return this.http.post(`${this.bookingUrl}/add`, rooms, { observe: 'response' })
+    .pipe(
+      catchError(error => {
+        return of({ status: error.status, error: error.error } as ApiResponse);
+      })
+    );
+   }
 } 

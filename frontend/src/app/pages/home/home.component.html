@@ -4,12 +4,12 @@
 
             <h1 class="mb-4">Buscar salas</h1>
 
-            <form [formGroup]="roomFilters" (ngSubmit)="onSubmit()">
+            <form [formGroup]="roomFilters" (ngSubmit)="sortRooms()">
                 <div class="row align-items-center mb-3">
                     <div class="col-lg col-md-4">
                         <div class="form-floating mb-3">
                             <input formControlName="date" id="date" type="date" class="form-control"
-                                placeholder="Fecha">
+                               placeholder="Fecha">
                             <label for="date">Fecha de la reserva</label>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                             <label for="capacity">Capacidad</label>
                         </div>
                     </div>
-                    <div class="col-lg col-md-4">
+                    <!-- <div class="col-lg col-md-4">
                         <div class="form-floating mb-3">
                             <select class="form-select" id="priority" aria-label="priority">
                                 <option value="low">Baja</option>
@@ -43,7 +43,7 @@
                             </select>
                             <label for="priority">Prioridad de reunión</label>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-auto mb-3">
                         <button type="submit" role="button" class="btn btn-primary">Buscar</button>
                     </div>
@@ -65,9 +65,14 @@
                     <tr *ngFor="let room of roomsMock; let i = index">
                         <td>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [attr.id]="'check-item-' + room.id"
-                                    (click)="addRoomToBooking(room)">
-                            </div>
+                                <input 
+                                  class="form-check-input" 
+                                  type="checkbox" 
+                                  [attr.id]="'check-item-' + room.id"
+                                  [(ngModel)]="room['selected']" 
+                                  (change)="updatePreBooking(room)">
+                                <label class="form-check-label" [attr.for]="'check-item-' + room.id"></label>
+                              </div>
                         </td>
                         <td class="fw-semibold">{{ room.name }}</td>
                         <td>
@@ -115,6 +120,13 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="card floating-card" [ngClass]="{'show' : roomsSelected}">
+        <div class="card-body p-3">
+            <button class="btn btn-dark me-3" (click)="clearSelections()">Limpiar selección</button>
+            <button class="btn btn-primary">Reservar</button>
         </div>
     </div>
 </section>
