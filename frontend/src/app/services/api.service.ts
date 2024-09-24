@@ -24,7 +24,6 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   //USER REQUESTS
-
   //Auth
   // Verifica errores de de la solicitud, de no haber devuelve el observable con la response
   authRequest(user: any): Observable<ApiResponse> {
@@ -46,6 +45,28 @@ export class ApiService {
       );
   }
 
+  //Delete
+  deleteUserRequest(userId: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.userUrl}/delete/${userId}`, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+
+
+  //Update
+  updateUserRequest(user: any): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.userUrl}/update`, user, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+
+
   //GetUserRole
   getUserRoleRequest(userId: number): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.userUrl}/role/${userId}`, { observe: 'response' })
@@ -56,12 +77,26 @@ export class ApiService {
       );
   }
 
-   makeBookingRequest(rooms: any[]): Observable<ApiResponse> {
+  //GetAllUsers
+  getAllUsersRequest(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.userUrl}/all`, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+
+
+
+  //BOOKING
+  //AddBooking
+  makeBookingRequest(rooms: any[]): Observable<ApiResponse> {
     return this.http.post(`${this.bookingUrl}/add`, rooms, { observe: 'response' })
-    .pipe(
-      catchError(error => {
-        return of({ status: error.status, error: error.error } as ApiResponse);
-      })
-    );
-   }
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
 } 

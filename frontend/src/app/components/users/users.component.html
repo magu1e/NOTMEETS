@@ -1,8 +1,8 @@
 <section id="users">
-    <div class="card mt-5">
+    <div class="card my-5">
         <div class="card-body">
             <h1 class="mb-4">Usuarios</h1>
-            <table class="table table-stripped table-hover ">
+            <table class="table table-stripped table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
@@ -14,7 +14,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let user of usersMock; let i = index">
+                    <tr *ngFor="let user of users; let i = index">
                         <td>
                             #{{ user.id }}
                         </td>
@@ -28,9 +28,9 @@
                             Piso {{ user.location }}
                         </td>
                         <td>
-                            <div class="badge bg-dark fw-light">
+                            <span class="badge fw-light bg-dark">
                                 {{ user.role }}
-                            </div>
+                            </span>
                         </td>
                         <td>
                             <div class="d-flex justify-content-end">
@@ -45,6 +45,10 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div *ngIf="!users || users.length < 0" class="alert alert-info text-center" role="alert" data-bs-theme="dark">
+               Aun no se han creado usuarios
+            </div>
         </div>
     </div>
 </section>
@@ -65,7 +69,7 @@
                             class="form-control mb-2"
                             placeholder="Username"
                             required>
-                        <label for="username">Username</label>
+                        <label for="username">Usuario</label>
                         <div *ngIf="hasError('username')">
                             <small *ngIf="hasError('username','required')" class="text-danger">El usuario es requerido.</small>
                             <small *ngIf="hasError('username','minlength')" class="text-danger">El usuario debe tener como mínimo 8 caracteres.</small>
@@ -83,7 +87,7 @@
                         class="form-control mb-2"
                         placeholder="Email"
                         required>
-                    <label for="email">Email</label>
+                    <label for="email">Correo electrónico</label>
                     <div *ngIf="hasError('email')">
                         <small *ngIf="hasError('email', 'required')" class="text-danger">El email es requerido.</small>
                         <small *ngIf="hasError('email', 'email')" class="text-danger">Formato de correo inválido.</small>
@@ -119,7 +123,7 @@
     </div>
     <div modal-footer>
         <button type="button" class="btn btn-dark me-3" (click)="closeModal('editModal')">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="editUser()">Guardar</button>
+        <button type="button" class="btn btn-primary" (click)="editUser(selectedUser!)">Guardar</button>
     </div>
 </app-modal>
 
@@ -128,11 +132,11 @@
     <div modal-body>
         <div class="text-center">
             <p>¿Está seguro que desea eliminar el usuario?</p>
-            <p class="mb-0 fw-semibold">{{ selectedUser }}</p>
+            <p class="mb-0 fw-semibold">#{{selectedUser?.id}} - {{ selectedUser?.username }}</p>
         </div>
     </div>
     <div modal-footer>
         <button type="button" class="btn btn-dark me-3" (click)="closeModal('deleteModal')">Cancelar</button>
-        <button type="button" class="btn btn-danger" (click)="deleteUser()">Eliminar</button>
+        <button type="button" class="btn btn-danger" (click)="deleteUser(selectedUser!.id)">Eliminar</button>
     </div>
 </app-modal>

@@ -14,8 +14,13 @@ $disabled-misc: rgba(lighten($accent, 20), 0.8);
 $customColors : (
   "primary": #5471CF,
   "dark": darken($background, 5),
+  "info": #405099,
 );
 $theme-colors: map-merge($theme-colors, $customColors);
+
+$info-bg-subtle-dark: shade-color(map-get($theme-colors, "info"), 80%);
+$info-border-subtle-dark: shade-color(map-get($theme-colors, "info"), 40%);
+$info-text-emphasis-dark: tint-color(map-get($theme-colors, "info"), 40%);
 
 //General
 $body-bg: $background;

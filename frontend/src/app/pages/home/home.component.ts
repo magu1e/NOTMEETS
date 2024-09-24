@@ -9,7 +9,7 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 import { ModalService } from '../../shared/modal/modal.service';
 
 
-interface Booking {
+export interface Booking {
   id: number;
   room: number;
   startDate: string;
@@ -18,7 +18,7 @@ interface Booking {
   priority: number;
 }
 
-interface Rooms {
+export interface Rooms {
   id: number,
   name: string,
   location: number,
