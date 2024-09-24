@@ -11,7 +11,7 @@ export const roomsMock = [
         startDate: '2024-10-10 09:00',
         endDate: '2024-10-10 13:00',
         user: 'username1',
-        priority: 'low',
+        priority: 1,
       },
       {
         id: 2,
@@ -19,7 +19,7 @@ export const roomsMock = [
         startDate: '2024-10-11 16:00',
         endDate: '2024-10-11 17:00',
         user: 'username2',
-        priority: 'high',
+        priority: 2,
       },
       {
         id: 3,
@@ -27,7 +27,7 @@ export const roomsMock = [
         startDate: '2024-10-12 17:00',
         endDate: '2024-10-12 18:00',
         user: 'username3',
-        priority: 'low',
+        priority: 2,
       },
       {
         id: 4,
@@ -35,14 +35,14 @@ export const roomsMock = [
         startDate: '2024-10-13 13:00',
         endDate: '2024-10-13 15:00',
         user: 'username4',
-        priority: 'mid',
+        priority: 3,
       },
     ]
   },
   {
     id: 2,
     name: 'Sala 2',
-    location: 1,
+    location: 3,
     capacity: 2,
     bookings: [
       {
@@ -51,7 +51,7 @@ export const roomsMock = [
         startDate: '2024-10-14 09:00',
         endDate: '2024-10-14 13:00',
         user: 'username5',
-        priority: 'low',
+        priority: 1,
       },
       {
         id: 2,
@@ -59,7 +59,7 @@ export const roomsMock = [
         startDate: '2024-10-15 16:00',
         endDate: '2024-10-15 17:00',
         user: 'username6',
-        priority: 'high',
+        priority: 1,
       },
       {
         id: 3,
@@ -67,7 +67,7 @@ export const roomsMock = [
         startDate: '2024-10-15 17:00',
         endDate: '2024-10-15 18:00',
         user: 'username7',
-        priority: 'low',
+        priority: 1,
       },
       {
         id: 4,
@@ -75,23 +75,23 @@ export const roomsMock = [
         startDate: '2024-10-15 13:00',
         endDate: '2024-10-15 15:00',
         user: 'username8',
-        priority: 'mid',
+        priority: 3,
       },
     ]
   },
   {
     id: 3,
     name: 'Sala 3',
-    location: 1,
+    location: 2,
     capacity: 30,
     bookings: [
       {
         id: 1,
         room: 1,
-        startDate: '2024-10-15 09:00',
-        endDate: '2024-10-15 13:00',
+        startDate: '2024-10-10 09:00',
+        endDate: '2024-10-10 13:00',
         user: 'username9',
-        priority: 'low',
+        priority: 2,
       },
       {
         id: 2,
@@ -99,7 +99,7 @@ export const roomsMock = [
         startDate: '2024-10-11 16:00',
         endDate: '2024-10-11 17:00',
         user: 'username10',
-        priority: 'high',
+        priority: 1,
       },
       {
         id: 3,
@@ -107,7 +107,7 @@ export const roomsMock = [
         startDate: '2024-10-12 17:00',
         endDate: '2024-10-12 18:00',
         user: 'username111',
-        priority: 'low',
+        priority: 2,
       },
       {
         id: 4,
@@ -115,14 +115,14 @@ export const roomsMock = [
         startDate: '2024-10-12 13:00',
         endDate: '2024-10-12 15:00',
         user: 'username12',
-        priority: 'mid',
+        priority: 1,
       },
     ]
   },
   {
     id: 4,
     name: 'Sala 4',
-    location: 1,
+    location: 4,
     capacity: 10,
     bookings: [
       {
@@ -131,7 +131,7 @@ export const roomsMock = [
         startDate: '2024-10-20 09:00',
         endDate: '2024-10-20 13:00',
         user: 'username13',
-        priority: 'low',
+        priority: 1,
       },
       {
         id: 2,
@@ -139,7 +139,7 @@ export const roomsMock = [
         startDate: '2024-10-20 16:00',
         endDate: '2024-10-20 17:00',
         user: 'username14',
-        priority: 'high',
+        priority: 1,
       },
       {
         id: 3,
@@ -147,7 +147,7 @@ export const roomsMock = [
         startDate: '2024-10-16 17:00',
         endDate: '2024-10-16 18:00',
         user: 'username15',
-        priority: 'low',
+        priority: 2,
       },
       {
         id: 4,
@@ -155,7 +155,127 @@ export const roomsMock = [
         startDate: '2024-10-16 13:00',
         endDate: '2024-10-16 15:00',
         user: 'username16',
-        priority: 'mid',
+        priority: 3,
+      },
+    ]
+  },
+  {
+    id: 5,
+    name: 'Sala 5',
+    location: 1,
+    capacity: 49,
+    bookings: [
+      {
+        id: 1,
+        room: 1,
+        startDate: '2024-10-10 09:00',
+        endDate: '2024-10-10 13:00',
+        user: 'username9',
+        priority: 1,
+      },
+      {
+        id: 2,
+        room: 1,
+        startDate: '2024-10-11 16:00',
+        endDate: '2024-10-11 17:00',
+        user: 'username10',
+        priority: 1,
+      },
+      {
+        id: 3,
+        room: 1,
+        startDate: '2024-10-12 17:00',
+        endDate: '2024-10-12 18:00',
+        user: 'username111',
+        priority: 2,
+      },
+      {
+        id: 4,
+        room: 1,
+        startDate: '2024-10-12 13:00',
+        endDate: '2024-10-12 15:00',
+        user: 'username12',
+        priority: 2,
+      },
+    ]
+  },
+  {
+    id: 6,
+    name: 'Sala 6',
+    location: 1,
+    capacity: 60,
+    bookings: [
+      {
+        id: 1,
+        room: 1,
+        startDate: '2024-10-10 09:00',
+        endDate: '2024-10-10 13:00',
+        user: 'username9',
+        priority: 1,
+      },
+      {
+        id: 2,
+        room: 1,
+        startDate: '2024-10-11 16:00',
+        endDate: '2024-10-11 17:00',
+        user: 'username10',
+        priority: 2,
+      },
+      {
+        id: 3,
+        room: 1,
+        startDate: '2024-10-12 17:00',
+        endDate: '2024-10-12 18:00',
+        user: 'username111',
+        priority: 1,
+      },
+      {
+        id: 4,
+        room: 1,
+        startDate: '2024-10-12 13:00',
+        endDate: '2024-10-12 15:00',
+        user: 'username12',
+        priority: 2,
+      },
+    ]
+  },
+  {
+    id: 7,
+    name: 'Sala 7',
+    location: 4,
+    capacity: 25,
+    bookings: [
+      {
+        id: 1,
+        room: 1,
+        startDate: '2024-10-20 09:00',
+        endDate: '2024-10-20 13:00',
+        user: 'username13',
+        priority: 2,
+      },
+      {
+        id: 2,
+        room: 1,
+        startDate: '2024-10-20 16:00',
+        endDate: '2024-10-20 17:00',
+        user: 'username14',
+        priority: 1,
+      },
+      {
+        id: 3,
+        room: 1,
+        startDate: '2024-10-16 17:00',
+        endDate: '2024-10-16 18:00',
+        user: 'username15',
+        priority: 1,
+      },
+      {
+        id: 4,
+        room: 1,
+        startDate: '2024-10-16 13:00',
+        endDate: '2024-10-16 15:00',
+        user: 'username16',
+        priority: 1,
       },
     ]
   },
@@ -171,7 +291,7 @@ export const roomsMock = [
   //       startDate: '18-10-2024 09:00',
   //       endDate: '18-10-2024 13:00',
   //       user: 'username17',
-  //       priority: 'low',
+  //       priority: 1,
   //     },
   //     {
   //       id: 2,
@@ -179,7 +299,7 @@ export const roomsMock = [
   //       startDate: '2024-10-11 16:00',
   //       endDate: '2024-10-11 17:00',
   //       user: 'username18',
-  //       priority: 'high',
+  //       priority: 1,
   //     },
   //     {
   //       id: 3,
@@ -187,7 +307,7 @@ export const roomsMock = [
   //       startDate: '18-10-2024 17:00',
   //       endDate: '18-10-2024 18:00',
   //       user: 'username19',
-  //       priority: 'low',
+  //       priority: 1,
   //     },
   //     {
   //       id: 4,
@@ -195,7 +315,7 @@ export const roomsMock = [
   //       startDate: '19-10-2024 13:00',
   //       endDate: '19-10-2024 15:00',
   //       user: 'username20',
-  //       priority: 'mid',
+  //       priority: 1,
   //     },
   //   ]
   // },
@@ -211,7 +331,7 @@ export const roomsMock = [
   //       startDate: '19-10-2024 09:00',
   //       endDate: '19-10-2024 13:00',
   //       user: 'username1',
-  //       priority: 'low',
+  //       priority: 1,
   //     },
   //     {
   //       id: 2,
@@ -219,7 +339,7 @@ export const roomsMock = [
   //       startDate: '2024-10-11 16:00',
   //       endDate: '2024-10-11 17:00',
   //       user: 'username1',
-  //       priority: 'high',
+  //       priority: 1,
   //     },
   //     {
   //       id: 3,
@@ -227,7 +347,7 @@ export const roomsMock = [
   //       startDate: '19-10-2024 17:00',
   //       endDate: '19-10-2024 18:00',
   //       user: 'username1',
-  //       priority: 'low',
+  //       priority: 1,
   //     },
   //     {
   //       id: 4,
@@ -235,7 +355,7 @@ export const roomsMock = [
   //       startDate: '2024-10-20 13:00',
   //       endDate: '2024-10-20 15:00',
   //       user: 'username1',
-  //       priority: 'mid',
+  //       priority: 1,
   //     },
   //   ]
   // },
@@ -251,7 +371,7 @@ export const roomsMock = [
   //       startDate: '2024-10-20 09:00',
   //       endDate: '2024-10-20 13:00',
   //       user: 'username1',
-  //       priority: 'low',
+  //       priority: 1,
   //     },
   //     {
   //       id: 2,
@@ -259,7 +379,7 @@ export const roomsMock = [
   //       startDate: '2024-10-11 16:00',
   //       endDate: '2024-10-11 17:00',
   //       user: 'username1',
-  //       priority: 'high',
+  //       priority: 1,
   //     },
   //     {
   //       id: 3,
@@ -267,7 +387,7 @@ export const roomsMock = [
   //       startDate: '2024-10-20 17:00',
   //       endDate: '2024-10-20 18:00',
   //       user: 'username1',
-  //       priority: 'low',
+  //       priority: 1,
   //     },
   //     {
   //       id: 4,
@@ -275,7 +395,7 @@ export const roomsMock = [
   //       startDate: '2024-10-20 13:00',
   //       endDate: '2024-10-20 15:00',
   //       user: 'username1',
-  //       priority: 'mid',
+  //       priority: 1,
   //     },
   //   ]
   // },

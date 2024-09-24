@@ -155,7 +155,10 @@ body {
   }
 }
 .form-check-input {
+  background-color: darken($background, 5);
   &:disabled {
+    background-color: lighten($background, 5);
+    border-color: darken($misc, 5);
     ~ label {
       color: $text-muted;
       text-decoration: line-through;
