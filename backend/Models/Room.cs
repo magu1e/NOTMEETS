@@ -19,7 +19,6 @@
             Name = name;
             Location = location; 
             Capacity = capacity;
-
             // Asigna la lista de reservas, si es nula crea una lista vacía
             Bookings = bookings ?? new List<Booking>(); 
         }

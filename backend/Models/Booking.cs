@@ -14,7 +14,7 @@ namespace backend.Models
         //El error se soluciono 
         public Room Room { get; set; }
 
-        public string Priority { get; set; } 
+        public string Priority { get; set; } // "LOW", "MEDIUM", "HIGH"
 
         [Required]
         [DataType(DataType.DateTime)]

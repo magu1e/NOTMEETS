@@ -14,6 +14,9 @@ namespace backend.Repositories
         IEnumerable<UserDTO> GetAllUsers(); //Obtener todos los usuarios
         UserDTO? GetUserById(int id); //Obtener un usuario 
         UserDTO? GetUserRole(int id); //Obtener rol del usuario
+        object GetUserByUsername(string username);
+
+
 
         // IEnumerable<GetUserBookingsDTO> GetUserBookings() // Obtener lista de reservas del usuario
         // IEnumerable<GetUserNotificationsDTO> GeUserNotifications(); //Obtener lista de notificaciones del usuario
