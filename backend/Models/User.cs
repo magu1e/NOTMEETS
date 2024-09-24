@@ -9,7 +9,7 @@
         public int Location { get; set; }
         public string Role { get; set; }
 
-        public List<Reserva> Reservas { get; set; }
+        //public List<Reserva> Reservas { get; set; }
 
         //public List<Notification> Notifications { get; set; }
 

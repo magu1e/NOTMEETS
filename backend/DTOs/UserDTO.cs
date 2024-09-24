@@ -5,11 +5,11 @@ namespace backend.DTOs
     public class UserDTO
     {
         public int Id { get; set; }
-        public string? Username { get; set; }
-        public string? Password { get; set; }
-        public string? Email { get; set; }
+        public string Username { get; set; } = String.Empty;
+        public string Password { get; set; } = String.Empty;
+        public string Email { get; set; } = String.Empty;
         public int Location { get; set; }
-        public string? Role { get; set; }
+        public string Role { get; set; } = String.Empty;
 
         //public List<Reservation>? Reservations { get; set; }
 

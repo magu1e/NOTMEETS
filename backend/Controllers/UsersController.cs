@@ -58,29 +58,28 @@ namespace backend.Controllers
         }
 
 
-        //TODO -> fixear
-        //[HttpPut("update")]
-        //public IActionResult Update([FromBody] UserDTO userDto)
-        //{
-        //    if (userDto == null)
-        //    {
-        //        return BadRequest("Datos de usuario inválidos.");
-        //    }
+        [HttpPut("update")]
+        public IActionResult Update([FromBody] UserDTO userDto)
+        {
+            if (userDto == null)
+            {
+                return BadRequest("Datos de usuario inválidos.");
+            }
 
-        //    try
-        //    {
-        //        _userService.UpdateUser(userDto);
-        //        return NoContent(); // Indica que la operacion fue exitosa pero no devuelve nada
-        //    }
-        //    catch (KeyNotFoundException ex)
-        //    {
-        //        return NotFound(ex.Message);
-        //    }
-        //}
-
+            try
+            {
+                _userService.UpdateUser(userDto);
+                return Ok(new { message = "Datos del usuario actualizados." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
 
-        [HttpDelete("{id}")]
+
+        [HttpDelete("delete/{id}")]
         public IActionResult Delete(int id)
         {
             try
