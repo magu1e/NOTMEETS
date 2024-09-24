@@ -12,7 +12,7 @@ export const routes: Routes = [
     component: ContainerLayoutComponent, //Layout con .container
     children: [
       { path: 'home', component: HomeComponent },
-      { path: 'adminitration', component: AdministrationComponent },
+      { path: 'administration', component: AdministrationComponent },
     ]
   },
   {

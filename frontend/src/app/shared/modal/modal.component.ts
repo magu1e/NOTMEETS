@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
-import { ModalService } from './modal.service'; // Asegúrate de importar tu servicio
+import { ModalService } from './modal.service';
 
 @Component({
   selector: 'app-modal',
@@ -9,19 +9,21 @@ import { ModalService } from './modal.service'; // Asegúrate de importar tu ser
 })
 export class ModalComponent implements AfterViewInit {
   @Input() title: string = 'Modal Title';
+  @Input() id!: string;
   @Output() close = new EventEmitter<void>();
   @Output() confirm = new EventEmitter<void>();
   @ViewChild('modal') modalElement!: ElementRef;
 
   private modalInstance!: any;
 
-  constructor(private modalService: ModalService) {} // Inyección del servicio
+  constructor(private modalService: ModalService) {}
 
   ngAfterViewInit(): void {
+    this.modalService.registerModal(this.id); // Registrar el modal
     this.modalInstance = new (window as any).bootstrap.Modal(this.modalElement.nativeElement);
     
-    // Suscribirse al estado del modal
-    this.modalService.isModalVisible$.subscribe(isVisible => {
+    // Suscribirse al estado del modal usando el ID
+    this.modalService.getModalState(this.id)?.subscribe(isVisible => {
       if (isVisible) {
         this.openModal();
       } else {
@@ -36,7 +38,7 @@ export class ModalComponent implements AfterViewInit {
 
   closeModal() {
     this.modalInstance.hide();
-    this.close.emit();
+    this.close.emit(); // Emitir el evento de cierre
   }
 
   confirmModal() {

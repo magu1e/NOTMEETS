@@ -110,16 +110,15 @@
         </div>
     </div>
 
-    <div class="card floating-card" [ngClass]="{'show' : roomsSelected && !isModalOpen}">
+    <div class="card floating-card" [ngClass]="{'show' : roomsSelected}">
         <div class="card-body p-3">
             <button class="btn btn-dark me-3" (click)="clearSelections()">Limpiar selección</button>
-            <button class="btn btn-primary" data-bs-target="#modalBooking"
-                (click)="modalBooking.openModal()">Reservar</button>
+            <button class="btn btn-primary" (click)="modalBooking.openModal()">Reservar</button>
         </div>
     </div>
 
     <!-- Modal genérico -->
-    <app-modal [title]="'Crear reserva'" #modalBooking>
+    <app-modal id="modalBooking" [title]="'Crear reserva'" #modalBooking>
         <div modal-body>
             <div class="card mb-4 bg-dark">
                 <div class="card-body p-3">
@@ -134,7 +133,6 @@
                     </small>
                  </div>
             </div>
-              
             <form [formGroup]="booking">
                 <div class="form-floating mb-3">
                     <select formControlName="priority" class="form-select" id="priority" aria-label="priority">
@@ -148,7 +146,7 @@
             <small class="text-muted">Las reservas de mayor prioridad pueden cancelar reservas hechas previamente para la misma fecha y rango horario.</small>
         </div>
         <div modal-footer>
-            <button type="button" class="btn btn-dark me-3" (click)="onModalClose()">Volver</button>
+            <button type="button" class="btn btn-dark me-3" (click)="modalBooking.closeModal()">Volver</button>
             <button type="button" class="btn btn-primary" (click)="makeBookings()">Reservar</button>
         </div>
     </app-modal>

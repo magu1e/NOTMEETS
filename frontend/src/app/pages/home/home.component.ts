@@ -52,7 +52,6 @@ export class HomeComponent {
   schedules = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
 
   //Booking
-  isModalOpen = false;
 
   constructor(private formBuilder: FormBuilder, private apiService: ApiService, private modalService: ModalService) {
     this.roomFilters = this.formBuilder.group({
@@ -222,11 +221,10 @@ formatDateTime = (date: string, time: string) => {
           priority: priority,
           room: {...room}
         })
-        console.log(newBookings)
+       //console.log(newBookings)
       return newBookings; 
     });
   }
-
 
   makeBookings() {
     const priority = this.booking.get('priority')!.value;
@@ -242,26 +240,8 @@ formatDateTime = (date: string, time: string) => {
     //       ;
     //     }
     //   });
+    this.modalService.closeModal('modalBooking');
   }
-
-    // Método para abrir el modal
-    openModal() {
-      this.isModalOpen = true;
-      this.modalService.openModal();
-    }
-  
-    // Método para cerrar el modal
-    onModalClose() {
-      this.isModalOpen = false;
-      this.modalService.closeModal();
-    }
-  
-    // Método para confirmar acción y cerrar el modal
-    onModalConfirm() {
-      this.isModalOpen = false;
-      this.modalService.confirmModal();
-      this.makeBookings();
-    }
 }
 
 

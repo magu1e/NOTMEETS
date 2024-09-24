@@ -5,22 +5,31 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ModalService {
-  // Estado del modal -> false indica que está cerrado
-  private isModalVisibleSubject = new BehaviorSubject<boolean>(false);
-  isModalVisible$ = this.isModalVisibleSubject.asObservable();
+  private modals: { [key: string]: BehaviorSubject<boolean> } = {};
 
-  // Abrie el modal
-  openModal() {
-    this.isModalVisibleSubject.next(true);
+  // Registrar un modal con un ID único
+  registerModal(id: string) {
+    if (!this.modals[id]) {
+      this.modals[id] = new BehaviorSubject<boolean>(false);
+    }
   }
 
-  // Cerrar el modal
-  closeModal() {
-    this.isModalVisibleSubject.next(false);
+  // Abrir un modal específico
+  openModal(id: string) {
+    if (this.modals[id]) {
+      this.modals[id].next(true);
+    }
   }
 
-  // Confirmar la acción y luego cerrar el modal
-  confirmModal() {
-    this.isModalVisibleSubject.next(false);
+  // Cerrar un modal específico
+  closeModal(id: string) {
+    if (this.modals[id]) {
+      this.modals[id].next(false);
+    }
+  }
+
+  // Obtener el estado del modal (abierto o cerrado)
+  getModalState(id: string) {
+    return this.modals[id]?.asObservable();
   }
 }
