@@ -8,8 +8,12 @@ namespace backend.Models
     public class Booking
     {
         //id
-        public int Id { get; set; }      
+        public int Id { get; set; }
+      
         public string User { get; set; }
+
+        // Nueva propiedad para almacenar el ID de la sala
+        public int RoomId { get; set; }
 
         //El error se soluciono 
         public Room Room { get; set; }
@@ -26,19 +30,16 @@ namespace backend.Models
 
         
 
-        // Constructor para inicializar 
-        public Booking(string user, Room room, string priority, DateTime startDate, DateTime endDate)
+        // Constructor para inicializar agregue el RoomId
+        public Booking(string user, Room room, int roomId, string priority, DateTime startDate, DateTime endDate)
         {
             User = user;
-            // El error que tenia se soluciona con Room como parametro
             Room = room;  
+            RoomId = roomId;
             Priority = priority;
             StartDate = startDate;
             EndDate = endDate;
         }
-
-
-
-
+        
     }
 }

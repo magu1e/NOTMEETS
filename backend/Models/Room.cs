@@ -7,8 +7,6 @@
         public string Location { get; set; }
         public int Capacity { get; set; }
 
-        
-
         //Lista de reservar 
         public List<Booking> Bookings { get; set; } = new List<Booking>();
 
@@ -21,6 +19,11 @@
             Capacity = capacity;
             // Asigna la lista de reservas, si es nula crea una lista vacía
             Bookings = bookings ?? new List<Booking>(); 
+        }
+
+        public Room(int id)
+        {
+            Id = id;
         }
     }
 }

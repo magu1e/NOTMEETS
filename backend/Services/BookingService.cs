@@ -15,10 +15,15 @@ namespace backend.Services
             _userRepository = userRepository;
         }
 
+        public void CancelBooking(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         // Implementación del método para crear una reserva
         public Booking CreateBooking(NewbookingDTO newBookingDTO)
         {
-            // Obtener todas las reservas que se solapan con la nueva reserva en la misma sala
+            // Obtener todas las reservas que coinciden con la nueva reserva en la misma sala
             var conflictingBookings = _bookingRepository.GetBookingsForRoomAndTime(
                 newBookingDTO.RoomId, newBookingDTO.StartDate, newBookingDTO.EndDate); //Preguntar aqui como definir 
 
@@ -37,20 +42,32 @@ namespace backend.Services
                     throw new Exception("La sala ya está reservada con una mayor o igual prioridad.");
                 }
             }
+
             // Crear nueva reserva
             var newBooking = new Booking(
                 newBookingDTO.User,
-                new Room { Id = newBookingDTO.RoomId }, // Pregutar aqui el DTO esta definido como RoomName
+                newBookingDTO.RoomId, // Pasa solo el RoomId
                 newBookingDTO.Priority,
                 newBookingDTO.StartDate,
                 newBookingDTO.EndDate);
 
             return _bookingRepository.AddBooking(newBooking);
         }
+
+        public Booking GetBookingById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Booking> GetBookingsForRoom(int roomId)
+        {
+            throw new NotImplementedException();
+        }
+
         // Método para comparar prioridades
         private int ComparePriority(string newPriority, string existingPriority)
         {
-            var priorityOrder = new Dictionary<string, int> { { "LOW", 1 }, { "MEDIUM", 2 }, { "HIGH", 3 } };
+            var priorityOrder = new Dictionary<string, int> { { "LOW", 3 }, { "MEDIUM", 2 }, { "HIGH", 1 } };
             return priorityOrder[newPriority] - priorityOrder[existingPriority];
         }
 
