@@ -49,7 +49,7 @@ export class HomeComponent {
   roomsSelected = false;
 
   //Seleccion de horarios
-  schedules = ['09:00hs', '10:00hs', '11:00hs', '12:00hs', '13:00hs', '14:00hs', '15:00hs', '16:00hs', '17:00hs', '18:00hs'];
+  schedules = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
 
   //Booking
   isModalOpen = false;
@@ -63,7 +63,7 @@ export class HomeComponent {
     });
 
     this.booking = this.formBuilder.group({
-      priority: '3',
+      priority: 3,
     });
     
     this.selectionPropsInit()
@@ -76,8 +76,8 @@ export class HomeComponent {
   selectionPropsInit(){
     this.roomsMock.forEach((room) => {
       room['selectedDate'] = this.currentDate;
+      room['selectedStartTime'] = '09:00';
       room['selectedEndTime'] = '';
-      room['selectedStartTime'] = '';
       room['selected'] = false;
       room['filteredStartSchedules'] = [...this.schedules];
       room['filteredEndSchedules'] = [...this.schedules];
@@ -199,26 +199,38 @@ filterRooms() {
     console.log(roomsMock)
   }
 
-   // Método para abrir el modal
-   openModal() {
-    this.isModalOpen = true;
-    this.modalService.openModal();
+
+
+formatDateTime = (date: string, time: string) => {
+    const mergedDateTime = `${date} ${time}`;
+    return format(new Date(mergedDateTime), 'yyyy-MM-dd HH:mm');
+};
+ 
+
+  setRequest(rooms: Rooms[], priority: number) {
+    let newBookings: any[] = [];
+    rooms.map(({ selected, filteredStartSchedules, filteredEndSchedules, ...room }) => {
+      
+      const formattedStartDate = this.formatDateTime(room['selectedDate'], room['selectedStartTime']);
+      const formattedEndDate = this.formatDateTime(room['selectedDate'], room['selectedEndTime']);
+
+      newBookings.push(
+        {
+          startDate: formattedStartDate, 
+          endDate: formattedEndDate, 
+          //user: getUser(); 
+          priority: priority,
+          room: {...room}
+        })
+        console.log(newBookings)
+      return newBookings; 
+    });
   }
 
-  // Método para cerrar el modal
-  onModalClose() {
-    this.isModalOpen = false;
-    this.modalService.closeModal();
-  }
-
-  // Método para confirmar acción y cerrar el modal
-  onModalConfirm() {
-    this.isModalOpen = false;
-    this.modalService.confirmModal();
-    this.makeBookings();
-  }
 
   makeBookings() {
+    const priority = this.booking.get('priority')!.value;
+    this.setRequest(this.selectedRooms, priority);
     // this.apiService.makeBookingRequest(rooms) //TODO ENVIAR JSON FINAL POR PARAMS
     //   .subscribe((response: ApiResponse) => {
     //     if (response.status === 201) { // Manejo de respuesta exitosa
@@ -232,6 +244,24 @@ filterRooms() {
     //   });
   }
 
+    // Método para abrir el modal
+    openModal() {
+      this.isModalOpen = true;
+      this.modalService.openModal();
+    }
+  
+    // Método para cerrar el modal
+    onModalClose() {
+      this.isModalOpen = false;
+      this.modalService.closeModal();
+    }
+  
+    // Método para confirmar acción y cerrar el modal
+    onModalConfirm() {
+      this.isModalOpen = false;
+      this.modalService.confirmModal();
+      this.makeBookings();
+    }
 }
 
 

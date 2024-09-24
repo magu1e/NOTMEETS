@@ -80,12 +80,12 @@
                                     <button class="dropdown-toggle btn btn-sm px-3 py-2" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0, 15"
                                         [disabled]="">
-                                        <span>{{ room['selectedStartTime'] || '09:00hs' }}</span>
+                                        <span>{{ room['selectedStartTime'] || '09:00' }}hs</span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li *ngFor="let schedule of room['filteredStartSchedules']; let j=index"
                                             class="dropdown-item" (click)="selectTime(room, 'start', schedule)">
-                                            {{schedule}}
+                                            {{schedule}}hs
                                         </li>
                                     </ul>
                                 </div>
@@ -93,12 +93,12 @@
                                     <button class="dropdown-toggle btn btn-sm px-3 py-2" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0, 15"
                                         [disabled]="">
-                                        <span> {{ room['selectedEndTime'] || '09:00hs' }}</span>
+                                        <span> {{ room['selectedEndTime'] || '09:00' }}hs</span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li *ngFor="let schedule of room['filteredEndSchedules']; let j=index"
                                             class="dropdown-item" (click)="selectTime(room, 'end', schedule)">
-                                            {{schedule}}
+                                            {{schedule}}hs
                                         </li>
                                     </ul>
                                 </div>
@@ -110,7 +110,7 @@
         </div>
     </div>
 
-    <div class="card floating-card" [ngClass]="{'show' : roomsSelected}">
+    <div class="card floating-card" [ngClass]="{'show' : roomsSelected && !isModalOpen}">
         <div class="card-body p-3">
             <button class="btn btn-dark me-3" (click)="clearSelections()">Limpiar selección</button>
             <button class="btn btn-primary" data-bs-target="#modalBooking"
@@ -121,6 +121,20 @@
     <!-- Modal genérico -->
     <app-modal [title]="'Crear reserva'" #modalBooking>
         <div modal-body>
+            <div class="card mb-4 bg-dark">
+                <div class="card-body p-3">
+                    <h6>Salas a reservar</h6>
+                    <small>
+                        <span class="fw-semibold">Fecha: </span><span>{{ roomFilters.get('date')!.value }}</span>
+                        <p class="mb-0" *ngFor="let room of selectedRooms">
+                            <span class="me-2">
+                                <span class="fw-semibold">{{room.name}}:</span> {{ room['selectedStartTime'] }}hs - {{ room['selectedEndTime']}}hs, ({{room.capacity}} personas,  Piso {{room.location}})
+                            </span>
+                        </p>
+                    </small>
+                 </div>
+            </div>
+              
             <form [formGroup]="booking">
                 <div class="form-floating mb-3">
                     <select formControlName="priority" class="form-select" id="priority" aria-label="priority">
