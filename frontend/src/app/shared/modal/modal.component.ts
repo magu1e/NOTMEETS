@@ -38,7 +38,7 @@ export class ModalComponent implements AfterViewInit {
 
   closeModal() {
     this.modalInstance.hide();
-    this.close.emit(); // Emitir el evento de cierre
+    this.close.emit();
   }
 
   confirmModal() {

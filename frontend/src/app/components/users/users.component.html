@@ -57,46 +57,64 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-floating mb-3">
-                        <input formControlName="username" id="username" type="text" class="form-control"
-                            placeholder="Username" required>
+                        <input 
+                            formControlName="username" 
+                            id="username" 
+                            type="text"
+                            [ngClass]="{'is-invalid' : hasError('username')}"
+                            class="form-control mb-2"
+                            placeholder="Username"
+                            required>
                         <label for="username">Username</label>
+                        <div *ngIf="hasError('username')">
+                            <small *ngIf="hasError('username','required')" class="text-danger">El usuario es requerido.</small>
+                            <small *ngIf="hasError('username','minlength')" class="text-danger">El usuario debe tener como mínimo 8 caracteres.</small>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-12">
                 <div class="form-floating mb-3">
-                    <input formControlName="email" id="email" type="email" class="form-control" placeholder="Email"
+                    <input 
+                        formControlName="email"
+                        id="email" 
+                        type="email"
+                        [ngClass]="{'is-invalid' : hasError('email')}"
+                        class="form-control mb-2"
+                        placeholder="Email"
                         required>
                     <label for="email">Email</label>
+                    <div *ngIf="hasError('email')">
+                        <small *ngIf="hasError('email', 'required')" class="text-danger">El email es requerido.</small>
+                        <small *ngIf="hasError('email', 'email')" class="text-danger">Formato de correo inválido.</small>
+                    </div>
                 </div>
             </div>
             <div class="col-12">
                 <div class="form-floating mb-4">
-                    <select 
-                        formControlName="location" 
-                        id="registerLocation" 
-                        class="form-select mb-2"
-                        placeholder="Ubicación" 
-                        required>
-                            <option value="1">Piso 1</option>
-                            <option value="2">Piso 2</option>
-                            <option value="3">Piso 3</option>
-                            <option value="4">Piso 4</option>
+                    <select formControlName="location" id="location" class="form-select mb-1" placeholder="Ubicación" required>
+                        <option value="1">Piso 1</option>
+                        <option value="2">Piso 2</option>
+                        <option value="3">Piso 3</option>
+                        <option value="4">Piso 4</option>
                     </select>
-                    <label for="registerLocation">Ubicación</label>
+                    <label for="location">Ubicación</label>
                 </div>
-                <!-- <div *ngIf="invalidRegister" class="mb-4 text-center">
-                    <small class="text-danger">{{ invalidRegister }}</small>
-                </div>> -->
             </div>
             <div class="col-12">
                 <div class="form-floating">
-                    <!-- Select -->
-                    <input formControlName="role" id="role" type="text" class="form-control" placeholder="Role"
-                        required>
-                    <label for="role">Role</label>
+                    <div class="form-floating">
+                        <select formControlName="role" id="role" class="form-select mb-1" placeholder="Rol" required>
+                            <option value="user">Usuario</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                        <label for="role">Rol</label>
+                    </div>
                 </div>
             </div>
+            <!-- <div *ngIf="invalidRegister" class="mb-4 text-center">
+            <small class="text-danger">{{ invalidRegister }}</small>
+        </div>> -->
         </form>
     </div>
     <div modal-footer>
@@ -108,7 +126,10 @@
 <!-- Modal Delete -->
 <app-modal id="deleteModal" [title]="'Eliminar usuario'" #deleteModal>
     <div modal-body>
-        <p class="mb-0 text-center">¿Está seguro que desea eliminar el usuario?</p>
+        <div class="text-center">
+            <p>¿Está seguro que desea eliminar el usuario?</p>
+            <p class="mb-0 fw-semibold">{{ selectedUser }}</p>
+        </div>
     </div>
     <div modal-footer>
         <button type="button" class="btn btn-dark me-3" (click)="closeModal('deleteModal')">Cancelar</button>

@@ -13,7 +13,7 @@
                         id="loginUsername"  
                         type="text" 
                         [ngClass]="{'is-invalid' : hasError(loginForm,'username')}"
-                        class="form-control mb-2"  
+                        class="form-control mb-1"  
                         placeholder="Usuario"
                         required>
                     <label for="loginUsername">Usuario</label>
@@ -27,7 +27,7 @@
                     id="loginPassword"
                     type="password" 
                     [ngClass]="{'is-invalid' : hasError(loginForm,'password')}"
-                    class="form-control mb-2" 
+                    class="form-control mb-1" 
                     placeholder="Password"
                     required>
                     <label for="loginPassword">Contraseña</label>
@@ -64,7 +64,7 @@
                         id="registerUsername" 
                         type="text" 
                         [ngClass]="{'is-invalid' : hasError(registerForm,'username')}"
-                        class="form-control mb-2" 
+                        class="form-control mb-1" 
                         placeholder="Usuario"
                         required>
                     <label for="registerUsername">Usuario</label>
@@ -79,12 +79,12 @@
                         id="registerPassword" 
                         type="password" 
                         [ngClass]="{'is-invalid' : hasError(registerForm,'password')}"
-                        class="form-control mb-2" 
+                        class="form-control mb-1" 
                         placeholder="Password"
                         required>
                     <label for="registerPassword">Contraseña</label>
                     <div *ngIf="hasError(registerForm,'password')">
-                        <small *ngIf="hasError(registerForm,'password','required')" class="text-danger">El usuario es requerido.</small>
+                        <small *ngIf="hasError(registerForm,'password','required')" class="text-danger">El contraseña es requerida.</small>
                         <small *ngIf="hasError(registerForm,'password','minlength')" class="text-danger">La contraseña debe tener como mínimo 8 caracteres.</small>
                     </div>
                 </div>
@@ -94,12 +94,12 @@
                         id="registerEmail" 
                         type="email" 
                         [ngClass]="{'is-invalid' : hasError(registerForm,'email')}"
-                        class="form-control mb-2" 
+                        class="form-control mb-1" 
                         placeholder="Correo electrónico"
                         required>
                     <label for="registerEmail">Correo electrónico</label>
                     <div *ngIf="hasError(registerForm,'email')">
-                        <small *ngIf="hasError(registerForm,'email', 'required')" class="text-danger">El usuario es requerido.</small>
+                        <small *ngIf="hasError(registerForm,'email', 'required')" class="text-danger">El email es requerido.</small>
                         <small *ngIf="hasError(registerForm,'email', 'email')" class="text-danger">Formato de correo inválido.</small>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                     <select 
                         formControlName="location" 
                         id="registerLocation" 
-                        class="form-select mb-2"
+                        class="form-select mb-1"
                         placeholder="Ubicación" 
                         required>
                             <option value="1">Piso 1</option>
