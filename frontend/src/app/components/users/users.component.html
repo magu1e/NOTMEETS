@@ -1,0 +1,117 @@
+<section id="users">
+    <div class="card mt-5">
+        <div class="card-body">
+            <h1 class="mb-4">Usuarios</h1>
+            <table class="table table-stripped table-hover ">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Ubicación</th>
+                        <th scope="col">Rol</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of usersMock; let i = index">
+                        <td>
+                            #{{ user.id }}
+                        </td>
+                        <td>
+                            <span class="fw-semibold">{{ user.username }}</span>
+                        </td>
+                        <td>
+                            {{ user.email }}
+                        </td>
+                        <td>
+                            Piso {{ user.location }}
+                        </td>
+                        <td>
+                            <div class="badge bg-dark fw-light">
+                                {{ user.role }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-icon" type="button" (click)="openModalEditUser(user)">
+                                    <span class="material-symbols-rounded">edit</span>
+                                </button>
+                                <button class="btn btn-icon" type="button" (click)="openModalDeleteUser(user)">
+                                    <span class="material-symbols-rounded text-danger">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<!-- Modal Edit -->
+<app-modal id="editModal" [title]="'Editar usuario'" #editModal>
+    <div modal-body>
+        <form [formGroup]="editUserForm">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input formControlName="username" id="username" type="text" class="form-control"
+                            placeholder="Username" required>
+                        <label for="username">Username</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <input formControlName="email" id="email" type="email" class="form-control" placeholder="Email"
+                        required>
+                    <label for="email">Email</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-4">
+                    <select 
+                        formControlName="location" 
+                        id="registerLocation" 
+                        class="form-select mb-2"
+                        placeholder="Ubicación" 
+                        required>
+                            <option value="1">Piso 1</option>
+                            <option value="2">Piso 2</option>
+                            <option value="3">Piso 3</option>
+                            <option value="4">Piso 4</option>
+                    </select>
+                    <label for="registerLocation">Ubicación</label>
+                </div>
+                <!-- <div *ngIf="invalidRegister" class="mb-4 text-center">
+                    <small class="text-danger">{{ invalidRegister }}</small>
+                </div>> -->
+            </div>
+            <div class="col-12">
+                <div class="form-floating">
+                    <!-- Select -->
+                    <input formControlName="role" id="role" type="text" class="form-control" placeholder="Role"
+                        required>
+                    <label for="role">Role</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('editModal')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="editUser()">Guardar</button>
+    </div>
+</app-modal>
+
+<!-- Modal Delete -->
+<app-modal id="deleteModal" [title]="'Eliminar usuario'" #deleteModal>
+    <div modal-body>
+        <p class="mb-0 text-center">¿Está seguro que desea eliminar el usuario?</p>
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('deleteModal')">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="deleteUser()">Eliminar</button>
+    </div>
+</app-modal>
