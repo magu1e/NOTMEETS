@@ -48,7 +48,7 @@ namespace backend.DTOs
             Id = user.Id;
             Username = user.Username;
             Email = user.Email;
-            Location = 0;
+            Location = user.Location;
             Role = user.Role;
         }
 

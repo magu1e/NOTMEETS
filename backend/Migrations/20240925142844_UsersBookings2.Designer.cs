@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20240925135149_UsersBookings")]
-    partial class UsersBookings
+    [Migration("20240925142844_UsersBookings2")]
+    partial class UsersBookings2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
