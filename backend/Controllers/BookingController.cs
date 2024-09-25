@@ -32,7 +32,7 @@ namespace backend.Controllers
             }
         }
             // GET: api/Booking/5
-            [HttpGet("{id}")]
+            [HttpGet("{id:int}")]
             public async Task<IActionResult> GetBooking(int id)
             {
                 var booking = _bookingService.GetBookingById(id);
@@ -46,7 +46,7 @@ namespace backend.Controllers
 
         // GET: api/Booking/5
         [HttpGet("all")]
-        public async Task<IActionResult> GetBookingsForRoomAndTime(int? roomId, DateTime? startDate, DateTime? endDate)
+        public async Task<IActionResult> GetBookingsForRoomAndTime(int roomId, DateTime startDate, DateTime endDate)
         {
             var booking = _bookingService.GetBookingsForRoomAndTime(roomId,startDate,endDate);
             if (booking == null)
@@ -58,7 +58,7 @@ namespace backend.Controllers
 
 
         // PUT: api/Booking/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
             public async Task<IActionResult> UpdateBooking(int id, [FromBody] NewBookingDTO updatedBooking)
             {
                 try
@@ -77,7 +77,7 @@ namespace backend.Controllers
             }
 
             // DELETE: api/Booking/5
-            [HttpDelete("{id}")]
+            [HttpDelete("{id:int}")]
             public async Task<IActionResult> DeleteBooking(int id)
             {
                 var result = _bookingService.DeleteBooking(id);

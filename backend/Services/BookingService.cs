@@ -81,7 +81,7 @@ namespace backend.Services
             throw new NotImplementedException();
         }
 
-        public List<Booking> GetBookingsForRoomAndTime(int? roomId, DateTime? startDate, DateTime? endDate)
+        public List<Booking> GetBookingsForRoomAndTime(int roomId, DateTime startDate, DateTime endDate)
         {
             return _bookingRepository.GetBookingsForRoomAndTime(roomId, startDate, endDate).ToList();
         }
