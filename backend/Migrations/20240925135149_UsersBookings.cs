@@ -5,16 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace backend.Migrations
 {
-    public partial class cambiosenlosmodelos : Migration
+    public partial class UsersBookings : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Reservacioes");
-
-            migrationBuilder.DropTable(
-                name: "Salas");
-
             migrationBuilder.CreateTable(
                 name: "Rooms",
                 columns: table => new
@@ -28,6 +22,23 @@ namespace backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,52 +90,8 @@ namespace backend.Migrations
             migrationBuilder.DropTable(
                 name: "Rooms");
 
-            migrationBuilder.CreateTable(
-                name: "Salas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Salas", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Reservacioes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SalaId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Reservacioes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Reservacioes_Salas_SalaId",
-                        column: x => x.SalaId,
-                        principalTable: "Salas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reservacioes_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservacioes_SalaId",
-                table: "Reservacioes",
-                column: "SalaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservacioes_UserId",
-                table: "Reservacioes",
-                column: "UserId");
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
