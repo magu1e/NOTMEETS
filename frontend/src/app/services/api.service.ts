@@ -45,17 +45,6 @@ export class ApiService {
       );
   }
 
-  //Delete
-  deleteUserRequest(userId: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(`${this.userUrl}/delete/${userId}`, { observe: 'response' })
-      .pipe(
-        catchError(error => {
-          return of({ status: error.status, error: error.error } as ApiResponse);
-        })
-      );
-  }
-
-
   //Update
   updateUserRequest(user: any): Observable<ApiResponse> {
     return this.http.put<ApiResponse>(`${this.userUrl}/update`, user, { observe: 'response' })
@@ -66,6 +55,16 @@ export class ApiService {
       );
   }
 
+
+  //Delete
+  deleteUserRequest(userId: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.userUrl}/delete/${userId}`, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
 
   //GetUserRole
   getUserRoleRequest(userId: number): Observable<ApiResponse> {
@@ -99,4 +98,4 @@ export class ApiService {
         })
       );
   }
-} 
+}

@@ -217,7 +217,7 @@ formatDateTime = (date: string, time: string) => {
         {
           startDate: formattedStartDate, 
           endDate: formattedEndDate, 
-          //user: getUser(); 
+          //user: getUser(); //TODO obtener usuario de cache
           priority: priority,
           room: {...room}
         })

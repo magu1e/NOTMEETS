@@ -1,7 +1,10 @@
 <section id="users">
     <div class="card my-5">
         <div class="card-body">
-            <h1 class="mb-4">Usuarios</h1>
+            <div class="d-flex justify-content-between  align-items-center mb-4">
+                <h1>Usuarios</h1>
+                <button class="btn btn-primary" type="button" (click)="openModalAddUser()">Crear usuario</button>
+            </div>
             <table class="table table-stripped table-hover">
                 <thead>
                     <tr>
@@ -46,13 +49,111 @@
                 </tbody>
             </table>
 
-            <div *ngIf="!users || users.length < 0" class="alert alert-info text-center" role="alert" data-bs-theme="dark">
-               Aun no se han creado usuarios
+            <div *ngIf="!users || users.length < 0" class="alert alert-info text-center" role="alert"
+                data-bs-theme="dark">
+                Aun no se han creado usuarios
             </div>
         </div>
     </div>
 </section>
 
+
+<!-- Modal Crear -->
+<app-modal id="addModal" [title]="'Crear usuario'" #addModal (click)="closeModal('addModal')">
+    <div modal-body>
+        <form [formGroup]="addUserForm">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input 
+                            formControlName="username" 
+                            id="username" 
+                            type="text"
+                            [ngClass]="{'is-invalid' : hasError(addUserForm, 'username')}" 
+                            class="form-control mb-2"
+                            placeholder="Username" 
+                            required>
+                        <label for="username">Usuario</label>
+                        <div *ngIf="hasError(addUserForm, 'username')">
+                            <small *ngIf="hasError(addUserForm, 'username','required')" class="text-danger">El
+                                usuario es requerido.</small>
+                            <small *ngIf="hasError(addUserForm, 'username','minlength')" class="text-danger">El
+                                usuario debe tener como mínimo 8 caracteres.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input 
+                            formControlName="password" 
+                            id="password" 
+                            type="password"
+                            [ngClass]="{'is-invalid' : hasError(addUserForm, 'password')}" 
+                            class="form-control mb-2"
+                            placeholder="password" 
+                            required>
+                        <label for="password">Contraseña</label>
+                        <div *ngIf="hasError(addUserForm, 'password')">
+                            <small *ngIf="hasError(addUserForm, 'password','required')" class="text-danger">La
+                                contraseña es requerida.</small>
+                            <small *ngIf="hasError(addUserForm, 'password','minlength')" class="text-danger">La
+                                contraseña debe tener como mínimo 8 caracteres.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <input 
+                        formControlName="email" 
+                        id="email" 
+                        type="email"
+                        [ngClass]="{'is-invalid' : hasError(addUserForm, 'email')}"
+                        class="form-control mb-2"
+                        placeholder="Email" 
+                        required>
+                    <label for="email">Correo electrónico</label>
+                    <div *ngIf="hasError(addUserForm, 'email')">
+                        <small *ngIf="hasError(addUserForm, 'email', 'required')" class="text-danger">El email es
+                            requerido.</small>
+                        <small *ngIf="hasError(addUserForm, 'email', 'email')" class="text-danger">Formato de correo
+                            inválido.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-4">
+                    <select formControlName="location" id="location" class="form-select" placeholder="Ubicación"
+                        required>
+                        <option value="1">Piso 1</option>
+                        <option value="2">Piso 2</option>
+                        <option value="3">Piso 3</option>
+                        <option value="4">Piso 4</option>
+                    </select>
+                    <label for="location">Ubicación</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <select formControlName="role" id="role" class="form-select" placeholder="Rol" required>
+                        <option value="user">Usuario</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                    <label for="role">Rol</label>
+                </div>
+            </div>
+            <!-- <div *ngIf="invalidForm" class="text-center">
+            <small class="text-danger">{{ invalidForm }}</small>
+        </div> -->
+        </form>
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('addModal')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="addUser()">Crear</button>
+    </div>
+</app-modal>
 
 <!-- Modal Edit -->
 <app-modal id="editModal" [title]="'Editar usuario'" #editModal>
@@ -61,42 +162,37 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-floating mb-3">
-                        <input 
-                            formControlName="username" 
-                            id="username" 
-                            type="text"
-                            [ngClass]="{'is-invalid' : hasError('username')}"
-                            class="form-control mb-2"
-                            placeholder="Username"
-                            required>
+                        <input formControlName="username" id="username" type="text"
+                            [ngClass]="{'is-invalid' : hasError(editUserForm, 'username')}" class="form-control mb-2"
+                            placeholder="Username" required>
                         <label for="username">Usuario</label>
-                        <div *ngIf="hasError('username')">
-                            <small *ngIf="hasError('username','required')" class="text-danger">El usuario es requerido.</small>
-                            <small *ngIf="hasError('username','minlength')" class="text-danger">El usuario debe tener como mínimo 8 caracteres.</small>
+                        <div *ngIf="hasError(editUserForm, 'username')">
+                            <small *ngIf="hasError(editUserForm, 'username','required')" class="text-danger">El usuario
+                                es requerido.</small>
+                            <small *ngIf="hasError(editUserForm, 'username','minlength')" class="text-danger">El usuario
+                                debe tener como mínimo 8 caracteres.</small>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-12">
                 <div class="form-floating mb-3">
-                    <input 
-                        formControlName="email"
-                        id="email" 
-                        type="email"
-                        [ngClass]="{'is-invalid' : hasError('email')}"
-                        class="form-control mb-2"
-                        placeholder="Email"
-                        required>
+                    <input formControlName="email" id="email" type="email"
+                        [ngClass]="{'is-invalid' : hasError(editUserForm, 'email')}" class="form-control mb-2"
+                        placeholder="Email" required>
                     <label for="email">Correo electrónico</label>
-                    <div *ngIf="hasError('email')">
-                        <small *ngIf="hasError('email', 'required')" class="text-danger">El email es requerido.</small>
-                        <small *ngIf="hasError('email', 'email')" class="text-danger">Formato de correo inválido.</small>
+                    <div *ngIf="hasError(editUserForm, 'email')">
+                        <small *ngIf="hasError(editUserForm, 'email', 'required')" class="text-danger">El email es
+                            requerido.</small>
+                        <small *ngIf="hasError(editUserForm, 'email', 'email')" class="text-danger">Formato de correo
+                            inválido.</small>
                     </div>
                 </div>
             </div>
             <div class="col-12">
-                <div class="form-floating mb-4">
-                    <select formControlName="location" id="location" class="form-select mb-1" placeholder="Ubicación" required>
+                <div class="form-floating mb-3">
+                    <select formControlName="location" id="location" class="form-select" placeholder="Ubicación"
+                        required>
                         <option value="1">Piso 1</option>
                         <option value="2">Piso 2</option>
                         <option value="3">Piso 3</option>
@@ -108,7 +204,7 @@
             <div class="col-12">
                 <div class="form-floating">
                     <div class="form-floating">
-                        <select formControlName="role" id="role" class="form-select mb-1" placeholder="Rol" required>
+                        <select formControlName="role" id="role" class="form-select" placeholder="Rol" required>
                             <option value="user">Usuario</option>
                             <option value="admin">Administrador</option>
                         </select>
@@ -116,9 +212,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div *ngIf="invalidRegister" class="mb-4 text-center">
-            <small class="text-danger">{{ invalidRegister }}</small>
-        </div>> -->
         </form>
     </div>
     <div modal-footer>

@@ -6,7 +6,7 @@
   aria-labelledby="exampleModalLabel" 
   aria-hidden="true">
   
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
     <div class="modal-content">
 
       <!-- Modal Header -->

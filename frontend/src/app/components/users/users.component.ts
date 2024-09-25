@@ -32,10 +32,8 @@ export class UsersComponent {
   editUserForm!: FormGroup;
   selectedUser: User | null = null;
 
-  getUseresEror = {
-    status: false,
-    errorMessage: ''
-  };
+  addUserForm!: FormGroup;
+  invalidForm?: string | null = null;
 
   constructor(private formBuilder: FormBuilder, private apiService: ApiService, private modalService: ModalService) {
     this.editUserForm = this.formBuilder.group({
@@ -43,6 +41,14 @@ export class UsersComponent {
       email: ['', [Validators.required, Validators.email]],
       location: ['', [Validators.required]],
       role: ['', [Validators.required]],
+    })
+
+    this.addUserForm = this.formBuilder.group({
+      username: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      email: ['', [Validators.required, Validators.email]],
+      location: ['1', [Validators.required]],
+      role: ['user', [Validators.required]],
     })
   };
 
@@ -57,21 +63,67 @@ export class UsersComponent {
     this.getAllUsersRequest();
   }
 
+  //Obtener la lista de usuarios
   getAllUsersRequest() {
     this.apiService.getAllUsersRequest().subscribe((response: ApiResponse) => {
       if (response.status === 200) {
         this.users = response.body;
         this.usersLoading = false;
       } else {
-        this.getUseresEror = { status: true, errorMessage: response.error?.message };
         this.usersLoading = false;
         console.log(response);
       }
     })
   }
 
+  addUser() {
+    const { username, password, email, location, role } = this.addUserForm.value
+    const updatedUser: any = {
+      username: username,
+      password: password,
+      email: email,
+      location: location,
+      role: role
+    };
+    this.apiService.registerRequest(updatedUser).subscribe((response: ApiResponse) => {
+      if (response.status === 201) {
+        this.loadUsers();
+        this.closeModal('addModal')
+        //toast success
+      } else {
+        //toast error
+        this.addUserForm.markAllAsTouched();
+        this.invalidForm = response?.error;
+        console.log(response);
+      }
+    })
+  }
 
+  //Editar usuario
+  editUser(user: User) {
+    const { username, email, location, role } = this.editUserForm.value
+    const updatedUser: any = {
+      id: user.id,
+      username: username,
+      email: email,
+      location: location,
+      role: role
+    };
+    this.apiService.updateUserRequest(updatedUser).subscribe((response: ApiResponse) => {
+      if (response.status === 200) {
+        this.loadUsers();
+        this.clearSelectedUser();
+        this.closeModal('editModal')
+        //toast success
+      } else {
+        //toast error
+        this.editUserForm.markAllAsTouched();
+        console.log(response);
+      }
+    })
+  }
 
+  //Borrar usuario
   deleteUser(userId: number) {
     this.apiService.deleteUserRequest(userId).subscribe((response: ApiResponse) => {
       console.log(userId)
@@ -88,41 +140,32 @@ export class UsersComponent {
   }
 
 
-  editUser(user: User) {
-    const { username, email, location, role } = this.editUserForm.value
-    const updatedUser: any = {
-        id: user.id,
-        username: username,
-        email: email,
-        location: location,
-        role: role
-    };
-    console.log(updatedUser)
-    this.apiService.updateUserRequest(updatedUser).subscribe((response: ApiResponse) => {
-      if (response.status === 200) {
-        this.loadUsers();
-        this.clearSelectedUser();
-        this.closeModal('editModal')
-        //toast success
-      } else {
-        //toast error
-        console.log(response);
-      }
-    })
-  }
-
-  //Modal
+  //Modals
   closeModal(id: string) {
     this.modalService.closeModal(id);
+    setTimeout(() => { //Espera que complete la animacion de cierre para limpiar los campos
+      this.resetAddForm();
+    }, 150)
+  }
+
+  //Reset form y errores
+  resetAddForm() {
+    this.invalidForm = null;
+    this.addUserForm = this.formBuilder.group({
+      username: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      email: ['', [Validators.required, Validators.email]],
+      location: ['1', [Validators.required]],
+      role: ['user', [Validators.required]],
+    })
   }
 
   clearSelectedUser() {
     this.selectedUser = null
   }
 
-  openModalDeleteUser(user: User) {
-    this.selectedUser = user; // Guarda el usuario seleccionado
-    this.modalService.openModal('deleteModal');
+  openModalAddUser() {
+    this.modalService.openModal('addModal');
   }
 
   openModalEditUser(user: User) {
@@ -137,9 +180,15 @@ export class UsersComponent {
     this.modalService.openModal('editModal');
   }
 
+  openModalDeleteUser(user: User) {
+    this.selectedUser = user; // Guarda el usuario seleccionado
+    this.modalService.openModal('deleteModal');
+  }
+
+
   //Validaciones de campos
-  hasError(fieldName: string, errorType?: string): any {
-    const input = this.editUserForm.get(fieldName);
+  hasError(form: any, fieldName: string, errorType?: string): any {
+    const input = form.get(fieldName);
     if (errorType) {
       return input?.touched && input?.hasError(errorType);
     }
