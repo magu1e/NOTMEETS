@@ -7,7 +7,7 @@ import { ApiService } from './api.service';
 })
 export class AuthService {
 
-  constructor(private router: Router, private apiService: ApiService) {}
+  constructor(private router: Router, private apiService: ApiService) { }
 
   // Guardar el username y rol en localStorage
   setUser(username: string, role: string): void {
@@ -18,6 +18,11 @@ export class AuthService {
   // Obtener el usuario
   getUser(): string | null {
     return localStorage.getItem('username');
+  }
+
+  // Obtener el rol
+  getRole(): string | null {
+    return localStorage.getItem('role');
   }
 
   // Verificar si el usuario esta logueado

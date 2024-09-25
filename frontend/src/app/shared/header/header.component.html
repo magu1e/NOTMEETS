@@ -4,16 +4,29 @@
             <a href="#" class="navbar-brand"><img src="../../../assets/images/NMlogo.svg" width="70px" alt="NMlogo"></a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-5">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Buscar salas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Mis reservas</a>
-                    </li>
+                    <ng-container *ngIf="!isAdmin">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Buscar salas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Mis reservas</a>
+                        </li>
+                    </ng-container>
+                    <ng-container *ngIf="isAdmin">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Usuarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Salas</a>
+                        </li>
+                    </ng-container>
                 </ul>
             </div>
             <div class="d-flex align-items-center me-3">
-                <span>mfarinas</span>
+                <div class="text-end">
+                    <span class="d-block text-capitalize fw-semibold">{{user.username}}</span>
+                    <small *ngIf="user.role === 'admin'" class="text-primary text-capitalize">{{user.role}}</small>
+                </div>
                 <img src="../../../assets/images/userImg.svg" width="40px" alt="NMlogo" class="ms-2">
             </div>
             <!-- [ngClass]="'notification': hasNotifications" -->
@@ -21,7 +34,7 @@
                 <span class="material-symbols-rounded">notifications</span>
             </div> -->
             <div class="btn btn-icon">
-                <span class="material-symbols-rounded" (click)="logout()">logout</span>  
+                <span class="material-symbols-rounded" (click)="logout()">logout</span>
             </div>
         </div>
     </nav>
