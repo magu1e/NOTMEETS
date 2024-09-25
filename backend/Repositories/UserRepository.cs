@@ -37,15 +37,15 @@ namespace backend.Repositories
 
 
 
-        public User AddUser(UserDTO userDto)
+        public User? AddUser(UserDTO userDto)
         {
             var user = new User
              (
-                username: userDto.Username,
-                password: userDto.Password,
-                email: userDto.Email,
-                location: userDto.Location,
-                role: userDto?.Role ?? "user"
+                username: userDto.Username!,
+                password: userDto.Password!,
+                email: userDto.Email!,
+                location: userDto.Location!,
+                role: userDto.Role ?? "user"
             );
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -53,23 +53,35 @@ namespace backend.Repositories
         }
 
 
-        //TODO -> fixear
-        //public User? UpdateUser(GetUserDTO userDto)
+        //public User UpdateUser(UserDTO userDto)
         //{
-        //    var user = _context.Users.Find(userDto.Id);
-        //    if (user == null)
-        //    {
-        //        return null;
-        //    }
-        //    user.Username = userDto.Username;
-        //    user.Email = userDto.Email;
-        //    user.Location = userDto.Location;
-        //    user.Role = userDto.Role;
+        //    //var user = _context.Users.Find(userDto.Id);
+        //    var user = GetUserById(userDto.Id);
+        //    user!.Username = userDto.Username;
+        //    user!.Email = userDto.Email;
+        //    user!.Location = userDto.Location;
+        //    user!.Role = userDto.Role;
         //    _context.SaveChanges();
         //    return user;
 
         //}
+        public User UpdateUser(UserDTO userDto)
+        {
+            var user = GetUserById(userDto.Id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("Usuario no encontrado.");
+            }
 
+            // Actualiza las propiedades del usuario con los datos de UserDTO
+            user.Username = userDto.Username;
+            user.Email = userDto.Email;
+            user.Location = userDto.Location;
+            user.Role = userDto.Role;
+
+            _context.SaveChanges();
+            return user;
+        }
 
 
         public bool DeleteUser(int id)
@@ -92,12 +104,12 @@ namespace backend.Repositories
 
 
 
-        public UserDTO? GetUserById(int id)
+        public User? GetUserById(int id)
         {
             var user = _context.Users.Find(id);
             if (user != null)
             {
-                return new UserDTO(user);
+                return user;
             }
             return null;
         }

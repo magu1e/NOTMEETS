@@ -4,6 +4,7 @@ import { Component, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService, ApiResponse } from '../../services/api.service'
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -40,7 +41,7 @@ export class LoginComponent {
     });
   }
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private apiService: ApiService) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private apiService: ApiService, private authService: AuthService) {
     this.initForms()
   }
 
@@ -69,9 +70,9 @@ export class LoginComponent {
   //Redirige según el rol
   redirect(userRole: string) {
     if (userRole !== 'admin') {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/bookings']);
     } else {
-      this.router.navigate(['/administration']);
+      this.router.navigate(['/admin']);
     }
   }
 
@@ -88,9 +89,10 @@ export class LoginComponent {
     this.apiService.authRequest(user).subscribe((response: ApiResponse) => {
       if (response.status === 200) {
         console.log('Autenticación exitosa', response.status);
+        //Implementar toast success
         const userId = response.body.user.id;
+        this.authService.setUser(response.body.user.username, response.body.user.role) // Guarda el usuario en localstorage
         this.getRole(userId);
-        this.resetForm();
       } else {
         this.invalidCredentials = response.error?.message;
         console.log(response);
@@ -103,8 +105,10 @@ export class LoginComponent {
       .subscribe((response: ApiResponse) => {
         if (response.status === 201) { // Manejo de respuesta exitosa
           console.log('Usuario creado exitosamente', response.status);
-          this.router.navigate(['/home']);
-          this.resetForm();
+          setTimeout(()=> {
+            this.auth(user); // Timeout para dar tiempo a que se cree el usuario y automaticamente lo loguee
+          }, 150)
+          this.router.navigate(['/bookings']);
         } else { // Manejo de error
           this.invalidRegister = response.error;
           ;
@@ -118,6 +122,7 @@ export class LoginComponent {
         if (this.loginForm.valid) {
           const { username, password } = this.loginForm.value;
           this.auth({ username, password });
+          this.resetForm();
         } else {
           this.loginForm.markAllAsTouched();
         }
@@ -126,6 +131,7 @@ export class LoginComponent {
         if (this.registerForm.valid) {
           const { username, password, email, location } = this.registerForm.value;
           this.register({ username, password, email, location });
+          this.resetForm();
         } else {
           this.registerForm.markAllAsTouched();
         }

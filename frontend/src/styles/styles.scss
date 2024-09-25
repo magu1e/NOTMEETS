@@ -5,7 +5,7 @@
 //FONTS
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 //ICONS
-@import url("https://fonts.googleapis.com/icon?family=Material+Symbols+rounded");
+@import url("https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded");
 
 //STYLES
 //Utility
@@ -27,22 +27,25 @@
 body {
   font-weight: 300;
 }
-
+.pointer {
+  cursor: pointer;
+}
 //Text
 .mat-sm {
   font-size: 20px;
 }
-
-//Components
-.form-floating {
-  label {
-    color: $secondary;
-  }
+.text-muted {
+  color: $text-muted !important;
 }
 
+//Components
+//Buttons
 .btn {
   border-radius: $border-radius-pill !important;
   padding: map-get($spacers, 2) map-get($spacers, 4);
+  &:disabled {
+    color: $disabled-misc !important;
+  }
 }
 
 .btn-icon {
@@ -55,10 +58,20 @@ body {
   }
 }
 
+.btn-dark {
+  &:hover,
+  &:active {
+    background-color: darken($dark, 12) !important;
+  }
+}
+
+//Dropdown
 .dropdown {
   .dropdown-toggle {
     @extend .d-flex, .align-items-center;
+    position: relative;
     background-color: darken($surface, 3);
+    padding: 0.8rem 1.3rem !important;
     &.btn.show {
       &,
       &:active {
@@ -67,6 +80,10 @@ body {
     }
     &::after {
       content: "\e313";
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
       font-family: "Material Symbols Rounded";
       border: none;
       @extend .mat-sm;
@@ -74,9 +91,6 @@ body {
   }
   .dropdown-menu {
     @extend .shadow;
-    .dropdown-header {
-      white-space: normal;
-    }
     .dropdown-item {
       &:has(.form-check-input:checked) {
         background-color: darken($misc, 20) !important;
@@ -91,11 +105,14 @@ body {
 //Forms
 .form-floating {
   position: relative;
+  label {
+    color: $secondary;
+  }
   .form-control {
     &[type="date"] {
       padding-right: 0;
       &::-webkit-calendar-picker-indicator {
-        /* Oculta el ícono predeterminado de calendarios */
+        /* Oculta el ícono predeterminado */
         opacity: 0;
       }
       &::after {
@@ -109,6 +126,68 @@ body {
         color: $misc;
       }
     }
+    &[type="time"] {
+      padding-right: 0;
+      &::-webkit-calendar-picker-indicator {
+        /* Oculta el ícono predeterminado */
+        opacity: 0;
+      }
+      &::after {
+        content: "\e8b5"; /* Icono reloj custom */
+        font-family: "Material Symbols Rounded";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: $misc;
+      }
+    }
+    &[type="number"] {
+      &::-webkit-inner-spin-button {
+        &,
+        &:focus {
+          -webkit-appearance: none;
+          margin: 0;
+          appearance: none;
+          -moz-appearance: textfield;
+        }
+      }
+    }
+  }
+}
+.form-check-input {
+  background-color: darken($background, 5);
+  &:disabled {
+    background-color: lighten($background, 5);
+    border-color: darken($misc, 5);
+    ~ label {
+      color: $text-muted;
+      text-decoration: line-through;
+    }
+  }
+}
+
+.form-wrapper {
+  position: relative !important;
+  width: fit-content;
+  .form-select-custom {
+    border: none !important;
+    border-radius: $border-radius-pill;
+    min-width: 130px;
+    padding: 0.8rem 1.6rem;
+    box-shadow: none !important;
+  }
+  &::after {
+    position: absolute;
+    content: "\e313"; /* Icono del calendario custom */
+    font-family: "Material Symbols Rounded";
+    font-size: 24px;
+    right: 10px;
+    top: 50%;
+    opacity: 1;
+    transform: translateY(-50%);
+    color: $white;
   }
 }
 
@@ -116,28 +195,28 @@ body {
   @extend .shadow;
 }
 
+.floating-card {
+  @extend .shadow;
+  position: fixed;
+  max-width: fit-content;
+  transition: 0.2s ease;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  transform-origin: 50% 50%;
+  &.show {
+    transform: translate(-50%, -25%) !important;
+  }
+}
+
 .table {
   th {
     padding-top: 0.8rem;
     padding-bottom: 0.8rem;
     font-size: $font-size-sm;
-    color: rgba(lighten($misc, 20), 0.8);
+    color: $text-muted;
   }
   tr {
-    td {
-      .material-symbols-rounded {
-        font-variation-settings: 
-        "FILL" 0, 
-        "wght" 300, 
-        "GRAD" 0, 
-        "opsz" 24 !important;
-      }
-    }
-    &:hover {
-      .dropdown-toggle {
-        background-color: transparent;
-      }
-    }
     &:has(.form-check-input:checked) {
       td {
         background-color: $table-hover-bg;
@@ -155,7 +234,7 @@ body {
     bottom: -26%;
     font-family: $font-family-base;
     font-size: 20rem;
-    font-weight: bolder;
+    font-weight: 700;
     transform: rotate(-90deg);
     transform-origin: top left;
     line-height: 0.6;
@@ -176,7 +255,43 @@ body {
   }
 }
 
-//
+//Scrollbar
+body {
+  $sb-track-color: darken($background, 5);
+  $sb-thumb-color: $misc;
+  $sb-size: 7px;
+
+  ::-webkit-scrollbar {
+    width: $sb-size;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $sb-track-color;
+    border-radius: 20px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $sb-thumb-color;
+    border-radius: 20px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    scrollbar-color: $sb-thumb-color $sb-track-color;
+  }
+}
+
+//Bookings
+#bookings {
+  table {
+    .dropdown-toggle {
+      min-width: 110px;
+    }
+    .dropdown-menu {
+      max-height: 240px;
+      overflow: auto;
+    }
+  }
+}
 
 //Login
 .brand-text {

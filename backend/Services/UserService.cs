@@ -46,26 +46,26 @@ namespace backend.Services
         }
 
 
-        //TODO -> fixear
-        //public UserClass? UpdateUser(GetUserDTO userDto)
-        //{
-        //    var user = _userRepository.GetUserById(userDto.Id);
-        //    var newUsernameAlreadyExists = _context.Users.Any(u => u.Username == userDto.Username);
-        //    // Valida que exista y que no mande un nombre ya en uso
-        //    if (user == null || newUsernameAlreadyExists)
-        //    {
-        //        if (user == null)
-        //        {
-        //            throw new KeyNotFoundException("No se ha encontrado el usuario.");
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentException("Ya existe ese nombre de usuario.");
-        //        }
-        //    }
-        //    UserClass? userUpdated = _userRepository.UpdateUser(user);
-        //    return userUpdated;
-        //}
+
+        public User UpdateUser(UserDTO userDto)
+        {
+            var user = _userRepository.GetUserById(userDto.Id);
+            var newUsernameAlreadyTaken = _context.Users.Any(u => u.Username == userDto.Username && u.Id != userDto.Id); // username ya existe en la base y es de otro usuario
+                      
+            // Valida que exista
+            if (user == null)
+            {
+                throw new KeyNotFoundException("No se ha encontrado el usuario.");
+            }
+            // Valida que no updatee por un nombre ya en uso
+            if (newUsernameAlreadyTaken)
+            {
+                throw new ArgumentException("El nombre de usuario ya existe.");
+            }
+
+            User updatedUser = _userRepository.UpdateUser(userDto);
+            return updatedUser;
+        }
 
 
 
@@ -83,7 +83,7 @@ namespace backend.Services
 
 
 
-        public UserDTO GetUserById(int id)
+        public User GetUserById(int id)
         {
             var user = _userRepository.GetUserById(id);
             if (user == null)

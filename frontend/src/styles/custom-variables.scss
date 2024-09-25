@@ -2,10 +2,6 @@
 @import "../../node_modules/bootstrap/scss/variables";
 
 //Reemplaza colores originarios de bs
-$customColors : (
-  "primary": #5471CF,
-);
-$theme-colors: map-merge($theme-colors, $customColors);
 
 //Colors
 $primary: #5471CF;
@@ -13,10 +9,24 @@ $background: #17181E;
 $surface: #1B1C25;
 $accent: #404cf7;
 $misc: #4a5392;
+$disabled-misc: rgba(lighten($accent, 20), 0.8);
+
+$customColors : (
+  "primary": #5471CF,
+  "dark": darken($background, 5),
+  "info": #405099,
+);
+$theme-colors: map-merge($theme-colors, $customColors);
+
+$info-bg-subtle-dark: shade-color(map-get($theme-colors, "info"), 80%);
+$info-border-subtle-dark: shade-color(map-get($theme-colors, "info"), 40%);
+$info-text-emphasis-dark: tint-color(map-get($theme-colors, "info"), 40%);
 
 //General
 $body-bg: $background;
 $body-color: $white;
+
+$text-muted: rgba(lighten($misc, 20), 0.8);
 
 $xs: map-get($grid-breakpoints, xs);
 $sm: map-get($grid-breakpoints, sm);
@@ -41,15 +51,12 @@ $link-hover-color: shift-color($link-color, $link-shade-percentage);
 
 //Dropdowns 
 $dropdown-link-hover-bg: rgba($misc, .1);
-$dropdown-padding-x:  0;
 $dropdown-border-color:  $misc;
 $dropdown-header-color: rgba(lighten($misc, 30), .8);
 $dropdown-link-active-bg: $dropdown-link-hover-bg;
 
-
-
-$dropdown-item-padding-y: $spacer * .9;
-$dropdown-item-padding-x: $spacer * 1.8;
+$dropdown-item-padding-y: $spacer * .5;
+$dropdown-item-padding-x: $spacer * 1.5;
 
 //Cards
 $card-spacer-y: 3rem;
@@ -64,11 +71,13 @@ $input-focus-border-color: $accent;
 $input-color: $body-color;
 
 $form-check-input-checked-bg-color: $accent;
+$form-check-label-disabled-opacity: .2; 
 
-
+$form-select-indicator: none;
 
 //Navbar
 $navbar-padding-y: $spacer * 3.5;
+$navbar-nav-link-padding-x: $spacer * 1.2;
 
 //Tables
 $table-cell-padding-y: 1.5rem;
@@ -79,3 +88,12 @@ $table-color: $body-color;
 $table-hover-color: $body-color;
 $table-hover-bg: rgba($misc, .15);
 $table-th-font-weight: 300;
+
+//Otros
+$btn-close-color: $white;
+$btn-close-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$btn-close-color}'><path d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/></svg>");
+
+//Modal
+$modal-header-border-color: transparent;
+$modal-footer-border-color: transparent;
+$modal-inner-padding: $spacer * 1.5
