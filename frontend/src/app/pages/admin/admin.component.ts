@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UsersComponent } from '../../components/users/users.component';
+import { UsersComponent } from '../users/users.component';
 
 @Component({
   selector: 'app-admin',
