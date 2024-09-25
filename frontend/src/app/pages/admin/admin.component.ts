@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { UsersComponent } from '../../components/users/users.component';
 
 @Component({
-  selector: 'app-config',
+  selector: 'app-admin',
   standalone: true,
   imports: [UsersComponent],
-  templateUrl: './config.component.html',
-  styleUrl: './config.component.scss'
+  templateUrl: './admin.component.html',
+  styleUrls: ['./admin.component.scss']
 })
-export class ConfigComponent {
+export class AdminComponent {
 
 }

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
-import { BookingComponent } from './pages/home/booking.component';
-import { ConfigComponent } from './pages/config/config.component';
+import { BookingsComponent } from './pages/bookings/bookings.component'
 import { ContainerLayoutComponent } from './shared/container-layout/container-layout.component';
 import { BlankLayoutComponent } from './shared/blank-layout/blank-layout.component';
 import { authGuard } from './guards/auth.guard';
+import { AdminComponent } from './pages/admin/admin.component';
 
 export const routes: Routes = [
   {
@@ -24,12 +24,12 @@ export const routes: Routes = [
     canActivateChild: [authGuard], // Protege todas las rutas hijas
     children: [
       {
-        path: 'booking',
-        component: BookingComponent,
+        path: 'bookings',
+        component: BookingsComponent,
       },
       {
-        path: 'config',
-        component: ConfigComponent,
+        path: 'admin',
+        component: AdminComponent,
       },
     ],
   },

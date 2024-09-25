@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { ApiResponse, ApiService } from '../../services/api.service';
 import { ModalService } from '../../shared/modal/modal.service';
-import { Booking } from '../../pages/home/booking.component';
+import { Booking } from '../../pages/bookings/bookings.component';
 
 
 export interface User {

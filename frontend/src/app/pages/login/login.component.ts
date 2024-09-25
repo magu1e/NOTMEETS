@@ -70,9 +70,9 @@ export class LoginComponent {
   //Redirige según el rol
   redirect(userRole: string) {
     if (userRole !== 'admin') {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/bookings']);
     } else {
-      this.router.navigate(['/administration']);
+      this.router.navigate(['/admin']);
     }
   }
 
@@ -108,7 +108,7 @@ export class LoginComponent {
           setTimeout(()=> {
             this.auth(user); // Timeout para dar tiempo a que se cree el usuario y automaticamente lo loguee
           }, 150)
-          this.router.navigate(['/home']);
+          this.router.navigate(['/bookings']);
         } else { // Manejo de error
           this.invalidRegister = response.error;
           ;

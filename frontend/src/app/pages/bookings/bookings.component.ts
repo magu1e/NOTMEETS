@@ -32,12 +32,12 @@ export interface Rooms {
   selector: 'app-booking',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FormsModule, ModalComponent],
-  templateUrl: './booking.component.html',
-  styleUrls: ['./booking.component.scss']
+  templateUrl: './bookings.component.html',
+  styleUrls: ['./bookings.component.scss']
 })
 
 
-export class BookingComponent {
+export class BookingsComponent {
   roomsMock: Rooms[] = roomsMock;
 
   //Filtros
@@ -71,7 +71,7 @@ export class BookingComponent {
   
   ngOnInit() {
     if(this.authService.isAuthenticated()) {
-      this.authService.redirect(['home'])
+      this.authService.redirect(['/bookings'])
     }
     this.filterRooms();
   }
