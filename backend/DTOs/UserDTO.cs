@@ -9,7 +9,7 @@ namespace backend.DTOs
         public string Password { get; set; } = String.Empty;
         public string Email { get; set; } = String.Empty;
         public int Location { get; set; }
-        public string Role { get; set; } = String.Empty;
+        public string Role { get; set; } = "user";
 
         //public List<Reservation>? Reservations { get; set; }
 

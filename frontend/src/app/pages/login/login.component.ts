@@ -90,6 +90,8 @@ export class LoginComponent {
         console.log('Autenticación exitosa', response.status);
         //Implementar toast success
         const userId = response.body.user.id;
+        localStorage.setItem('username', JSON.stringify(response.body.user.username)); // Guarda el usuario en localstorage
+        localStorage.setItem('role', JSON.stringify(response.body.user.role)); // Guarda el rol en localstorage
         this.getRole(userId);
         this.resetForm();
       } else {

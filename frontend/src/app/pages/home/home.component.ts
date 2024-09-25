@@ -200,15 +200,22 @@ filterRooms() {
 
 
 
-formatDateTime = (date: string, time: string) => {
-    const mergedDateTime = `${date} ${time}`;
-    return format(new Date(mergedDateTime), 'yyyy-MM-dd HH:mm');
-};
- 
+  formatDateTime = (date: string, time: string) => {
+      const mergedDateTime = `${date} ${time}`;
+      return format(new Date(mergedDateTime), 'yyyy-MM-dd HH:mm');
+  };
+  
 
+  //Obtiene usuario guardado en localstorage
+  getLoggedInUser() {
+    const username = localStorage.getItem('username');
+    const role = localStorage.getItem('role');
+    return {username, role};
+  }
+  
   setRequest(rooms: Rooms[], priority: number) {
     let newBookings: any[] = [];
-    rooms.map(({ selected, filteredStartSchedules, filteredEndSchedules, ...room }) => {
+    rooms.map( room => {
       
       const formattedStartDate = this.formatDateTime(room['selectedDate'], room['selectedStartTime']);
       const formattedEndDate = this.formatDateTime(room['selectedDate'], room['selectedEndTime']);
@@ -217,11 +224,11 @@ formatDateTime = (date: string, time: string) => {
         {
           startDate: formattedStartDate, 
           endDate: formattedEndDate, 
-          //user: getUser(); //TODO obtener usuario de cache
+          user: this.getLoggedInUser(),
           priority: priority,
-          room: {...room}
+          room: room.id
         })
-       //console.log(newBookings)
+       console.log(newBookings)
       return newBookings; 
     });
   }
