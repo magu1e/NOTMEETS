@@ -105,6 +105,9 @@ export class LoginComponent {
       .subscribe((response: ApiResponse) => {
         if (response.status === 201) { // Manejo de respuesta exitosa
           console.log('Usuario creado exitosamente', response.status);
+          setTimeout(()=> {
+            this.auth(user); // Timeout para dar tiempo a que se cree el usuario y automaticamente lo loguee
+          }, 150)
           this.router.navigate(['/home']);
         } else { // Manejo de error
           this.invalidRegister = response.error;

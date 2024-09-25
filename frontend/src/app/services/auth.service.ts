@@ -13,7 +13,6 @@ export class AuthService {
   setUser(username: string, role: string): void {
     localStorage.setItem('username', username);
     localStorage.setItem('role', role);
-
   }
 
   // Obtener el usuario
