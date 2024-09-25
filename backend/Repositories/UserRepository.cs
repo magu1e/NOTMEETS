@@ -114,6 +114,11 @@ namespace backend.Repositories
             }
             return null;
         }
+
+        public User GetUserByUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

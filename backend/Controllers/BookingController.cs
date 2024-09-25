@@ -12,25 +12,67 @@ namespace backend.Controllers
     public class BookingController : ControllerBase
 
     {
-        private readonly BookingService _bookingService;
+        private readonly IBookingService _bookingService;
 
-        public BookingController(BookingService bookingService)
+        public BookingController(IBookingService bookingService)
         {
             _bookingService = bookingService;
         }
         [HttpPost]
-        public ActionResult<Booking> CreateBooking([FromBody] NewbookingDTO newBookingDTO)
+        public async Task<IActionResult> CreateBooking([FromBody] NewBookingDTO newBookingDto)
         {
             try
             {
-                var booking = _bookingService.CreateBooking(newBookingDTO);
+                var booking = _bookingService.CreateBooking(newBookingDto);
+                return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+            // GET: api/Booking/5
+            [HttpGet("{id}")]
+            public async Task<IActionResult> GetBooking(int id)
+            {
+                var booking = _bookingService.GetBookingById(id);
+                if (booking == null)
+                {
+                    return NotFound();
+                }
                 return Ok(booking);
             }
-            catch (Exception ex)
+
+            // PUT: api/Booking/5
+            [HttpPut("{id}")]
+            public async Task<IActionResult> UpdateBooking(int id, [FromBody] NewBookingDTO updatedBooking)
             {
-                return BadRequest(new { message = ex.Message });
+                try
+                {
+                    var booking = _bookingService.UpdateBooking(id, updatedBooking);
+                    if (booking == null)
+                    {
+                        return NotFound();
+                    }
+                    return Ok(booking);
+                }
+                catch (ArgumentException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
 
+            // DELETE: api/Booking/5
+            [HttpDelete("{id}")]
+            public async Task<IActionResult> DeleteBooking(int id)
+            {
+                var result = _bookingService.DeleteBooking(id);
+                if (!result)
+                {
+                    return NotFound();
+                }
+                return NoContent();
+            }
         }
     }
-}
+         

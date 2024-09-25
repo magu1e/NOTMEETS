@@ -14,7 +14,7 @@ namespace backend.Repositories
         }
 
         // Obtener reservas que se solapen con el tiempo dado para una sala específica
-        public List<Booking> GetBookingsForRoomAndTime(int roomId, DateTime startDate, DateTime endDate)
+        public IEnumerable<Booking> GetBookingsForRoomAndTime(int roomId, DateTime startDate, DateTime endDate)
         {
             return _context.Bookings
                 .Where(b => b.Room.Id == roomId &&
@@ -45,13 +45,32 @@ namespace backend.Repositories
         // Obtener una reserva por su ID
         public Booking GetBookingById(int id)
         {
-            return _context.Bookings.FirstOrDefault(b => b.Id == id);
+            return _context.Bookings.FirstOrDefault(b => b.Id == id); ///verificar esta advertencia
         }
 
+        public Task<Booking> CreateBooking(Booking booking)
+        {
+            throw new NotImplementedException();
+        }
 
+        Task<Booking> IBookingRepository.GetBookingById(int id)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<IEnumerable<Booking>> GetBookingsByRoomId(int roomId)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<Booking> UpdateBooking(Booking booking)
+        {
+            throw new NotImplementedException();
+        }
 
-
+        Task<bool> IBookingRepository.DeleteBooking(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

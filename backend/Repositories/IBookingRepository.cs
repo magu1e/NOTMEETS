@@ -4,9 +4,11 @@ namespace backend.Repositories
 {
     public interface IBookingRepository
     {
-        List<Booking> GetBookingsForRoomAndTime(int roomId, DateTime startDate, DateTime endDate);
         Booking AddBooking(Booking booking);
-        void DeleteBooking(int id);
-        Booking GetBookingById(int id);
+        Task<Booking> GetBookingById(int id);
+        Task<IEnumerable<Booking>> GetBookingsByRoomId(int roomId);
+        Task<Booking> UpdateBooking(Booking booking);
+        Task<bool> DeleteBooking(int id);
+        IEnumerable<Booking> GetBookingsForRoomAndTime(int roomId, DateTime startDate, DateTime endDate);
     }
 }

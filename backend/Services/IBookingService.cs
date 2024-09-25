@@ -5,9 +5,11 @@ namespace backend.Services
 {
     public interface IBookingService
     {
-        Booking CreateBooking(NewbookingDTO newBookingDTO);
+        Booking CreateBooking(NewBookingDTO newBookingDTO);
         List<Booking> GetBookingsForRoom(int roomId);
         Booking GetBookingById(int id);
         void CancelBooking(int id);
+        Booking UpdateBooking(int id, NewBookingDTO updatedBooking);
+        bool DeleteBooking(int id);
     }
 }

@@ -21,7 +21,7 @@ namespace backend.Services
         }
 
         // Implementación del método para crear una reserva
-        public Booking CreateBooking(NewbookingDTO newBookingDTO)
+        public Booking CreateBooking(NewBookingDTO newBookingDTO)
         {
             // Obtener todas las reservas que coinciden con la nueva reserva en la misma sala
             var conflictingBookings = _bookingRepository.GetBookingsForRoomAndTime(
@@ -46,12 +46,19 @@ namespace backend.Services
             // Crear nueva reserva
             var newBooking = new Booking(
                 newBookingDTO.User,
+                null,
                 newBookingDTO.RoomId, // Pasa solo el RoomId
                 newBookingDTO.Priority,
                 newBookingDTO.StartDate,
-                newBookingDTO.EndDate);
+                newBookingDTO.EndDate,newBookingDTO.Attendees); 
+                
 
             return _bookingRepository.AddBooking(newBooking);
+        }
+
+        public bool DeleteBooking(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public Booking GetBookingById(int id)
@@ -60,6 +67,11 @@ namespace backend.Services
         }
 
         public List<Booking> GetBookingsForRoom(int roomId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Booking UpdateBooking(int id, NewBookingDTO updatedBooking)
         {
             throw new NotImplementedException();
         }
