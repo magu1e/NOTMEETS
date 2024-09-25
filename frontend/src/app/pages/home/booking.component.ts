@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { parse, format } from 'date-fns';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { ModalService } from '../../shared/modal/modal.service';
+import { AuthService } from '../../services/auth.service';
 
 
 export interface Booking {
@@ -28,15 +29,15 @@ export interface Rooms {
 }
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-booking',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FormsModule, ModalComponent],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './booking.component.html',
+  styleUrls: ['./booking.component.scss']
 })
 
 
-export class HomeComponent {
+export class BookingComponent {
   roomsMock: Rooms[] = roomsMock;
 
   //Filtros
@@ -53,7 +54,7 @@ export class HomeComponent {
 
   //Booking
 
-  constructor(private formBuilder: FormBuilder, private apiService: ApiService, private modalService: ModalService) {
+  constructor(private formBuilder: FormBuilder, private apiService: ApiService, private modalService: ModalService, private authService: AuthService) {
     this.roomFilters = this.formBuilder.group({
       date: this.currentDate,
       startTime: '',
@@ -69,7 +70,10 @@ export class HomeComponent {
   }
   
   ngOnInit() {
-    // this.filterRooms();
+    if(this.authService.isAuthenticated()) {
+      this.authService.redirect(['home'])
+    }
+    this.filterRooms();
   }
 
   selectionPropsInit(){

@@ -27,9 +27,13 @@ export class AuthService {
 
   // Logout
   logout(): void {
+    this.router.navigate(['']);
     localStorage.removeItem('username');
     localStorage.removeItem('role');
-    this.router.navigate(['']);
+  }
+
+  redirect(route: string[]): void {
+    this.router.navigate(route);
   }
 
   redirectToLogin(): void {
