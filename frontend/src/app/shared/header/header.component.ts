@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -9,13 +10,11 @@ import { Router } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  constructor(private router: Router) {
+  constructor(private authService: AuthService) {
 
   }
   //Borra "user" de localstorage
   logout() {
-    this.router.navigate(['/login']);
-    localStorage.removeItem('username');
-    localStorage.removeItem('role');
+    this.authService.logout()
   }
 }

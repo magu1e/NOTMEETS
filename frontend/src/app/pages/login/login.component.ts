@@ -4,6 +4,7 @@ import { Component, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService, ApiResponse } from '../../services/api.service'
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -40,7 +41,7 @@ export class LoginComponent {
     });
   }
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private apiService: ApiService) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private apiService: ApiService, private authService: AuthService) {
     this.initForms()
   }
 
@@ -90,10 +91,8 @@ export class LoginComponent {
         console.log('Autenticación exitosa', response.status);
         //Implementar toast success
         const userId = response.body.user.id;
-        localStorage.setItem('username', JSON.stringify(response.body.user.username)); // Guarda el usuario en localstorage
-        localStorage.setItem('role', JSON.stringify(response.body.user.role)); // Guarda el rol en localstorage
+        this.authService.setUser(response.body.user.username, response.body.user.role) // Guarda el usuario en localstorage
         this.getRole(userId);
-        this.resetForm();
       } else {
         this.invalidCredentials = response.error?.message;
         console.log(response);
@@ -107,7 +106,6 @@ export class LoginComponent {
         if (response.status === 201) { // Manejo de respuesta exitosa
           console.log('Usuario creado exitosamente', response.status);
           this.router.navigate(['/home']);
-          this.resetForm();
         } else { // Manejo de error
           this.invalidRegister = response.error;
           ;
@@ -121,6 +119,7 @@ export class LoginComponent {
         if (this.loginForm.valid) {
           const { username, password } = this.loginForm.value;
           this.auth({ username, password });
+          this.resetForm();
         } else {
           this.loginForm.markAllAsTouched();
         }
@@ -129,6 +128,7 @@ export class LoginComponent {
         if (this.registerForm.valid) {
           const { username, password, email, location } = this.registerForm.value;
           this.register({ username, password, email, location });
+          this.resetForm();
         } else {
           this.registerForm.markAllAsTouched();
         }

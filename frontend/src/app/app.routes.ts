@@ -5,27 +5,42 @@ import { HomeComponent } from './pages/home/home.component';
 import { AdministrationComponent } from './pages/administration/administration.component';
 import { ContainerLayoutComponent } from './shared/container-layout/container-layout.component';
 import { BlankLayoutComponent } from './shared/blank-layout/blank-layout.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    component: ContainerLayoutComponent, //Layout con .container
+    component: BlankLayoutComponent,
     children: [
-      { path: 'home', component: HomeComponent },
-      { path: 'administration', component: AdministrationComponent },
-    ]
+      {
+        path: '',
+        component: LoginComponent,
+      },
+    ],
   },
   {
     path: '',
-    component: BlankLayoutComponent, //Layout sin .container
+    component: ContainerLayoutComponent,
+    canActivateChild: [authGuard], // Protege todas las rutas hijas
     children: [
-      { path: 'login', component: LoginComponent },
-    ]
+      {
+        path: 'home',
+        component: HomeComponent,
+      },
+      {
+        path: 'administration',
+        component: AdministrationComponent,
+      },
+    ],
+  },
+  {
+    path: '**', 
+    redirectTo: '', // En URLs no encontradas redirige a login
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
