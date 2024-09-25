@@ -24,7 +24,7 @@ namespace backend.Controllers
             try
             {
                 var booking = _bookingService.CreateBooking(newBookingDto);
-                return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
+                return Ok(new { id = booking.Id });
             }
             catch (ArgumentException ex)
             {
@@ -43,8 +43,22 @@ namespace backend.Controllers
                 return Ok(booking);
             }
 
-            // PUT: api/Booking/5
-            [HttpPut("{id}")]
+
+        // GET: api/Booking/5
+        [HttpGet("all")]
+        public async Task<IActionResult> GetBookingsForRoomAndTime(int? roomId, DateTime? startDate, DateTime? endDate)
+        {
+            var booking = _bookingService.GetBookingsForRoomAndTime(roomId,startDate,endDate);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+            return Ok(booking);
+        }
+
+
+        // PUT: api/Booking/5
+        [HttpPut("{id}")]
             public async Task<IActionResult> UpdateBooking(int id, [FromBody] NewBookingDTO updatedBooking)
             {
                 try

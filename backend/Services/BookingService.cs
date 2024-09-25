@@ -1,18 +1,25 @@
-﻿using backend.DTOs;
+﻿using backend.Data;
+using backend.DTOs;
 using backend.Models;
 using backend.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _bookingRepository;
-        private readonly IUserRepository _userRepository; // ver si se aplica Para obtener y notificar al usuario.
+        private readonly IUserRepository _userRepository;
+        private readonly ApiContext _context;                               // ver si se aplica Para obtener y notificar al usuario.
 
-        public BookingService(IBookingRepository bookingRepository, IUserRepository userRepository)
+
+
+        public BookingService(IBookingRepository bookingRepository, IUserRepository userRepository,ApiContext context)
         {
             _bookingRepository = bookingRepository;
             _userRepository = userRepository;
+            _context = context;
+
         }
 
         public void CancelBooking(int id)
@@ -42,11 +49,14 @@ namespace backend.Services
                     throw new Exception("La sala ya está reservada con una mayor o igual prioridad.");
                 }
             }
+            //Busca la sala si todo esta ok
+            var room = _context.Rooms.Where(r=>r.Id==newBookingDTO.RoomId).FirstOrDefault();
+            var user = _context.Users.Where(u => u.Id == newBookingDTO.UserId).FirstOrDefault();
 
             // Crear nueva reserva
             var newBooking = new Booking(
                 newBookingDTO.User,
-                null,
+                room,
                 newBookingDTO.RoomId, // Pasa solo el RoomId
                 newBookingDTO.Priority,
                 newBookingDTO.StartDate,
@@ -63,12 +73,17 @@ namespace backend.Services
 
         public Booking GetBookingById(int id)
         {
-            throw new NotImplementedException();
+            return _bookingRepository.GetBookingById(id);
         }
 
         public List<Booking> GetBookingsForRoom(int roomId)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Booking> GetBookingsForRoomAndTime(int? roomId, DateTime? startDate, DateTime? endDate)
+        {
+            return _bookingRepository.GetBookingsForRoomAndTime(roomId, startDate, endDate).ToList();
         }
 
         public Booking UpdateBooking(int id, NewBookingDTO updatedBooking)

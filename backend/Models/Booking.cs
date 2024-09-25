@@ -51,7 +51,12 @@ namespace backend.Models
 
             }
 
-        
+        public Booking()
+        {
+
+
+        }
+
     }
 }
 

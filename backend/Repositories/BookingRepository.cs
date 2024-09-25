@@ -13,14 +13,18 @@ namespace backend.Repositories
             _context = context;
         }
 
-        // Obtener reservas que se solapen con el tiempo dado para una sala específica
-        public IEnumerable<Booking> GetBookingsForRoomAndTime(int roomId, DateTime startDate, DateTime endDate)
+        // Obtener reservas con el tiempo dado para una sala específica
+        public IEnumerable<Booking> GetBookingsForRoomAndTime(int? roomId, DateTime? startDate, DateTime? endDate)
         {
-            return _context.Bookings
-                .Where(b => b.Room.Id == roomId &&
-                            b.StartDate < endDate &&
-                            b.EndDate > startDate)
-                .ToList();
+            var query = _context.Bookings;
+            if (roomId != null)
+            query.Where(b => b.Room.Id == roomId);
+            if (startDate != null)
+                query.Where(b => b.StartDate > startDate);
+            if (endDate != null)
+            query.Where(b => b.EndDate < endDate);
+
+               return query.ToList();
         }
 
         // Añadir una nueva reserva
@@ -53,10 +57,6 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
-        Task<Booking> IBookingRepository.GetBookingById(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<IEnumerable<Booking>> GetBookingsByRoomId(int roomId)
         {

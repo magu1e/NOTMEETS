@@ -35,9 +35,9 @@ namespace backend.Models
             Bookings = bookings ?? new List<Booking>(); 
         }
 
-        //public Room(int id) //ver esto
-        //{
-           // Id = id;
-        //}
+        public Room()
+        {
+          
+        }
     }
 }
