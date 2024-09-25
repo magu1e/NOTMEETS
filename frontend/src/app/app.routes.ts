@@ -5,7 +5,8 @@ import { BookingsComponent } from './pages/bookings/bookings.component'
 import { ContainerLayoutComponent } from './shared/container-layout/container-layout.component';
 import { BlankLayoutComponent } from './shared/blank-layout/blank-layout.component';
 import { authGuard } from './guards/auth.guard';
-import { AdminComponent } from './pages/admin/admin.component';
+import { UsersComponent } from './pages/users/users.component'
+import { RoomsComponent } from './pages/rooms/rooms.component';
 
 export const routes: Routes = [
   {
@@ -28,8 +29,12 @@ export const routes: Routes = [
         component: BookingsComponent,
       },
       {
-        path: 'admin',
-        component: AdminComponent,
+        path: 'users',
+        component: UsersComponent,
+      },
+      {
+        path: 'rooms',
+        component: RoomsComponent,
       },
     ],
   },

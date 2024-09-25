@@ -72,7 +72,7 @@ export class LoginComponent {
     if (userRole !== 'admin') {
       this.router.navigate(['/bookings']);
     } else {
-      this.router.navigate(['/admin']);
+      this.router.navigate(['/users']);
     }
   }
 
