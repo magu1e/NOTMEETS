@@ -79,7 +79,7 @@ namespace backend.Controllers
 
 
 
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("delete/{id:int}")]
         public IActionResult Delete(int id)
         {
             try
@@ -112,7 +112,7 @@ namespace backend.Controllers
 
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public IActionResult GetUserById(int id)
         {
             try
@@ -128,7 +128,7 @@ namespace backend.Controllers
 
 
 
-        [HttpGet("role/{id}")]
+        [HttpGet("role/{id:int}")]
         public IActionResult GetUserRole(int id)
         {
             try

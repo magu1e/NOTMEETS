@@ -1,6 +1,5 @@
 ﻿using backend.Data;
 using backend.DTOs;
-using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,37 +17,39 @@ namespace backend.Controllers
         {
             _bookingService = bookingService;
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateBooking([FromBody] NewBookingDTO newBookingDto)
+
+        //Add
+        //POST: api/Booking/add
+        [HttpPost("add")]
+        public async Task<IActionResult> AddBooking([FromBody] List<AddBookingDTO> addBookingDTOs)
         {
             try
             {
-                var booking = _bookingService.CreateBooking(newBookingDto);
-                return Ok(new { id = booking.Id });
+                if (addBookingDTOs == null || !addBookingDTOs.Any())
+                {
+                    return BadRequest("La lista de reservas no puede estar vacía.");
+                }
+
+                await _bookingService.AddBooking(addBookingDTOs);
+                return Ok("La reserva se ha creado correctamente.");
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
-        }
-            // GET: api/Booking/5
-            [HttpGet("{id:int}")]
-            public async Task<IActionResult> GetBooking(int id)
+            catch (Exception ex)
             {
-                var booking = _bookingService.GetBookingById(id);
-                if (booking == null)
-                {
-                    return NotFound();
-                }
-                return Ok(booking);
+                return Problem(ex.Message);
             }
+        }
 
 
-        // GET: api/Booking/5
-        [HttpGet("all")]
-        public async Task<IActionResult> GetBookingsForRoomAndTime(int roomId, DateTime startDate, DateTime endDate)
+        //GetBookingById
+        //GET: api/Booking/5
+        [HttpGet("{id:int}")]
+        public IActionResult GetBookingById(int id)
         {
-            var booking = _bookingService.GetBookingsForRoomAndTime(roomId,startDate,endDate);
+            var booking = _bookingService.GetBookingById(id);
             if (booking == null)
             {
                 return NotFound();
@@ -57,36 +58,51 @@ namespace backend.Controllers
         }
 
 
-        // PUT: api/Booking/5
-        [HttpPut("{id:int}")]
-            public async Task<IActionResult> UpdateBooking(int id, [FromBody] NewBookingDTO updatedBooking)
+        //GetBookingsForRoomAtTime
+        // GET: api/Booking/date/5
+        [HttpGet("date/{id:int}")]
+        public IActionResult GetBookingsForRoomAtTime(int roomId, DateTime startDate, DateTime endDate)
+        {
+            var booking = _bookingService.GetBookingsForRoomAtTime(roomId, startDate, endDate);
+            if (booking == null)
             {
-                try
-                {
-                    var booking = _bookingService.UpdateBooking(id, updatedBooking);
-                    if (booking == null)
-                    {
-                        return NotFound();
-                    }
-                    return Ok(booking);
-                }
-                catch (ArgumentException ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                return NotFound();
             }
+            return Ok(booking);
+        }
 
-            // DELETE: api/Booking/5
-            [HttpDelete("{id:int}")]
-            public async Task<IActionResult> DeleteBooking(int id)
+        //UpdateBooking
+        // PUT: api/Booking/update/5
+        //[HttpPut("update/{id:int}")]
+        //public async Task<IActionResult> UpdateBooking(int id, [FromBody] AddBookingDTO updatedBooking)
+        //{
+        //    try
+        //    {
+        //        var booking = _bookingService.UpdateBooking(id, updatedBooking);
+        //        if (booking == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(booking);
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+
+        //DeleteBooking
+        // DELETE: api/Booking/delete/5
+        [HttpDelete("delete/{id:int}")]
+        public IActionResult DeleteBooking(int id)
+        {
+            var result = _bookingService.DeleteBooking(id);
+            if (!result)
             {
-                var result = _bookingService.DeleteBooking(id);
-                if (!result)
-                {
-                    return NotFound();
-                }
-                return NoContent();
+                return NotFound();
             }
+            return NoContent();
         }
     }
-         
+}
