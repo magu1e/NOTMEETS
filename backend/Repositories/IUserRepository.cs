@@ -11,7 +11,7 @@ namespace backend.Repositories
         User UpdateUser(UserDTO userDto); //Modificaicon usuario
         bool DeleteUser(int id); //Borrado usuario
         IEnumerable<UserDTO> GetAllUsers(); //Obtener todos los usuarios
-        User? GetUserById(int id); //Obtener un usuario 
+        UserDTO? GetUserById(int id); //Obtener un usuario 
         UserDTO? GetUserRole(int id); //Obtener rol del usuario
         User? GetUserByUsername(string username);
 

@@ -27,19 +27,23 @@ namespace backend.Controllers
             {
                 if (addBookingDTOs == null || !addBookingDTOs.Any())
                 {
-                    return BadRequest("La lista de reservas no puede estar vacía.");
+                    return BadRequest(new { message = "La lista de reservas no puede estar vacía." });
                 }
 
                 await _bookingService.AddBooking(addBookingDTOs);
-                return Ok("La reserva se ha creado correctamente.");
+                return Ok(new { message = "La reserva se ha creado correctamente." }); 
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return Problem(ex.Message);
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 

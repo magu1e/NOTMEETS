@@ -45,6 +45,9 @@ namespace backend.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<long>("Timestamp")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 

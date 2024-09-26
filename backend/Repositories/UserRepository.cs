@@ -2,6 +2,8 @@
 using backend.DTOs;
 using backend.Models;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace backend.Repositories
 {
@@ -15,7 +17,6 @@ namespace backend.Repositories
             _context = context;
 
         }
-
 
 
         public object? UserAuth(UserDTO userDto)
@@ -55,7 +56,7 @@ namespace backend.Repositories
 
         public User UpdateUser(UserDTO userDto)
         {
-            var user = GetUserById(userDto.Id);
+            var user = _context.Users.FirstOrDefault(u => u.Id == userDto.Id);
             if (user == null)
             {
                 throw new KeyNotFoundException("Usuario no encontrado.");
@@ -87,18 +88,48 @@ namespace backend.Repositories
 
         public IEnumerable<UserDTO> GetAllUsers()
         {
-            return _context.Users.Select(u => new UserDTO(u)).ToList();
+            return _context.Users
+                .Include(u => u.Bookings) // Incluye las reservas asociadas
+                .Select(u => new UserDTO
+                (
+                    u,
+                    u.Bookings.Select(b => new AddBookingDTO
+                    (
+                        b.Id,
+                        b.StartDate,
+                        b.EndDate,
+                        b.RoomId,
+                        b.User.Username,
+                        b.Attendees,
+                        b.Priority,
+                        b.Timestamp
+                    )).ToList()
+                ))
+                .ToList();
         }
 
-
-
-        public User? GetUserById(int id)
+        public UserDTO? GetUserById(int id)
         {
-            var user = _context.Users.Find(id);
+            var user = _context.Users.Include(u => u.Bookings).FirstOrDefault(u => u.Id == id);
+
             if (user != null)
             {
-                return user;
+                return new UserDTO(
+                    user,
+                    user.Bookings.Select(b => new AddBookingDTO
+                    (
+                        b.Id,
+                        b.StartDate,
+                        b.EndDate,
+                        b.RoomId,
+                        b.User.Username,
+                        b.Attendees,
+                        b.Priority,
+                        b.Timestamp
+                    )).ToList()
+                );
             }
+
             return null;
         }
 

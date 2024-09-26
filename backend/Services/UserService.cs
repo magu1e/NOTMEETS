@@ -83,7 +83,7 @@ namespace backend.Services
 
 
 
-        public User GetUserById(int id)
+        public UserDTO GetUserById(int id)
         {
             var user = _userRepository.GetUserById(id);
             if (user == null)

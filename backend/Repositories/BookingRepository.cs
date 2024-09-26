@@ -16,86 +16,90 @@ namespace backend.Repositories
             _context = context;
         }
 
-
-        public async Task<bool> AddBooking(AddBookingDTO addBookingDTO)
+        public async Task<bool> AddBooking(List<AddBookingDTO> addBookingDTOs)
         {
-            List<string> bookingsWithErrors = new List<string>(); // Almacena las salas con errores
+            // Guarda las salas con errores
+            List<string> bookingsWithErrors = new();
             string errorMessage = string.Empty;
 
-            // Iniciar una transacción para asegurar atomicidad
+            // Inicia la transacción para asegurar atomicidad
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var room = await _context.Rooms.FindAsync(addBookingDTO.RoomId);
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == addBookingDTO.Username);
-
-                if (room == null || user == null)
+                // Recorre todas las reservas a agregar
+                foreach (var addBookingDTO in addBookingDTOs)
                 {
-                    throw new Exception("No se encontró la sala o el usuario.");
-                }
+                    var room = await _context.Rooms.FindAsync(addBookingDTO.RoomId);
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == addBookingDTO.Username);
 
-                // Verificar si hay conflictos de reservas
-                var conflictingBookings = await
-                    _context.Bookings.Where(b => b.RoomId == addBookingDTO.RoomId &&
-                    (b.StartDate < addBookingDTO.EndDate && b.EndDate > addBookingDTO.StartDate)).ToListAsync();
-
-                foreach (var existingBooking in conflictingBookings)
-                {
-                    if (addBookingDTO.Priority > existingBooking.Priority)
+                    if (room == null || user == null)
                     {
-                        // Si la nueva reserva tiene mayor prioridad, cancela la existente
-                        _context.Bookings.Remove(existingBooking);
-                        // NotifyUser(existingBooking.User, existingBooking); // TODO -> REVISAR
+                        throw new ArgumentException("No se encontró la sala o el usuario.");
                     }
-                    else
+
+                    // Verifica si hay conflictos de reservas y los guarda en la lista
+                    var conflictingBookings = await _context.Bookings.Where(b => b.RoomId == addBookingDTO.RoomId &&
+                        (b.StartDate < addBookingDTO.EndDate && b.EndDate > addBookingDTO.StartDate)).ToListAsync();
+
+                    // Verifica si la nueva reserva tiene conflictos con reservas existentes
+                    foreach (var existingBooking in conflictingBookings)
                     {
-                        // Agregar los IDs de las salas en conflicto a la lista
-                        bookingsWithErrors.Add(existingBooking.Room.Id.ToString());
+                        // Valida prioridad
+                        if (addBookingDTO.Priority > existingBooking.Priority)
+                        {
+                            // Cancela todas las reservas con mismo timestamp (hechas en la misma petición)
+                            var bookingsToCancel = await _context.Bookings
+                                .Where(b => b.Timestamp == existingBooking.Timestamp)
+                                .ToListAsync();
+
+                            // Borra las reservas a cancelar
+                            _context.Bookings.RemoveRange(bookingsToCancel);
+                            // TODO -> Falta notificar a los usuarios de las reservas canceladas
+                        }
+                        else
+                        {
+                            // Agrega los IDs de las salas en conflicto a la lista
+                            bookingsWithErrors.Add(existingBooking.Room.Id.ToString());
+                        }
                     }
+
+                    // Si hay reservas en conflicto, no se procesan
+                    if (bookingsWithErrors.Any(b => b == room.Id.ToString()))
+                    {
+                        string roomIds = string.Join(", ", bookingsWithErrors);
+                        errorMessage = bookingsWithErrors.Count > 1
+                            ? $"Las salas con IDs {roomIds} ya ha sido reservadas para ese día y horario." //TODO -> No esta devolviendo todas cuando es mas de una
+                            : $"La sala con ID {roomIds} ya ha sido reservada para ese día y horario.";
+                        throw new InvalidOperationException(errorMessage);
+                    }
+
+                    // Crea la nueva reserva si no hay conflictos
+                    var booking = new Booking
+                    (
+                        startDate: addBookingDTO.StartDate,
+                        endDate: addBookingDTO.EndDate,
+                        room: room,
+                        user: user,
+                        attendees: addBookingDTO.Attendees,
+                        priority: addBookingDTO.Priority,
+                        timestamp: addBookingDTO.Timestamp
+                    );
+
+                    // Asegura que la entidad de la sala y el usuario no se modifiquen
+                    _context.Entry(room).State = EntityState.Unchanged;
+                    _context.Entry(user).State = EntityState.Unchanged;
+
+                    await _context.Bookings.AddAsync(booking); // Agregar la nueva reserva
                 }
 
-                // Generar el mensaje de error dependiendo de la cantidad de salas en conflicto
-                if (bookingsWithErrors.Count == 1)
-                {
-                    errorMessage = $"La sala con ID {bookingsWithErrors[0]} ya ha sido reservada para ese día y horario.";
-                }
-                else if (bookingsWithErrors.Count > 1)
-                {
-                    string roomIds = string.Join(", ", bookingsWithErrors);
-                    errorMessage = $"Las salas con IDs {roomIds} tienen conflictos y no pueden ser reservadas.";
-                }
-
-                // Si hay salas con conflictos, lanza la excepción
-                if (bookingsWithErrors.Count > 0)
-                {
-                    throw new Exception(errorMessage);
-                }
-
-                // Crear la nueva reserva
-                var booking = new Booking
-                (
-                    startDate: addBookingDTO.StartDate,
-                    endDate: addBookingDTO.EndDate,
-                    room: room,
-                    user: user,
-                    attendees: addBookingDTO.Attendees,
-                    priority: addBookingDTO.Priority
-                );
-
-                // Asegura que la entidad de la sala y el usuario no se modifiquen
-                _context.Entry(room).State = EntityState.Unchanged;
-                _context.Entry(user).State = EntityState.Unchanged;
-
-                await _context.Bookings.AddAsync(booking); // Agregar la nueva reserva
-                await _context.SaveChangesAsync(); // Guardar los cambios antes de hacer commit
-                await transaction.CommitAsync(); // Confirmar transacción
+                await _context.SaveChangesAsync(); // Guarda los cambios antes de hacer commit
+                await transaction.CommitAsync(); // Confirma transacción
 
                 return true;
             }
             catch (Exception ex)
             {
-                // Revertir la transacción si ocurre un error
-                await transaction.RollbackAsync();
+                await transaction.RollbackAsync(); // Si hay error en alguna, cancela y vuelve todo atrás
                 throw new Exception(ex.Message);
             }
         }

@@ -11,6 +11,7 @@ namespace backend.DTOs
         public string? Username { get; set; } = String.Empty;
         public int RoomId { get; set; } // Agregar esta propiedad para poder buscar la sala por id en el BookingService
         public int Priority { get; set; } = 1;  // 1 = Low, 3 = High // Inicializa por defecto en 1
+        public long Timestamp { get; set; } //Id para las reservas hechas en una misma peticion
 
         [Required]
         [DataType(DataType.DateTime)]
@@ -30,14 +31,16 @@ namespace backend.DTOs
         public AddBookingDTO() { }
 
         //AddBooking
-        public AddBookingDTO(DateTime startDate, DateTime endDate, int roomId, string username, int attendees, int priority)
+        public AddBookingDTO(int id, DateTime startDate, DateTime endDate, int roomId, string username, int attendees, int priority, long timestamp)
         {
+            Id = id;
             StartDate = startDate;
             EndDate = endDate;
             RoomId = roomId;
             Username = username;
             Attendees = attendees;
             Priority = 1;
+            Timestamp = timestamp;
         }
 
     }

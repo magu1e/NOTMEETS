@@ -20,7 +20,6 @@ export class HeaderComponent {
   constructor(private authService: AuthService) {}
   
   ngOnInit() {
-    console.log(this.isAdmin)
     if(this.user.role === 'admin'){
       this.isAdmin = true
     }

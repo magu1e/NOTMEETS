@@ -35,6 +35,7 @@
                         </div>
                     </div>
                     <div class="col-md-auto mb-3">
+                        <button type="button" class="btn btn-dark me-2" (click)="restoreInitialFilters()">Limpiar</button>
                         <button type="submit" role="button" class="btn btn-primary">Buscar</button>
                     </div>
                 </div>
@@ -80,7 +81,7 @@
                                     <button class="dropdown-toggle btn btn-sm px-3 py-2" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0, 15"
                                         [disabled]="">
-                                        <span>{{ room['selectedStartTime'] || '09:00' }}hs</span>
+                                        <span class="pe-3">{{ room['selectedStartTime'] || '09:00' }}hs</span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li *ngFor="let schedule of room['filteredStartSchedules']; let j=index"
@@ -93,7 +94,7 @@
                                     <button class="dropdown-toggle btn btn-sm px-3 py-2" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0, 15"
                                         [disabled]="">
-                                        <span> {{ room['selectedEndTime'] || '09:00' }}hs</span>
+                                        <span class="pe-3"> {{ room['selectedEndTime'] || '09:00' }}hs</span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li *ngFor="let schedule of room['filteredEndSchedules']; let j=index"
@@ -117,7 +118,7 @@
         </div>
     </div>
 
-    <!-- Modal genérico -->
+    <!-- Modal Reserva -->
     <app-modal id="modalBooking" [title]="'Crear reserva'" #modalBooking>
         <div modal-body>
             <div class="card mb-4 bg-dark">
@@ -134,20 +135,23 @@
                  </div>
             </div>
             <form [formGroup]="booking">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-2">
                     <select formControlName="priority" class="form-select" id="priority" aria-label="priority">
-                        <option value="3">Baja</option>
+                        <option value="1">Baja</option>
                         <option value="2">Media</option>
-                        <option value="1">Alta</option>
+                        <option value="3">Alta</option>
                     </select>
                     <label for="priority">Prioridad de reunión</label>
                 </div>
             </form>
+            <p *ngIf="invalidBooking" class="text-danger text-center">
+                <small>{{invalidBooking}}</small>
+            </p>
             <small class="text-muted">Las reservas de mayor prioridad pueden cancelar reservas hechas previamente para la misma fecha y rango horario.</small>
         </div>
         <div modal-footer>
             <button type="button" class="btn btn-dark me-3" (click)="modalBooking.closeModal()">Volver</button>
-            <button type="button" class="btn btn-primary" (click)="makeBookings()">Reservar</button>
+            <button type="button" class="btn btn-primary" (click)="addBookings()">Reservar</button>
         </div>
     </app-modal>
 </section>

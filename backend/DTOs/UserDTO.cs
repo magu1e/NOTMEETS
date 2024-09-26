@@ -11,7 +11,7 @@ namespace backend.DTOs
         public int Location { get; set; }
         public string Role { get; set; } = "user";
 
-        public List<Booking>? Bookings { get; set; }
+        public List<AddBookingDTO>? Bookings { get; set; }
 
         //public List<Notification>? Notifications { get; set; }
 
@@ -50,8 +50,19 @@ namespace backend.DTOs
             Email = user.Email;
             Location = user.Location;
             Role = user.Role;
-            Bookings = user.Bookings;
         }
+
+        //GetUser
+        public UserDTO(User user, List<AddBookingDTO> bookings)
+        {
+            Id = user.Id;
+            Username = user.Username;
+            Email = user.Email;
+            Location = user.Location;
+            Role = user.Role;
+            Bookings = bookings.ToList();
+        }
+
 
         //GetUserRole
         public UserDTO(int id, string username, string role)

@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { COMPILER_OPTIONS, Component } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { roomsMock } from './salasMock.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiService, ApiResponse } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { parse, format } from 'date-fns';
+import { parse, format, parseISO } from 'date-fns';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { ModalService } from '../../shared/modal/modal.service';
 import { AuthService } from '../../services/auth.service';
@@ -44,8 +44,10 @@ export class BookingsComponent {
   roomFilters!: FormGroup;
   booking!:FormGroup;
   currentDate = format(new Date(), 'yyyy-MM-dd')
+  initialFilterValues!: any; 
 
   //Seleccion de salas
+  filteredRooms = [...this.roomsMock]; //Inicialmente muestra en la tabla todas las salas
   selectedRooms: Rooms[] = [];
   roomsSelected = false;
 
@@ -53,6 +55,7 @@ export class BookingsComponent {
   schedules = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
 
   //Booking
+  invalidBooking: string | null = null;
 
   constructor(private formBuilder: FormBuilder, private apiService: ApiService, private modalService: ModalService, private authService: AuthService) {
     this.roomFilters = this.formBuilder.group({
@@ -63,16 +66,18 @@ export class BookingsComponent {
     });
 
     this.booking = this.formBuilder.group({
-      priority: 3,
+      priority: 1,
     });
     
     this.selectionPropsInit()
   }
   
   ngOnInit() {
+    //Valida que este logueado y redirige automaticamente a bookings
     if(this.authService.isAuthenticated()) {
       this.authService.redirect(['/bookings'])
     }
+    this.initialFilterValues = this.roomFilters.value;
     this.filterRooms();
   }
 
@@ -88,18 +93,25 @@ export class BookingsComponent {
   }
   
 
-filterRooms() {
-  //Ordena segun filtros
-  this.sortRooms();
-  //Setea la fecha actual, si no filtra por fecha
-  this.roomsMock.forEach( room => {
-    room['selectedDate'] = this.roomFilters.get('date')?.value || this.currentDate;;
-  });
-}
 
 
   // SORT ROOMS
-  //Ordenar las salas segun conflictos, y de no tener segun capacidad
+  filterRooms() {
+    //Ordena segun filtros
+    this.sortRooms();
+    //Setea la fecha actual, si no filtra por fecha
+    this.roomsMock.forEach( room => {
+      room['selectedDate'] = this.roomFilters.get('date')?.value || this.currentDate;;
+    });
+  }
+  
+   //Limpiar los roomFilters
+   restoreInitialFilters() { 
+    this.roomFilters.setValue(this.initialFilterValues);
+    this.sortByConflictOrCapacity();
+  }
+  
+  //Ordenar las salas segun conflictos, y de no tener segun capacidad -> TODO agregar orden por cercania
   sortByConflictOrCapacity() {
     this.roomsMock.sort((a, b) => {
       const selectedCapacity = this.roomFilters.get('capacity')?.value;
@@ -110,21 +122,25 @@ filterRooms() {
     });
   }
 
-  // Pasa a formato Date y obtiene el timestamp
-  getTimeStamp(date: any) {
-    return parse(date, 'yyyy-MM-dd HH:mm', new Date()).getTime();
+  //Formatea fecha de la db: "2024-10-18T09:00:40.542Z" -> "2024-10-18 09:00" y obtiene timestamp
+  formatDate(dbDate:string, timestamp: boolean){
+    const date = parseISO(dbDate);
+    let formattedDate = format(date, 'yyyy-MM-dd HH:mm');
+    if(timestamp){
+      return date.getTime();
+    }
+    return formattedDate;
   }
 
   sortRooms() {
-    console.log(this.roomsMock)
     const { date, startTime, endTime } = this.roomFilters.value;
-    const startTimestamp = this.getTimeStamp(`${date} ${startTime}`)
-    const endTimestamp = this.getTimeStamp(`${date} ${endTime}`)
+    const startTimestamp = this.formatDate(`${date} ${startTime}`, true)
+    const endTimestamp = this.formatDate(`${date} ${endTime}`, true)
 
     this.roomsMock = this.roomsMock.map(room => {
       const conflictingBookings = room.bookings.filter(booking => {
-        const bookingStartTimestamp = this.getTimeStamp(booking.startDate)
-        const bookingEndTimestamp = this.getTimeStamp(booking.endDate)
+        const bookingStartTimestamp = this.formatDate(booking.startDate, true)
+        const bookingEndTimestamp = this.formatDate(booking.endDate, true)
         // Comparación de fecha y hora en timestamps
         return ( 
           (startTimestamp >= bookingStartTimestamp && startTimestamp < bookingEndTimestamp) || // Si el inicio está dentro del rango del booking
@@ -141,7 +157,8 @@ filterRooms() {
 
 
 
-  // TIME VALIDATIONS
+
+  // SELECT ROOMS/TIME VALIDATIONS
   // Recorta opciones superiores al horario de fin
   updateStartOptions(room: Rooms, hour: string) {
     const endIndex = this.schedules.indexOf(hour);
@@ -158,28 +175,21 @@ filterRooms() {
   selectTime(room: Rooms, time: string, hour: string) {
     let startTime = room['selectedStartTime'];
     let endTime = room['selectedEndTime'];
-    console.log(room)
     if (time === 'start') {
       room['selectedStartTime'] = hour; // Actualiza el horario de inicio seleccionado
       return this.updateEndOptions(room, hour);
     } else {
       room['selectedEndTime'] = hour; // Actualiza el horario de fin seleccionado
-
+      
       //Valida que la startTime no sea superior a endTime (como se recortan las opciones solo pasa cuando startTime y enDate son iguales)
       if (startTime && endTime && startTime >= endTime) {
         console.log('La fecha de inicio debe ser superior a la de fin')
-        //this.toastService.showToast('La hora de inicio no puede ser igual a la de fin', 'error'); //Implementar toast
+        //this.toastService.showToast('La hora de inicio no puede ser igual a la de fin', 'error'); // TODO -> Implementar toast
       }
       return this.updateStartOptions(room, hour);
     }
   }
 
-
-
-
-
-
-  //BOOKING
   //Updatea lista de salas elegidas para la reserva
   updatePreBooking(room: Rooms) {
     if (room['selected']) {
@@ -204,12 +214,16 @@ filterRooms() {
 
 
 
-  formatDateTime = (date: string, time: string) => {
-      const mergedDateTime = `${date} ${time}`;
-      return format(new Date(mergedDateTime), 'yyyy-MM-dd HH:mm');
+
+
+  //BOOKING
+  //Devuelve la fecha a formato ISO para enviar al back
+  toFormatISO = (date: string, time: string) => {
+      const mergedDateTime = `${date}T${time}`;
+      const dateObject = new Date(mergedDateTime + 'Z'); // Ajusta zona horaria UTC
+      return new Date(dateObject).toISOString();
   };
   
-
   //Obtiene usuario guardado en localstorage
   getLoggedInUser() {
     const username = localStorage.getItem('username');
@@ -217,50 +231,49 @@ filterRooms() {
     return {username, role};
   }
   
-  setRequest(rooms: Rooms[], priority: number) {
+  setRequest(rooms: Rooms[]) {
     let newBookings: any[] = [];
+
+    const priority = this.booking.get('priority')!.value;
+    const attendees = this.roomFilters.get('capacity')?.value | 1;
+
+    // Obtiene timesatmp para relacionar todas las reservas de un mismo evento
+    let timestamp = new Date().getTime() 
     rooms.map( room => {
       
-      const formattedStartDate = this.formatDateTime(room['selectedDate'], room['selectedStartTime']);
-      const formattedEndDate = this.formatDateTime(room['selectedDate'], room['selectedEndTime']);
+      const formattedStartDate = this.toFormatISO(room['selectedDate'], room['selectedStartTime']);
+      const formattedEndDate = this.toFormatISO(room['selectedDate'], room['selectedEndTime']);
 
       newBookings.push(
         {
           startDate: formattedStartDate, 
           endDate: formattedEndDate, 
-          user: this.getLoggedInUser(),
+          username: this.getLoggedInUser().username,
+          roomId: room.id,
           priority: priority,
-          room: room.id
+          attendees: attendees,
+          timestamp: timestamp
         })
-       console.log(newBookings)
+      });
+      console.log(newBookings)
       return newBookings; 
-    });
   }
 
-  makeBookings() {
-    const priority = this.booking.get('priority')!.value;
-    this.setRequest(this.selectedRooms, priority);
-    // this.apiService.makeBookingRequest(rooms) //TODO ENVIAR JSON FINAL POR PARAMS
-    //   .subscribe((response: ApiResponse) => {
-    //     if (response.status === 201) { // Manejo de respuesta exitosa
-    //       console.log('Reserva creada exitosamente', response.status);
-    //       //toast success // redirect mis reservas?
-    //     } else { // Manejo de error
-    //       //toast error -> horarios elegidos ocupados
-    //       //this.invalidBooking = response.error;
-    //       ;
-    //     }
-    //   });
-    this.modalService.closeModal('modalBooking');
+  addBookings() {
+    const newBookings = this.setRequest(this.selectedRooms);
+    console.log(newBookings)
+    this.apiService.addBookingRequest(newBookings)
+    .subscribe({
+      next: (response: ApiResponse) => {
+        if (response.status === 200) { 
+          console.log('Reserva creada exitosamente', response.status);
+          this.modalService.closeModal('modalBooking');
+        }
+      },
+      error: (error) => { 
+        console.error(error.message);
+        this.invalidBooking = error.message;
+      }
+      });
   }
 }
-
-
-
-  // Mando la lista de salas a reservar,
-  // en la consulta del repository a la base devuelve una lista de todas las salas con los bookings creados de cada una,
-  // en el service valido que en la response la fecha + rango horario entre startTime y endTime de los bookings, ninguno se pise con la fecha + rango horario que envie
-  // los que tengan horarios superpuestos los separo en un array y comparo las prioridades de esos bookings con los de la request: 
-  // caso 1: si es mas alta la prioridad de la request asigno ese booking a la sala, cancelo el previo y disparo la notificacion al usuario del booking cancelado
-  // caso 2: si es mas baja o igual prioridad, devuelvo excepcion + objeto sala + booking/s causantes del error 
-  // de no superponerse hago el add/save de la reserva en la base y devuelvo OK

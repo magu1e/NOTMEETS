@@ -30,12 +30,10 @@ namespace backend.Services
             {
                 throw new ArgumentException("La lista de reservas no puede estar vacía.");
             }
-
-            foreach (var bookingDTO in addBookingDTOs)
-            {
-                // Llamar al método AddBooking para cada AddBookingDTO individualmente
-                await _bookingRepository.AddBooking(bookingDTO);
-            }
+   
+            // Llamar al método AddBooking para cada AddBookingDTO individualmente
+            await _bookingRepository.AddBooking(addBookingDTOs);
+            
 
             return true;
         }
@@ -86,9 +84,6 @@ namespace backend.Services
         //        //);
         //    }
         //}
-
-
-
 
         //// Métodos adicionales de la interfaz
         // public List<Booking> GetBookingsForRoom(int roomId)

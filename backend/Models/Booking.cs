@@ -10,6 +10,8 @@ namespace backend.Models
         public int RoomId { get; set; }
         public Room Room { get; set; } //Sala de reserva 
         public int Priority { get; set; } //Prioridad de la reserva
+        public long Timestamp { get; set; } //Id para las reservas hechas en una misma peticion
+
 
         [Required]
         [DataType(DataType.DateTime)]
@@ -27,7 +29,7 @@ namespace backend.Models
         public Booking() { }
 
         // Constructor para inicializar Booking, agregue el RoomId
-        public Booking(DateTime startDate, DateTime endDate, Room room, User user, int attendees, int priority)
+        public Booking(DateTime startDate, DateTime endDate, Room room, User user, int attendees, int priority, long timestamp)
         {
             StartDate = startDate;
             EndDate = endDate;
@@ -37,6 +39,7 @@ namespace backend.Models
             User = user;
             Attendees = attendees;
             Priority = priority;
+            Timestamp = timestamp;
         }
     }
 }

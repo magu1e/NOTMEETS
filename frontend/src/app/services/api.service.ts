@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, of } from 'rxjs';
-
-
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, catchError, of, throwError } from 'rxjs';
+import { Rooms } from '../pages/bookings/bookings.component';
 
 export interface ApiResponse {
   status: number;
@@ -14,18 +13,17 @@ export interface ApiResponse {
   providedIn: 'root',
 })
 
-
 export class ApiService {
   //Endpoints
   private baseUrl = 'https://localhost:7252/api';
   private userUrl = `${this.baseUrl}/User`;
   private bookingUrl = `${this.baseUrl}/Booking`;
+  private roomsUrl = `${this.baseUrl}/Rooms`;
 
   constructor(private http: HttpClient) { }
 
   //USER REQUESTS
   //Auth
-  // Verifica errores de de la solicitud, de no haber devuelve el observable con la response
   authRequest(user: any): Observable<ApiResponse> {
     return this.http.post(`${this.userUrl}/auth`, user, { observe: 'response' })
       .pipe(
@@ -54,7 +52,6 @@ export class ApiService {
         })
       );
   }
-
 
   //Delete
   deleteUserRequest(userId: number): Observable<ApiResponse> {
@@ -90,12 +87,32 @@ export class ApiService {
 
   //BOOKING
   //AddBooking
-  makeBookingRequest(rooms: any[]): Observable<ApiResponse> {
-    return this.http.post(`${this.bookingUrl}/add`, rooms, { observe: 'response' })
+  addBookingRequest(rooms: any): Observable<ApiResponse> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<ApiResponse>(`${this.bookingUrl}/add`, rooms, { headers, observe: 'response' })
       .pipe(
-        catchError(error => {
-          return of({ status: error.status, error: error.error } as ApiResponse);
+        catchError((error: HttpErrorResponse) => {
+          if (error.error && error.error.message) {
+            return throwError(() => new Error(error.error.message));
+          }
+           else {
+            return throwError(() => new Error('Ocurrió un error desconocido.'));
+          }
         })
       );
   }
+
+  //ROOMS
+  //GetAllRooms
+  // getAllRoomsRequest(): Observable<ApiResponse> {
+  //   return this.http.get<ApiResponse>(`${this.roomsUrl}/all`, { observe: 'response' })
+  //     .pipe(
+  //       catchError(error => {
+  //         return of({ status: error.status, error: error.error } as ApiResponse);
+  //       })
+  //     );
+  // }
+
+
 }
+

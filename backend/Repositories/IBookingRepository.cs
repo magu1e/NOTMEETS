@@ -5,7 +5,7 @@ namespace backend.Repositories
 {
     public interface IBookingRepository
     {
-        Task<bool> AddBooking(AddBookingDTO addBookingDTO);
+        Task<bool> AddBooking(List<AddBookingDTO> addBookingDTO);
         Booking? GetBookingById(int id);
         //Task<IEnumerable<Booking>> GetBookingsByRoomId(int roomId);
         //Task<Booking> UpdateBooking(Booking booking);
