@@ -22,7 +22,7 @@ namespace backend.Models
         //public TimeSpan ClosingTime { get; set; }
 
         //Lista de reservas
-        public List<Booking> Bookings { get; set; } = new ();
+        public List<Booking> Bookings { get; set; }
 
 
         // Constructor para inicializar

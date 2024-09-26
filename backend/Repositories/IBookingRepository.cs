@@ -11,5 +11,6 @@ namespace backend.Repositories
         //Task<Booking> UpdateBooking(Booking booking);
         bool DeleteBooking(int id);
         List<Booking> GetBookingsForRoomAtTime(int roomId, DateTime startDate, DateTime endDate);
+        Task<List<Booking>> GetBookingsByUsername(string username);
     }
 }

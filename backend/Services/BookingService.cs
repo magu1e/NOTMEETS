@@ -50,6 +50,11 @@ namespace backend.Services
             return _bookingRepository.GetBookingById(id);
         }
 
+        public async Task<List<Booking>> GetBookingsByUsername(string username)
+        {
+            return await _bookingRepository.GetBookingsByUsername(username);
+        }
+
         //public List<Booking> GetBookingsForRoom(int roomId)
         //{
         //    throw new NotImplementedException();
