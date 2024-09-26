@@ -61,6 +61,17 @@ namespace backend.Controllers
             return Ok(booking);
         }
 
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetBookingByUsername(string username)
+        {
+            var bookings = await _bookingService.GetBookingsByUsername(username);
+            if (bookings == null)
+            {
+                return NotFound();
+            }
+            return Ok(bookings);
+        }
+
 
         //GetBookingsForRoomAtTime
         // GET: api/Booking/date/5

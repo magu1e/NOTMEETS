@@ -10,6 +10,7 @@ namespace backend.Repositories
 
     {
         private readonly ApiContext _context;
+        private readonly DbSet<Booking> db;
 
         public BookingRepository(ApiContext context)
         {
@@ -138,6 +139,14 @@ namespace backend.Repositories
                 return booking;
             }
             return null;
+        }
+
+        public async Task<List<Booking>> GetBookingsByUsername(string username)
+        {
+            var booking = await _context.Bookings
+                .Where(b => b.User.Username == username).ToListAsync();
+
+            return booking;
         }
     }
 }

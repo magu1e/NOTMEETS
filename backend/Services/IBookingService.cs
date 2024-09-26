@@ -12,5 +12,6 @@ namespace backend.Services
         //Booking UpdateBooking(int id, AddBookingDTO updatedBooking);
         bool DeleteBooking(int id);
         List<Booking> GetBookingsForRoomAtTime(int roomId, DateTime startDate, DateTime endDate);
+        Task<List<Booking>> GetBookingsByUsername(string username);
     }
 }

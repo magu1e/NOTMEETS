@@ -19,9 +19,11 @@ namespace backend
             // Inyecta services
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<IRoomService, RoomService>();
             // Inyecta repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
             // Inyecta controllers
             builder.Services.AddControllers();
 
