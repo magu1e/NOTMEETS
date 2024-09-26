@@ -53,18 +53,6 @@ namespace backend.Repositories
         }
 
 
-        //public User UpdateUser(UserDTO userDto)
-        //{
-        //    //var user = _context.Users.Find(userDto.Id);
-        //    var user = GetUserById(userDto.Id);
-        //    user!.Username = userDto.Username;
-        //    user!.Email = userDto.Email;
-        //    user!.Location = userDto.Location;
-        //    user!.Role = userDto.Role;
-        //    _context.SaveChanges();
-        //    return user;
-
-        //}
         public User UpdateUser(UserDTO userDto)
         {
             var user = GetUserById(userDto.Id);
@@ -125,6 +113,12 @@ namespace backend.Repositories
 
             }
             return null;
+        }
+
+        public User? GetUserByUsername(string username)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Username == username);
+            return user;
         }
     }
 

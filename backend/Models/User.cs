@@ -9,18 +9,21 @@
         public int Location { get; set; }
         public string Role { get; set; }
 
-        //public List<Reserva> Reservas { get; set; }
-
+        public List<Booking> Bookings { get; set; } = new();
         //public List<Notification> Notifications { get; set; }
 
-        public User (string username, string password, string email, int location, string role) 
+        //public User() { }
+        public User(string username, string password, string email, int location, string role)
         {
             Username = username;
             Password = password;
             Email = email;
             Location = location;
             Role = role;
+            Bookings = new List<Booking>();
         }
-
     }
 }
+
+
+

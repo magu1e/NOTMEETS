@@ -98,7 +98,7 @@ namespace backend.Services
         public IEnumerable<UserDTO> GetAllUsers()
         {
             var users = _userRepository.GetAllUsers();
-            if (users.Count() == 0)
+            if (!users.Any())
             {
                 throw new KeyNotFoundException("No hay usuarios cargados.");
             }
