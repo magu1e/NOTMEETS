@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20240926035145_Timestamp")]
-    partial class Timestamp
+    [Migration("20240926215327_Rooms")]
+    partial class Rooms
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

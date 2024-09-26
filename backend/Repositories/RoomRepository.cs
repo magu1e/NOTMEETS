@@ -42,6 +42,7 @@ namespace backend.Repositories
         public async Task<List<RoomDTO>> GetAllRooms()
         {
             return await _context.Rooms
+                .Include(r => r.Bookings)
                 .Select(r => new RoomDTO
                 {
                     RoomId = r.Id,

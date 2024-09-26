@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace backend.Migrations
 {
-    public partial class Timestamp : Migration
+    public partial class Rooms : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
