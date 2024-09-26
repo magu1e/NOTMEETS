@@ -42,9 +42,9 @@ export class BookingsComponent {
 
   //Filtros
   roomFilters!: FormGroup;
-  booking!:FormGroup;
+  booking!: FormGroup;
   currentDate = format(new Date(), 'yyyy-MM-dd')
-  initialFilterValues!: any; 
+  initialFilterValues!: any;
 
   //Seleccion de salas
   filteredRooms = [...this.roomsMock]; //Inicialmente muestra en la tabla todas las salas
@@ -68,20 +68,20 @@ export class BookingsComponent {
     this.booking = this.formBuilder.group({
       priority: 1,
     });
-    
+
     this.selectionPropsInit()
   }
-  
+
   ngOnInit() {
     //Valida que este logueado y redirige automaticamente a bookings
-    if(this.authService.isAuthenticated()) {
+    if (this.authService.isAuthenticated()) {
       this.authService.redirect(['/bookings'])
     }
     this.initialFilterValues = this.roomFilters.value;
     this.filterRooms();
   }
 
-  selectionPropsInit(){
+  selectionPropsInit() {
     this.roomsMock.forEach((room) => {
       room['selectedDate'] = this.currentDate;
       room['selectedStartTime'] = '09:00';
@@ -91,7 +91,7 @@ export class BookingsComponent {
       room['filteredEndSchedules'] = [...this.schedules];
     });
   }
-  
+
 
 
 
@@ -100,17 +100,17 @@ export class BookingsComponent {
     //Ordena segun filtros
     this.sortRooms();
     //Setea la fecha actual, si no filtra por fecha
-    this.roomsMock.forEach( room => {
+    this.roomsMock.forEach(room => {
       room['selectedDate'] = this.roomFilters.get('date')?.value || this.currentDate;;
     });
   }
-  
-   //Limpiar los roomFilters
-   restoreInitialFilters() { 
+
+  //Limpiar los roomFilters
+  restoreInitialFilters() {
     this.roomFilters.setValue(this.initialFilterValues);
     this.sortByConflictOrCapacity();
   }
-  
+
   //Ordenar las salas segun conflictos, y de no tener segun capacidad -> TODO agregar orden por cercania
   sortByConflictOrCapacity() {
     this.roomsMock.sort((a, b) => {
@@ -123,10 +123,10 @@ export class BookingsComponent {
   }
 
   //Formatea fecha de la db: "2024-10-18T09:00:40.542Z" -> "2024-10-18 09:00" y obtiene timestamp
-  formatDate(dbDate:string, timestamp: boolean){
+  formatDate(dbDate: string, timestamp: boolean) {
     const date = parseISO(dbDate);
     let formattedDate = format(date, 'yyyy-MM-dd HH:mm');
-    if(timestamp){
+    if (timestamp) {
       return date.getTime();
     }
     return formattedDate;
@@ -142,7 +142,7 @@ export class BookingsComponent {
         const bookingStartTimestamp = this.formatDate(booking.startDate, true)
         const bookingEndTimestamp = this.formatDate(booking.endDate, true)
         // Comparación de fecha y hora en timestamps
-        return ( 
+        return (
           (startTimestamp >= bookingStartTimestamp && startTimestamp < bookingEndTimestamp) || // Si el inicio está dentro del rango del booking
           (endTimestamp > bookingStartTimestamp && endTimestamp <= bookingEndTimestamp) || // Si el final está dentro del rango del booking
           (startTimestamp <= bookingStartTimestamp && endTimestamp >= bookingEndTimestamp) // Si el horario seleccionado engloba una reserva completa
@@ -180,7 +180,7 @@ export class BookingsComponent {
       return this.updateEndOptions(room, hour);
     } else {
       room['selectedEndTime'] = hour; // Actualiza el horario de fin seleccionado
-      
+
       //Valida que la startTime no sea superior a endTime (como se recortan las opciones solo pasa cuando startTime y enDate son iguales)
       if (startTime && endTime && startTime >= endTime) {
         console.log('La fecha de inicio debe ser superior a la de fin')
@@ -217,20 +217,38 @@ export class BookingsComponent {
 
 
   //BOOKING
+  openModalBooking() {
+    this.resetBookingForm();
+    this.modalService.openModal('modalBooking');
+  }
+
+  closeModalBooking() {
+    this.resetBookingForm();
+    this.modalService.closeModal('modalBooking')
+  }
+
+  //Reset form prioridad y errores
+  resetBookingForm() {
+    setTimeout(() => {
+      this.invalidBooking = null;
+      this.booking.get('priority')?.reset(1);
+    }, 150)
+  }
+
   //Devuelve la fecha a formato ISO para enviar al back
   toFormatISO = (date: string, time: string) => {
-      const mergedDateTime = `${date}T${time}`;
-      const dateObject = new Date(mergedDateTime + 'Z'); // Ajusta zona horaria UTC
-      return new Date(dateObject).toISOString();
+    const mergedDateTime = `${date}T${time}`;
+    const dateObject = new Date(mergedDateTime + 'Z'); // Ajusta zona horaria UTC
+    return new Date(dateObject).toISOString();
   };
-  
+
   //Obtiene usuario guardado en localstorage
   getLoggedInUser() {
     const username = localStorage.getItem('username');
     const role = localStorage.getItem('role');
-    return {username, role};
+    return { username, role };
   }
-  
+
   setRequest(rooms: Rooms[]) {
     let newBookings: any[] = [];
 
@@ -238,42 +256,43 @@ export class BookingsComponent {
     const attendees = this.roomFilters.get('capacity')?.value | 1;
 
     // Obtiene timesatmp para relacionar todas las reservas de un mismo evento
-    let timestamp = new Date().getTime() 
-    rooms.map( room => {
-      
+    let timestamp = new Date().getTime()
+    rooms.map(room => {
+
       const formattedStartDate = this.toFormatISO(room['selectedDate'], room['selectedStartTime']);
       const formattedEndDate = this.toFormatISO(room['selectedDate'], room['selectedEndTime']);
 
       newBookings.push(
         {
-          startDate: formattedStartDate, 
-          endDate: formattedEndDate, 
+          startDate: formattedStartDate,
+          endDate: formattedEndDate,
           username: this.getLoggedInUser().username,
           roomId: room.id,
           priority: priority,
           attendees: attendees,
           timestamp: timestamp
         })
-      });
-      console.log(newBookings)
-      return newBookings; 
+    });
+    console.log(newBookings)
+    return newBookings;
   }
 
   addBookings() {
     const newBookings = this.setRequest(this.selectedRooms);
     console.log(newBookings)
     this.apiService.addBookingRequest(newBookings)
-    .subscribe({
-      next: (response: ApiResponse) => {
-        if (response.status === 200) { 
-          console.log('Reserva creada exitosamente', response.status);
-          this.modalService.closeModal('modalBooking');
+      .subscribe({
+        next: (response: ApiResponse) => {
+          if (response.status === 200) {
+            console.log('Reserva creada exitosamente', response.status);
+            this.modalService.closeModal('modalBooking');
+            this.clearSelections();
+          }
+        },
+        error: (error) => {
+          console.error(error.message);
+          this.invalidBooking = error.message;
         }
-      },
-      error: (error) => { 
-        console.error(error.message);
-        this.invalidBooking = error.message;
-      }
       });
   }
 }

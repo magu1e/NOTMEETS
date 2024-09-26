@@ -58,7 +58,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" [attr.id]="'check-item-' + room.id"
                                     [(ngModel)]="room['selected']" (change)="updatePreBooking(room)"
-                                    [disabled]="room['selectedEndTime'] === ''">
+                                    [disabled]="room['selectedEndTime'] === '' || room['selectedEndTime'] <= room['selectedStartTime']  ">
                                 <label class="form-check-label" [attr.for]="'check-item-' + room.id"></label>
                             </div>
                         </td>
@@ -114,7 +114,7 @@
     <div class="card floating-card" [ngClass]="{'show' : roomsSelected}">
         <div class="card-body p-3">
             <button class="btn btn-dark me-3" (click)="clearSelections()">Limpiar selección</button>
-            <button class="btn btn-primary" (click)="modalBooking.openModal()">Reservar</button>
+            <button class="btn btn-primary" (click)="openModalBooking()">Reservar</button>
         </div>
     </div>
 
@@ -150,7 +150,7 @@
             <small class="text-muted">Las reservas de mayor prioridad pueden cancelar reservas hechas previamente para la misma fecha y rango horario.</small>
         </div>
         <div modal-footer>
-            <button type="button" class="btn btn-dark me-3" (click)="modalBooking.closeModal()">Volver</button>
+            <button type="button" class="btn btn-dark me-3" (click)="closeModalBooking()">Volver</button>
             <button type="button" class="btn btn-primary" (click)="addBookings()">Reservar</button>
         </div>
     </app-modal>
