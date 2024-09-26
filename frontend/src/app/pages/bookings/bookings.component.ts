@@ -1,6 +1,6 @@
 import { COMPILER_OPTIONS, Component } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { roomsMock } from './salasMock.component';
+import { roomsMock } from './salasMock';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiService, ApiResponse } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
@@ -11,12 +11,14 @@ import { AuthService } from '../../services/auth.service';
 
 
 export interface Booking {
-  id: number;
-  room: number;
-  startDate: string;
-  endDate: string;
-  user: string;
-  priority: number;
+  id: number,
+  roomId: number,
+  startDate: string,
+  endDate: string,
+  username: string,
+  priority: number,
+  attendees: number,
+  timestamp: number
 }
 
 export interface Rooms {

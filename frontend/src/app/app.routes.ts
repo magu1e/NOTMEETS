@@ -7,6 +7,7 @@ import { BlankLayoutComponent } from './shared/blank-layout/blank-layout.compone
 import { authGuard } from './guards/auth.guard';
 import { UsersComponent } from './pages/users/users.component'
 import { RoomsComponent } from './pages/rooms/rooms.component';
+import { MyBookingsComponent } from './pages/my-bookings/my-bookings.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,10 @@ export const routes: Routes = [
       {
         path: 'bookings',
         component: BookingsComponent,
+      },
+      {
+        path: 'my-bookings',
+        component: MyBookingsComponent,
       },
       {
         path: 'users',
