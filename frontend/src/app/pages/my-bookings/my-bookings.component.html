@@ -22,17 +22,9 @@
                                 <p class="mb-3 mb-xl-0 mx-2">{{formatDate(booking.endDate)}}</p>
                             </div>
                         </div>
-                        <div class="col-12 col-xl-auto">
-                            <div class="d-flex align-items-center">
-                                <span class="mb-3 mb-xl-0 mx-2 material-symbols-rounded">group</span>
-                                <p class="mb-3 mb-xl-0 mx-2">{{booking.attendees}} Asistentes</p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-auto">
-                            <div class="d-flex align-items-center">
-                                <p class="mb-3 mb-xl-0 mx-2 material-symbols-rounded">stairs_2</p>
-                                <p class="mb-3 mb-xl-0 mx-2">Piso {{getRoomInfo(booking.roomId)!.location}}</p>
-                            </div>
+                        <div class="d-flex align-items-center">
+                            <span class="material-symbols-rounded mx-2">stairs_2</span>
+                            <span class="mx-2">Piso {{getRoomInfo(booking.roomId)?.location}}</span>
                         </div>
                     </div>
                 </div>
@@ -44,7 +36,7 @@
         </div>
     </div>
     <!-- Alerta -->
-    <div *ngIf="!loggedInUserBookings === null || bookings.length < 0" class="alert alert-info text-center" role="alert"
+    <div *ngIf="!hasBookings" class="alert alert-info text-center" role="alert"
         data-bs-theme="dark"> Aun no tienes reservas.</div>
 </section>
 
@@ -54,7 +46,7 @@
     <div modal-body>
         <div class="text-center">
             <p>¿Está seguro que desea cancelar la reserva?</p>
-            <p class="mb-0 fw-semibold">#{{selectedBooking?.id}} - {{ selectedBookingRoomName }}</p>
+            <p class="mb-0 fw-semibold">#{{selectedBooking?.timestamp}} - {{ selectedBookingRoomName }}</p>
         </div>
     </div>
     <div modal-footer>

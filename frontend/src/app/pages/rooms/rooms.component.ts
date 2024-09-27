@@ -43,6 +43,14 @@ export class RoomsComponent {
     this.loadRooms();
   }
 
+    //Borra los modals cuando destruye el componente
+    ngOnDestroy(){
+      this.modalService.unregisterModal('addRoomModal')
+      this.modalService.unregisterModal('editRoomModal')
+      this.modalService.unregisterModal('deleteRoomModal')
+    }
+    
+
   //Actualiza lista de rooms
   loadRooms() {
     this.roomsLoading = true;

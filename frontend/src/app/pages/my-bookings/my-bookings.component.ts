@@ -24,7 +24,7 @@ export class MyBookingsComponent {
   selectedBooking: Booking | null = null;
   selectedBookingRoomName?: string | null = null;
 
-  loggedInUserBookings?: Booking[] | null = null;
+  hasBookings = false;
 
 
   constructor(private apiService: ApiService, private modalService: ModalService) { }
@@ -36,6 +36,12 @@ export class MyBookingsComponent {
     this.getAllRooms();
     this.loadBookings();
   };
+
+  ngOnDestroy(){
+    this.modalService.closeModal('deleteBookingModal')
+    this.modalService.unregisterModal('deleteBookingModal')
+  }
+  
 
   //Obtiene usuario guardado en localstorage
   getLoggedInUser() {
@@ -61,6 +67,7 @@ export class MyBookingsComponent {
     this.apiService.getBookingsByUsernameRequest(user).subscribe((response: ApiResponse) => {
       if (response.status === 200) {
         this.bookings = response.body;
+        this.hasBookings = this.bookings.length > 0;
       } else {
         console.log(response);
       }

@@ -57,6 +57,14 @@ export class UsersComponent {
     this.loadUsers();
   }
 
+  //Borra los modals cuando destruye el componente
+  ngOnDestroy(){
+    this.modalService.unregisterModal('addModal')
+    this.modalService.unregisterModal('deleteModal')
+    this.modalService.unregisterModal('editModal')
+  }
+  
+
   //Actualiza lista de usuarios
   loadUsers() {
     this.usersLoading = true;

@@ -28,6 +28,12 @@ export class ModalService {
     }
   }
 
+  unregisterModal(id: string) {
+    if (this.modals[id]) {
+      delete this.modals[id];
+    }
+  }
+
   // Obtener el estado del modal (abierto o cerrado)
   getModalState(id: string) {
     return this.modals[id]?.asObservable();
