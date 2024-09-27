@@ -71,8 +71,7 @@ export class BookingsComponent {
       priority: 1,
     });
 
-    this.getAllRooms();
-    this.selectionPropsInit();
+
   }
 
   ngOnInit() {
@@ -80,9 +79,8 @@ export class BookingsComponent {
     if (this.authService.isAuthenticated()) {
       this.authService.redirect(['/bookings'])
     }
-
     this.initialFilterValues = this.roomFilters.value;
-    this.filterRooms();
+    this.getAllRooms();
   }
 
   selectionPropsInit() {
@@ -105,6 +103,8 @@ export class BookingsComponent {
     this.apiService.getAllRoomsRequest().subscribe((response: ApiResponse) => {
       if (response.status === 200) {
         this.rooms = response.body;
+        this.selectionPropsInit();
+        this.filterRooms();
       } else {
         console.log(response);
       }
@@ -168,9 +168,8 @@ export class BookingsComponent {
       return { ...room, conflicts: conflictingBookings.length };
     });
     this.sortByConflictOrCapacity();
-    console.log(this.rooms);
+    console.log('Salas ordenadas')
   }
-
 
 
 
@@ -225,7 +224,6 @@ export class BookingsComponent {
     this.roomsSelected = false;
     this.selectionPropsInit()
     console.log('Seleccion disuelta')
-    console.log(this.rooms)
   }
 
 

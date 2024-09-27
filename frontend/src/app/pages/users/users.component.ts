@@ -89,12 +89,13 @@ export class UsersComponent {
       if (response.status === 201) {
         this.loadUsers();
         this.closeModal('addModal')
+        console.log('Usuario creado correctamente.')
         //toast success
       } else {
         //toast error
         this.addUserForm.markAllAsTouched();
         this.invalidForm = response?.error;
-        console.log(response);
+        console.log(this.invalidForm);
       }
     })
   }
