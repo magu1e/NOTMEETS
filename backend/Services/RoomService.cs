@@ -46,34 +46,6 @@ namespace backend.Services
         }
 
 
-
-        //public UserDTO GetUserById(int id)
-        //{
-        //    var user = _userRepository.GetUserById(id);
-        //    if (user == null)
-        //    {
-        //        throw new KeyNotFoundException("No se ha encontrado el usuario.");
-        //    }
-        //    return user;
-        //}
-
-
-
-        //public IEnumerable<UserDTO> GetAllUsers()
-        //{
-        //    var users = _userRepository.GetAllUsers();
-        //    if (!users.Any())
-        //    {
-        //        throw new KeyNotFoundException("No hay usuarios cargados.");
-        //    }
-        //    return users;
-        //}
-
-
-
-
-
-
         public async Task<RoomDTO> UpdateRoomAsync(RoomDTO roomDto)
         {
             //Validaciones ??

@@ -117,9 +117,9 @@ export class ApiService {
       );
   }
 
-  //Register
+  //Add
   addRoomRequest(room: any): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.roomsUrl}`, room, { observe: 'response' })
+    return this.http.post<ApiResponse>(`${this.roomsUrl}`, room, { observe: 'response' })
       .pipe(
         catchError(error => {
           return of({ status: error.status, error: error.error } as ApiResponse);
@@ -129,7 +129,7 @@ export class ApiService {
 
   //Update
   updateRoomRequest(room: any): Observable<ApiResponse> {
-    return this.http.post(`${this.roomsUrl}`, room, { observe: 'response' })
+    return this.http.put<ApiResponse>(`${this.roomsUrl}/${room.id}`, room, { observe: 'response' })
       .pipe(
         catchError(error => {
           return of({ status: error.status, error: error.error } as ApiResponse);

@@ -102,7 +102,7 @@ namespace backend.Repositories
             var room = await _context.Rooms.FindAsync(roomDto.Id);
             if (room == null)
             {
-                throw new KeyNotFoundException($"Room with ID {roomDto.Id} not found.");
+                throw new KeyNotFoundException($"La sala con ID {roomDto.Id} no existe.");
             }
 
             room.Name = roomDto.Name;

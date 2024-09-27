@@ -39,17 +39,17 @@ export class RoomsComponent {
   };
 
   ngOnInit() {
-    //Request lista de usuarios
+    //Request lista de rooms
     this.loadRooms();
   }
 
-  //Actualiza lista de usuarios
+  //Actualiza lista de rooms
   loadRooms() {
     this.roomsLoading = true;
     this.getAllRoomsRequest();
   }
 
-  //Obtener la lista de usuarios
+  //Obtener la lista de rooms
   getAllRoomsRequest() {
     this.apiService.getAllRoomsRequest().subscribe((response: ApiResponse) => {
       if (response.status === 200) {
@@ -70,10 +70,10 @@ export class RoomsComponent {
       capacity: capacity
     };
     this.apiService.registerRequest(updatedRoom).subscribe((response: ApiResponse) => {
-      if (response.status === 201) {
+      if (response.status === 200) {
         this.loadRooms();
-        this.closeModal('addModal')
-        console.log('Usuario creado correctamente.')
+        this.closeModal('addRoomModal')
+        console.log('Sala creada correctamente.')
         //toast success
       } else {
         //toast error
@@ -84,9 +84,9 @@ export class RoomsComponent {
     })
   }
 
-  //Editar usuario
+  //Editar room
   editRoom(room: Rooms) {
-    const { name,  location, capacity} = this.editRoomForm.value
+    const { name, location, capacity } = this.editRoomForm.value;
     const updatedRoom: any = {
       id: room.id,
       name: name,
@@ -97,7 +97,7 @@ export class RoomsComponent {
       if (response.status === 200) {
         this.loadRooms();
         this.clearSelectedRoom();
-        this.closeModal('editModal')
+        this.closeModal('editRoomModal');
         console.log('Los datos de la sala se han actualizado.');
         //toast success
       } else {
@@ -105,30 +105,30 @@ export class RoomsComponent {
         this.editRoomForm.markAllAsTouched();
         console.log(response);
       }
-    })
+    });
   }
 
-  //Borrar usuario
+  //Borrar room
   deleteRoom(roomId: number) {
     this.apiService.deleteRoomRequest(roomId).subscribe((response: ApiResponse) => {
-      console.log(roomId)
       if (response.status === 200) {
         this.loadRooms();
         this.clearSelectedRoom();
-        this.closeModal('deleteModal')
+        this.closeModal('deleteRoomModal');
         console.log('La sala se ha eliminado');
         //toast success
       } else {
         //toast error
         console.log(response);
       }
-    })
+    });
   }
 
 
   //Modals
   closeModal(id: string) {
     this.modalService.closeModal(id);
+    console.log(id)
     setTimeout(() => { //Espera que complete la animacion de cierre para limpiar los campos
       this.resetAddForm();
     }, 150)
@@ -149,23 +149,26 @@ export class RoomsComponent {
   }
 
   openModalAddRoom() {
-    this.modalService.openModal('addModal');
+    this.modalService.openModal('addRoomModal');
   }
 
   openModalEditRoom(room: Rooms) {
-    //Inicializa el form con los datos del usuario
+    //Inicializa el form con los datos del room
     this.selectedRoom = room;
     this.editRoomForm.patchValue({
+      id: room.id,
       name: room.name,
       location: room.location,
       capacity: room.capacity
     });
-    this.modalService.openModal('editModal');
+    console.log()
+    this.modalService.openModal('editRoomModal');
   }
 
   openModalDeleteRoom(room: Rooms) {
-    this.selectedRoom = room; // Guarda el usuario seleccionado
-    this.modalService.openModal('deleteModal');
+    this.selectedRoom = room; // Guarda el room seleccionado
+    console.log(this.selectedRoom)
+    this.modalService.openModal('deleteRoomModal');
   }
 
 

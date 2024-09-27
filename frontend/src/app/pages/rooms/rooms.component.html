@@ -59,7 +59,7 @@
 
 
 <!-- Modal Crear -->
-<app-modal id="addModal" [title]="'Crear sala'" #addModal (click)="closeModal('addModal')">
+<app-modal id="addRoomModal" [title]="'Crear sala'" #addRoomModal (click)="closeModal('addRoomModal')">
     <div modal-body>
         <form [formGroup]="addRoomForm">
             <div class="row">
@@ -67,7 +67,7 @@
                     <div class="form-floating mb-3">
                         <input formControlName="name" id="addForm-name" type="text"
                             [ngClass]="{'is-invalid' : hasError(addRoomForm, 'name')}" class="form-control mb-2"
-                            placeholder="name" required>
+                            placeholder="Nombre" required>
                         <label for="addForm-name">Nombre</label>
                         <small *ngIf="hasError(addRoomForm, 'name','required')" class="text-danger">El nombre es requerido.</small>
                     </div>
@@ -88,7 +88,7 @@
                     <div class="form-floating">
                         <input formControlName="capacity" id="addForm-capacity" type="number"
                             [ngClass]="{'is-invalid' : hasError(addRoomForm, 'capacity')}" class="form-control mb-2"
-                            placeholder="capacity" required>
+                            placeholder="Capacidad" required>
                         <label for="addForm-capacity">Capacidad</label>
                         <small *ngIf="hasError(addRoomForm, 'capacity', 'required')" class="text-danger">La capacidad es requerida.</small>
                     </div>
@@ -100,13 +100,13 @@
         </form>
     </div>
     <div modal-footer>
-        <button type="button" class="btn btn-dark me-3" (click)="closeModal('addModal')">Cancelar</button>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('addRoomModal')">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="addRoom()">Crear</button>
     </div>
 </app-modal>
 
 <!-- Modal Edit -->
-<app-modal id="editModal" [title]="'Editar sala'" #editModal>
+<app-modal id="editRoomModal" [title]="'Editar sala'" #editRoomModal (click)="closeModal('editRoomModal')">
     <div modal-body>
         <form [formGroup]="editRoomForm">
             <div class="row">
@@ -114,7 +114,7 @@
                     <div class="form-floating mb-3">
                         <input formControlName="name" id="editForm-name" type="text"
                             [ngClass]="{'is-invalid' : hasError(editRoomForm, 'name')}" class="form-control mb-2"
-                            placeholder="name" required>
+                            placeholder="Nombre" required>
                         <label for="editForm-name">Nombre</label>
                         <small *ngIf="hasError(editRoomForm, 'name','required')" class="text-danger">El nombre es
                             requerido.</small>
@@ -136,7 +136,7 @@
                     <div class="form-floating mb-3">
                         <input formControlName="capacity" id="editForm-capacity" type="number"
                             [ngClass]="{'is-invalid' : hasError(editRoomForm, 'capacity')}" class="form-control mb-2"
-                            placeholder="capacity" required>
+                            placeholder="Capacidad" required>
                         <label for="editForm-capacity">Capacidad</label>
                         <div *ngIf="hasError(editRoomForm, 'capacity')">
                             <small *ngIf="hasError(editRoomForm, 'capacity', 'required')" class="text-danger">La
@@ -148,13 +148,13 @@
         </form>
     </div>
     <div modal-footer>
-        <button type="button" class="btn btn-dark me-3" (click)="closeModal('editModal')">Cancelar</button>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('editRoomModal')">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="editRoom(selectedRoom!)">Guardar</button>
     </div>
 </app-modal>
 
 <!-- Modal Delete -->
-<app-modal id="deleteModal" [title]="'Eliminar sala'" #deleteModal>
+<app-modal id="deleteRoomModal" [title]="'Eliminar sala'" #deleteRoomModal (click)="closeModal('deleteRoomModal')">
     <div modal-body>
         <div class="text-center">
             <p>¿Está seguro que desea eliminar la sala?</p>
@@ -162,7 +162,7 @@
         </div>
     </div>
     <div modal-footer>
-        <button type="button" class="btn btn-dark me-3" (click)="closeModal('deleteModal')">Cancelar</button>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('deleteRoomModal')">Cancelar</button>
         <button type="button" class="btn btn-danger" (click)="deleteRoom(selectedRoom!.id)">Eliminar</button>
     </div>
 </app-modal>
