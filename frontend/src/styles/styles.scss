@@ -372,9 +372,9 @@ body {
   }
   #room-info {
     > :not(:first-child){
-      margin-left: .5rem;
-      padding-left: .5rem;
-      border-left: 1px solid  $white;
+      @media (min-width: 1400px)  {
+        border-left: 1px solid  $white;
+      }
     }
   }
 }
