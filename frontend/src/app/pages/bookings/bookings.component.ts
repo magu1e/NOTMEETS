@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { roomsMock } from './salasMock';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiService, ApiResponse } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
@@ -70,8 +69,6 @@ export class BookingsComponent {
     this.booking = this.formBuilder.group({
       priority: 1,
     });
-
-
   }
 
   ngOnInit() {

@@ -1,37 +1,52 @@
 <section id="my-bookings" class="pb-5">
     <h1 class="my-4">Mis reservas</h1>
-        <div *ngFor="let booking of bookingsMock; let j = index" class="card mb-3">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <div class="d-flex align-items-center mb-2">
-                            <h3 class="mb-0 me-3">Reserva #{{booking.timestamp}}</h3>
-                            <span 
-                                class="badge"
-                                [ngClass]="getPriority(booking.priority).className">
-                                    {{getPriority(booking.priority).label}}
-                            </span>
+    <div *ngFor="let booking of bookings; let i = index" class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center mb-2">
+                        <h3 class="mb-0 me-3">Reserva #{{booking.timestamp}}</h3>
+                        <span class="badge" [ngClass]="getPriority(booking.priority).className">
+                            {{getPriority(booking.priority).label}}
+                        </span>
+                    </div>
+                    <div id="room-info" class="d-flex align-items-center">
+                        <span class="fw-semibold me-2">{{ getRoomName( booking.roomId) }}</span>
+                        <div class="d-flex align-items-center">
+                            <span class="mx-2">{{formatDate(booking.startDate)}}</span>
+                            <span class="material-symbols-rounded mx-2">arrow_right_alt</span>
+                            <span class="mx-2">{{formatDate(booking.endDate)}}</span>
                         </div>
-                        <div id="room-info" class="d-flex align-items-center">
-                            <span class="fw-semibold me-2">{{ getRoomName( booking.roomId) }}</span>
-                            <div class="d-flex align-items-center">
-                                <span class="mx-2">{{formatDate(booking.startDate)}}</span>
-                                <span class="material-symbols-rounded mx-2">arrow_right_alt</span>
-                                <span class="mx-2">{{formatDate(booking.endDate)}}</span>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <span class="material-symbols-rounded mx-2">group</span>
-                                <span class="mx-2">{{booking.attendees}} Asistentes</span>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <span class="material-symbols-rounded mx-2">stairs_2</span>
-                                <span class="mx-2">Piso {{getRoomInfo(booking.roomId).location}}</span>
-                            </div>
+                        <div class="d-flex align-items-center">
+                            <span class="material-symbols-rounded mx-2">group</span>
+                            <span class="mx-2">{{booking.attendees}} Asistentes</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="material-symbols-rounded mx-2">stairs_2</span>
+                            <span class="mx-2">Piso {{getRoomInfo(booking.roomId)!.location}}</span>
                         </div>
                     </div>
-                    <button class="btn btn-dark btn-sm">Cancelar reserva</button>
                 </div>
+                <button class="btn btn-dark btn-sm" (click)="openModalCancelBooking(booking)">Cancelar reserva</button>
             </div>
         </div>
-
+    </div>
+    <!-- Alerta -->
+    <div *ngIf="!loggedInUserBookings === null || bookings.length < 0" class="alert alert-info text-center" role="alert"
+        data-bs-theme="dark"> Aun no tienes reservas.</div>
 </section>
+
+
+<!-- Modal Delete -->
+<app-modal id="deleteBookingModal" [title]="'Cancelar reserva'" #deleteBookingModal>
+    <div modal-body>
+        <div class="text-center">
+            <p>¿Está seguro que desea cancelar la reserva?</p>
+            <p class="mb-0 fw-semibold">#{{selectedBooking?.id}} - {{ selectedBookingRoomName }}</p>
+        </div>
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('deleteBookingModal')">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="cancelBooking(selectedBooking!.id)">Eliminar</button>
+    </div>
+</app-modal>

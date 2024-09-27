@@ -103,6 +103,27 @@ export class ApiService {
       );
   }
 
+  //DeleteBooking
+  deleteBookingRequest(bookingId: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.bookingUrl}/delete/${bookingId}`, { observe: 'response' })
+      .pipe(
+        catchError((error) => {
+          console.error('Error en la eliminación de la reserva:', error);
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+
+  //GetBookingByUsername
+  getBookingsByUsernameRequest(username: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.bookingUrl}/${username}`, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+
 
 
 
