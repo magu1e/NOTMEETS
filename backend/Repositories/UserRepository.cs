@@ -3,7 +3,6 @@ using backend.DTOs;
 using backend.Models;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace backend.Repositories
 {

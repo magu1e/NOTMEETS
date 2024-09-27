@@ -19,10 +19,6 @@ namespace backend.Services
 
         }
 
-        //public void CancelBooking(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public async Task<bool> AddBooking(List<AddBookingDTO> addBookingDTOs)
         {
@@ -30,10 +26,10 @@ namespace backend.Services
             {
                 throw new ArgumentException("La lista de reservas no puede estar vacía.");
             }
-   
+
             // Llamar al método AddBooking para cada AddBookingDTO individualmente
             await _bookingRepository.AddBooking(addBookingDTOs);
-            
+
 
             return true;
         }
@@ -53,7 +49,6 @@ namespace backend.Services
         }
 
 
-
         public Booking? GetBookingById(int id)
         {
             return _bookingRepository.GetBookingById(id);
@@ -64,10 +59,6 @@ namespace backend.Services
             return await _bookingRepository.GetBookingsByUsername(username);
         }
 
-        //public List<Booking> GetBookingsForRoom(int roomId)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public List<Booking> GetBookingsForRoomAtTime(int roomId, DateTime startDate, DateTime endDate)
         {
@@ -81,41 +72,21 @@ namespace backend.Services
 
 
 
-        // Método para notificar al usuario
-        //private Notification NotifyUser(User user, Booking canceledBooking)
-        //{
-        //    if (user != null)
-        //    {
-        //        // Aquí se puede implementar el envío de un correo electrónico o notificación al usuario //ver si se usa
-        //        Console.WriteLine($"Notificación enviada a {user.Email}: Su reserva ha sido cancelada.");
+// Método para notificar al usuario
+//private Notification NotifyUser(User user, Booking canceledBooking)
+//{
+//    if (user != null)
+//    {
+//        // Aquí se puede implementar el envío de un correo electrónico o notificación al usuario //ver si se usa
+//        Console.WriteLine($"Notificación enviada a {user.Email}: Su reserva ha sido cancelada.");
 
-        //        //   var newNotification = new Notification(
-        //        //       canceledBooking.User,
-        //        //       description: ($"Tus reservas de id {canceledBooking.Id} ha sido cancelada debido a otra reserva de mayor prioridad",
-        //        //       bookingId: canceledBooking.Id,
-        //        //       createdDate: DateTime.Now
+//        //   var newNotification = new Notification(
+//        //       canceledBooking.User,
+//        //       description: ($"Tus reservas de id {canceledBooking.Id} ha sido cancelada debido a otra reserva de mayor prioridad",
+//        //       bookingId: canceledBooking.Id,
+//        //       createdDate: DateTime.Now
 
-        //        //);
-        //    }
-        //}
+//        //);
+//    }
+//}
 
-        //// Métodos adicionales de la interfaz
-        // public List<Booking> GetBookingsForRoom(int roomId)
-        //{
-        // Implementar lógica para obtener todas las reservas de una sala
-        // return _bookingRepository.GetBookingsForRoomAndTime(roomId, DateTime.MinValue, DateTime.MaxValue);
-        // }
-
-        // public Booking GetBookingById(int id)
-        // {
-        // Implementar lógica para obtener una reserva por su ID
-        // return _bookingRepository.GetBookingById(id);
-        //}
-
-        //public void CancelBooking(int id)
-        // {
-        // Implementar lógica para cancelar una reserva
-        // _bookingRepository.DeleteBooking(id);
-        //}
-    }
-}

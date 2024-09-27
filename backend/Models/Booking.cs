@@ -43,12 +43,3 @@ namespace backend.Models
         }
     }
 }
-
-//TODO -> de usarse iria en BookingService/de no usarse borrar
-// Validar que el número de asistentes no exceda la capacidad de la sala
-//if (attendees > room.Capacity)
-//    {
-//        throw new ArgumentException($"El número de asistentes ({attendees}) excede la capacidad de la sala ({room.Capacity}).");
-//    }
-//    Attendees = attendees;
-//    }
