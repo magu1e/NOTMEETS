@@ -39,10 +39,19 @@ namespace backend.Services
         }
 
 
+
         public bool DeleteBooking(int id)
         {
-            throw new NotImplementedException();
+            // Valida que exista el booking y de no existir lanza excepcion y sale 
+            var user = _bookingRepository.GetBookingById(id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("No se ha encontrado la reserva.");
+            }
+            bool bookingDeleted = _bookingRepository.DeleteBooking(id);
+            return bookingDeleted;
         }
+
 
 
         public Booking? GetBookingById(int id)

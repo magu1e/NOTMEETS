@@ -115,7 +115,7 @@ namespace backend.Repositories
             if (booking != null)
             {
                 _context.Bookings.Remove(booking);
-                //_context.SaveChanges(); // Guardar cambios en la base de datos
+                _context.SaveChanges(); // Guardar cambios en la base de datos
                 return true;
             }
             return false;

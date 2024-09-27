@@ -117,7 +117,7 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            return NoContent();
+            return Ok("Reserva eliminada correctamente.");
         }
     }
 }
