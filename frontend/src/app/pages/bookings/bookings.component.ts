@@ -80,6 +80,12 @@ export class BookingsComponent {
     this.getAllRooms();
   }
 
+  ngOnDestroy(){
+    this.modalService.closeModal('modalBooking')
+    this.modalService.unregisterModal('modalBooking')
+  }
+  
+
   selectionPropsInit() {
     this.rooms.forEach((room) => {
       room['selectedDate'] = this.currentDate;

@@ -108,7 +108,6 @@ export class ApiService {
     return this.http.delete<ApiResponse>(`${this.bookingUrl}/delete/${bookingId}`, { observe: 'response' })
       .pipe(
         catchError((error) => {
-          console.error('Error en la eliminación de la reserva:', error);
           return of({ status: error.status, error: error.error } as ApiResponse);
         })
       );
