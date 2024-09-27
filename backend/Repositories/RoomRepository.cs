@@ -1,7 +1,9 @@
 ﻿using backend.Data;
 using backend.DTOs;
+using backend.Migrations;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace backend.Repositories
 {
@@ -45,28 +47,62 @@ namespace backend.Repositories
                 .Include(r => r.Bookings)
                 .Select(r => new RoomDTO
                 {
-                    RoomId = r.Id,
+                    Id = r.Id,
                     Name = r.Name,
                     Location = r.Location,
-                    Capacity = r.Capacity
-                    // Agregar Bookings si es necesario .Include(r => r.Bookings) antes del select
+                    Capacity = r.Capacity,
+                    Bookings = r.Bookings.Select(b => new AddBookingDTO
+                    (
+                        b.Id,
+                        b.StartDate,
+                        b.EndDate,
+                        b.RoomId,
+                        b.User.Username,
+                        b.Attendees,
+                        b.Priority,
+                        b.Timestamp
+                    )).ToList()
                 })
                 .ToListAsync();
         }
 
-        public async Task<Room?> GetRoomById(int id)
+
+        public async Task<RoomDTO?> GetRoomById(int id)
         {
-            return await _context.Rooms
-                .Include(r => r.Bookings) // No se si son necesarias aca, pero asi se haría en el método anterior
-                .FirstOrDefaultAsync(r => r.Id == id);
+            var room = await _context.Rooms.Include(r => r.Bookings).ThenInclude(b => b.User).FirstOrDefaultAsync(r => r.Id == id);
+            //var room = await _context.Rooms.Include(r => r.Bookings).Where(r => r.Id == id).Select(r => r).FirstOrDefaultAsync();
+            if (room != null)
+            {
+                return new RoomDTO(
+                    room.Id,
+                    room.Name,
+                    room.Location,
+                    room.Capacity,
+                    room.Bookings.Select(b => new AddBookingDTO
+                    (
+                        b.Id,
+                        b.StartDate,
+                        b.EndDate,
+                        b.RoomId,
+                        b.User.Username,
+                        b.Attendees,
+                        b.Priority,
+                        b.Timestamp
+                    )).ToList()
+                );
+            }
+            return null;
         }
+
+
+
 
         public async Task<Room> UpdateRoom(RoomDTO roomDto)
         {
-            var room = await _context.Rooms.FindAsync(roomDto.RoomId);
+            var room = await _context.Rooms.FindAsync(roomDto.Id);
             if (room == null)
             {
-                throw new KeyNotFoundException($"Room with ID {roomDto.RoomId} not found.");
+                throw new KeyNotFoundException($"Room with ID {roomDto.Id} not found.");
             }
 
             room.Name = roomDto.Name;

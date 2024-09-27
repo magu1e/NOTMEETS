@@ -12,7 +12,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20240926215327_Rooms")]
+    [Migration("20240927002024_Rooms")]
     partial class Rooms
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

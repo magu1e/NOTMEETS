@@ -10,7 +10,7 @@ namespace backend.Repositories
         Task<Room> UpdateRoom(RoomDTO roomDto);
         Task<bool> DeleteRoom(int id);
         Task<List<RoomDTO>> GetAllRooms();
-        Task<Room?> GetRoomById(int id);
+        Task<RoomDTO?> GetRoomById(int id);
 
     }
 }

@@ -3,7 +3,7 @@ namespace backend.DTOs
 {
     public class RoomDTO
     {
-        public int RoomId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = String.Empty;
         public int Location { get; set; }
         public int Capacity { get; set; }
@@ -13,7 +13,15 @@ namespace backend.DTOs
         public RoomDTO()
         {
         }
-    
+
+        public RoomDTO(int id, string name, int location, int capacity, List<AddBookingDTO> bookings)
+        {
+            Id = id;
+            Name = name;
+            Location = location;
+            Capacity = capacity;
+            Bookings = bookings.ToList();
+        }
 
         public RoomDTO(string name, int location, int capacity, List<AddBookingDTO> bookings)
         {

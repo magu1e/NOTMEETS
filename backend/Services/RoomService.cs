@@ -17,7 +17,7 @@ namespace backend.Services
             var room = await _roomRepository.AddRoom(roomDto);
             return new RoomDTO
             {
-                RoomId = room.Id,
+                Id = room.Id,
                 Name = room.Name,
                 Location = room.Location,
                 Capacity = room.Capacity
@@ -42,15 +42,37 @@ namespace backend.Services
             {
                 return null;
             }
-
-            return new RoomDTO
-            {
-                RoomId = room.Id,
-                Name = room.Name,
-                Location = room.Location,
-                Capacity = room.Capacity
-            };
+            return room;
         }
+
+
+
+        //public UserDTO GetUserById(int id)
+        //{
+        //    var user = _userRepository.GetUserById(id);
+        //    if (user == null)
+        //    {
+        //        throw new KeyNotFoundException("No se ha encontrado el usuario.");
+        //    }
+        //    return user;
+        //}
+
+
+
+        //public IEnumerable<UserDTO> GetAllUsers()
+        //{
+        //    var users = _userRepository.GetAllUsers();
+        //    if (!users.Any())
+        //    {
+        //        throw new KeyNotFoundException("No hay usuarios cargados.");
+        //    }
+        //    return users;
+        //}
+
+
+
+
+
 
         public async Task<RoomDTO> UpdateRoomAsync(RoomDTO roomDto)
         {
@@ -58,7 +80,7 @@ namespace backend.Services
             var updatedRoom = await _roomRepository.UpdateRoom(roomDto);
             return new RoomDTO
             {
-                RoomId = updatedRoom.Id,
+                Id = updatedRoom.Id,
                 Name = updatedRoom.Name,
                 Location = updatedRoom.Location,
                 Capacity = updatedRoom.Capacity

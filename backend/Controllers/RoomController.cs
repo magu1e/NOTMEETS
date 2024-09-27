@@ -45,13 +45,13 @@ namespace backend.Controllers
             }
 
             var createdRoom = await _roomService.AddRoomAsync(roomDto);
-            return CreatedAtAction(nameof(GetRoomById), new { id = createdRoom.RoomId }, createdRoom);
+            return CreatedAtAction(nameof(GetRoomById), new { id = createdRoom.Id }, createdRoom);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<RoomDTO>> UpdateRoom(int id, [FromBody] RoomDTO roomDto)
         {
-            if (id != roomDto.RoomId)
+            if (id != roomDto.Id)
             {
                 return BadRequest("Id incorrecto");
             }
@@ -80,7 +80,7 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            return NoContent();
+            return Ok(new { message = "Sala eliminada" });
         }
     }
 }

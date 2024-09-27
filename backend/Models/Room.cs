@@ -22,16 +22,16 @@ namespace backend.Models
         //public TimeSpan ClosingTime { get; set; }
 
         //Lista de reservas
-        public List<Booking> Bookings { get; set; }
+        public List<Booking> Bookings { get; set; } = new();
 
 
         // Constructor para inicializar
-        public Room(string name, int location, int capacity, List<Booking>? bookings = null)
+        public Room(string name, int location, int capacity)
         {
             Name = name;
             Location = location; 
             Capacity = capacity;
-            Bookings = bookings ?? new List<Booking>(); // Asigna la lista de reservas, si es nula crea una lista vacía
+            Bookings = new List<Booking>();
         }
 
         public Room()
