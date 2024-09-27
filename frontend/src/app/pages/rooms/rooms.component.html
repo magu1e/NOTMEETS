@@ -61,7 +61,7 @@
 <!-- Modal Crear -->
 <app-modal id="addRoomModal" [title]="'Crear sala'" #addRoomModal (click)="closeModal('addRoomModal')">
     <div modal-body>
-        <form [formGroup]="addRoomForm">
+        <form [formGroup]="addRoomForm" (ngSubmit)="addRoom()">
             <div class="row">
                 <div class="col-12">
                     <div class="form-floating mb-3">
@@ -93,22 +93,22 @@
                         <small *ngIf="hasError(addRoomForm, 'capacity', 'required')" class="text-danger">La capacidad es requerida.</small>
                     </div>
                 </div>
-                <div *ngIf="invalidForm" class="text-center mt-3">
-                    <small class="text-danger">{{ invalidForm }}</small>
+                <div *ngIf="invalidForm && invalidForm.length > 0" class="text-center mt-3">
+                    <small class="text-danger" *ngFor="let error of invalidForm">{{ error }}</small>
                 </div>
             </div>
         </form>
     </div>
     <div modal-footer>
         <button type="button" class="btn btn-dark me-3" (click)="closeModal('addRoomModal')">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="addRoom()">Crear</button>
+        <button type="submit" class="btn btn-primary" (click)="addRoom()">Crear</button>
     </div>
 </app-modal>
 
 <!-- Modal Edit -->
 <app-modal id="editRoomModal" [title]="'Editar sala'" #editRoomModal (click)="closeModal('editRoomModal')">
     <div modal-body>
-        <form [formGroup]="editRoomForm">
+        <form [formGroup]="editRoomForm" (ngSubmit)="editRoom(selectedRoom!)">
             <div class="row">
                 <div class="col-12">
                     <div class="form-floating mb-3">
@@ -139,17 +139,19 @@
                             placeholder="Capacidad" required>
                         <label for="editForm-capacity">Capacidad</label>
                         <div *ngIf="hasError(editRoomForm, 'capacity')">
-                            <small *ngIf="hasError(editRoomForm, 'capacity', 'required')" class="text-danger">La
-                                capacidad es requerida.</small>
+                            <small *ngIf="hasError(editRoomForm, 'capacity', 'required')" class="text-danger">La capacidad es requerida.</small>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div *ngIf="invalidForm && invalidForm.length > 0" class="text-center mt-3">
+                <small class="text-danger" *ngFor="let error of invalidForm">{{ error }}</small>
             </div>
         </form>
     </div>
     <div modal-footer>
         <button type="button" class="btn btn-dark me-3" (click)="closeModal('editRoomModal')">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="editRoom(selectedRoom!)">Guardar</button>
+        <button type="submit" class="btn btn-primary" (click)="editRoom(selectedRoom!)">Guardar</button>
     </div>
 </app-modal>
 
@@ -163,6 +165,6 @@
     </div>
     <div modal-footer>
         <button type="button" class="btn btn-dark me-3" (click)="closeModal('deleteRoomModal')">Cancelar</button>
-        <button type="button" class="btn btn-danger" (click)="deleteRoom(selectedRoom!.id)">Eliminar</button>
+        <button type="submit" class="btn btn-danger" (click)="deleteRoom(selectedRoom!.id)">Eliminar</button>
     </div>
 </app-modal>

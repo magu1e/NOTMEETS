@@ -22,7 +22,7 @@ export class RoomsComponent {
   selectedRoom: Rooms | null = null;
 
   addRoomForm!: FormGroup;
-  invalidForm?: string | null = null;
+  invalidForm?: any | null = null;
 
   constructor(private formBuilder: FormBuilder, private apiService: ApiService, private modalService: ModalService) {
     this.editRoomForm = this.formBuilder.group({
@@ -69,8 +69,8 @@ export class RoomsComponent {
       location: location,
       capacity: capacity
     };
-    this.apiService.registerRequest(updatedRoom).subscribe((response: ApiResponse) => {
-      if (response.status === 200) {
+    this.apiService.addRoomRequest(updatedRoom).subscribe((response: ApiResponse) => {
+      if (response.status === 201) {
         this.loadRooms();
         this.closeModal('addRoomModal')
         console.log('Sala creada correctamente.')
@@ -83,7 +83,7 @@ export class RoomsComponent {
       }
     })
   }
-
+ 
   //Editar room
   editRoom(room: Rooms) {
     const { name, location, capacity } = this.editRoomForm.value;

@@ -127,14 +127,16 @@ export class BookingsComponent {
     this.sortByConflictOrCapacity();
   }
 
-  //Ordenar las salas segun conflictos, y de no tener segun capacidad -> TODO agregar orden por cercania
+  //Ordena las salas segun conflictos, y de no tener segun capacidad
   sortByConflictOrCapacity() {
     this.rooms.sort((a, b) => {
-      const selectedCapacity = this.roomFilters.get('capacity')?.value;
-      if (a['conflicts'] === b['conflicts']) { //si ninguno tiene conflictos se fija en la capacidad
-        return Math.abs(a['capacity'] - selectedCapacity) - Math.abs(b['capacity'] - selectedCapacity);
+      // Compara el número de conflictos
+      if (a['conflicts'] !== b['conflicts']) {
+        return a['conflicts'] - b['conflicts']; // Menor número de conflictos primero
       }
-      return a['conflicts'] - b['conflicts'];
+      // Si ambos tienen el mismo número de conflictos, ordena por capacidad
+      const selectedCapacity = this.roomFilters.get('capacity')?.value || 0; // Valor por defecto 0 si no se establece capacidad
+      return Math.abs(a.capacity - selectedCapacity) - Math.abs(b.capacity - selectedCapacity);
     });
   }
 
@@ -223,6 +225,7 @@ export class BookingsComponent {
     this.selectedRooms = [];
     this.roomsSelected = false;
     this.selectionPropsInit()
+    this.sortRooms();
     console.log('Seleccion disuelta')
   }
 

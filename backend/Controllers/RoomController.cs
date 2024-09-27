@@ -41,7 +41,7 @@ namespace backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new { status = 400, message = "Hay errores en los campos" });
             }
 
             var createdRoom = await _roomService.AddRoomAsync(roomDto);
@@ -58,7 +58,7 @@ namespace backend.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new { status = 400, message = "Hay errores en los campos" });
             }
 
             try
