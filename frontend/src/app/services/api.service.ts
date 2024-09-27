@@ -85,6 +85,7 @@ export class ApiService {
 
 
 
+
   //BOOKING
   //AddBooking
   addBookingRequest(rooms: any): Observable<ApiResponse> {
@@ -95,12 +96,15 @@ export class ApiService {
           if (error.error && error.error.message) {
             return throwError(() => new Error(error.error.message));
           }
-           else {
+          else {
             return throwError(() => new Error('Ocurrió un error desconocido.'));
           }
         })
       );
   }
+
+
+
 
   //ROOMS
   //GetAllRooms
@@ -112,5 +116,35 @@ export class ApiService {
         })
       );
   }
-}
 
+  //Register
+  addRoomRequest(room: any): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.roomsUrl}`, room, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+
+  //Update
+  updateRoomRequest(room: any): Observable<ApiResponse> {
+    return this.http.post(`${this.roomsUrl}`, room, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+
+  //Delete
+  deleteRoomRequest(roomId: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.roomsUrl}/${roomId}`, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
+
+}

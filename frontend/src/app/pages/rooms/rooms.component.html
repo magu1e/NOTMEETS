@@ -1,2 +1,168 @@
+<section id="rooms">
+    <div class="card my-5">
+        <div class="card-body">
+            <div class="d-flex justify-content-between  align-items-center mb-4">
+                <h1>Salas</h1>
+                <button class="btn btn-primary" type="button" (click)="openModalAddRoom()">Crear sala</button>
+            </div>
+            <table class="table table-stripped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Ubicación</th>
+                        <th scope="col">Capacidad</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let room of rooms; let i = index">
+                        <td>
+                            #{{ room.id }}
+                        </td>
+                        <td>
+                            <span class="fw-semibold">{{ room.name }}</span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <span class="material-symbols-rounded me-2">stairs_2</span>
+                                <span>Piso {{ room.location }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <span class="material-symbols-rounded me-2">group</span>
+                                <span>{{ room.capacity }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-icon" type="button" (click)="openModalEditRoom(room)">
+                                    <span class="material-symbols-rounded">edit</span>
+                                </button>
+                                <button class="btn btn-icon" type="button" (click)="openModalDeleteRoom(room)">
+                                    <span class="material-symbols-rounded text-danger">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-<p>rooms works!</p>
+            <div *ngIf="!rooms || rooms.length < 0" class="alert alert-info text-center" role="alert"
+                data-bs-theme="dark">
+                Aun no se han creado salas.
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Modal Crear -->
+<app-modal id="addModal" [title]="'Crear sala'" #addModal (click)="closeModal('addModal')">
+    <div modal-body>
+        <form [formGroup]="addRoomForm">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input formControlName="name" id="addForm-name" type="text"
+                            [ngClass]="{'is-invalid' : hasError(addRoomForm, 'name')}" class="form-control mb-2"
+                            placeholder="name" required>
+                        <label for="addForm-name">Nombre</label>
+                        <small *ngIf="hasError(addRoomForm, 'name','required')" class="text-danger">El nombre es requerido.</small>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <select formControlName="location" id="addForm-location" class="form-select"
+                            placeholder="Ubicación" required>
+                            <option value="1">Piso 1</option>
+                            <option value="2">Piso 2</option>
+                            <option value="3">Piso 3</option>
+                            <option value="4">Piso 4</option>
+                        </select>
+                        <label for="addForm-location">Ubicación</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <input formControlName="capacity" id="addForm-capacity" type="number"
+                            [ngClass]="{'is-invalid' : hasError(addRoomForm, 'capacity')}" class="form-control mb-2"
+                            placeholder="capacity" required>
+                        <label for="addForm-capacity">Capacidad</label>
+                        <small *ngIf="hasError(addRoomForm, 'capacity', 'required')" class="text-danger">La capacidad es requerida.</small>
+                    </div>
+                </div>
+                <div *ngIf="invalidForm" class="text-center mt-3">
+                    <small class="text-danger">{{ invalidForm }}</small>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('addModal')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="addRoom()">Crear</button>
+    </div>
+</app-modal>
+
+<!-- Modal Edit -->
+<app-modal id="editModal" [title]="'Editar sala'" #editModal>
+    <div modal-body>
+        <form [formGroup]="editRoomForm">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input formControlName="name" id="editForm-name" type="text"
+                            [ngClass]="{'is-invalid' : hasError(editRoomForm, 'name')}" class="form-control mb-2"
+                            placeholder="name" required>
+                        <label for="editForm-name">Nombre</label>
+                        <small *ngIf="hasError(editRoomForm, 'name','required')" class="text-danger">El nombre es
+                            requerido.</small>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <select formControlName="location" id="editForm-location" class="form-select"
+                            placeholder="Ubicación" required>
+                            <option value="1">Piso 1</option>
+                            <option value="2">Piso 2</option>
+                            <option value="3">Piso 3</option>
+                            <option value="4">Piso 4</option>
+                        </select>
+                        <label for="editForm-location">Ubicación</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input formControlName="capacity" id="editForm-capacity" type="number"
+                            [ngClass]="{'is-invalid' : hasError(editRoomForm, 'capacity')}" class="form-control mb-2"
+                            placeholder="capacity" required>
+                        <label for="editForm-capacity">Capacidad</label>
+                        <div *ngIf="hasError(editRoomForm, 'capacity')">
+                            <small *ngIf="hasError(editRoomForm, 'capacity', 'required')" class="text-danger">La
+                                capacidad es requerida.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('editModal')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="editRoom(selectedRoom!)">Guardar</button>
+    </div>
+</app-modal>
+
+<!-- Modal Delete -->
+<app-modal id="deleteModal" [title]="'Eliminar sala'" #deleteModal>
+    <div modal-body>
+        <div class="text-center">
+            <p>¿Está seguro que desea eliminar la sala?</p>
+            <p class="mb-0 fw-semibold">#{{selectedRoom?.id}} - {{ selectedRoom?.name }}</p>
+        </div>
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-dark me-3" (click)="closeModal('deleteModal')">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="deleteRoom(selectedRoom!.id)">Eliminar</button>
+    </div>
+</app-modal>
