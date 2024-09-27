@@ -1,10 +1,10 @@
-import { COMPILER_OPTIONS, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { roomsMock } from './salasMock';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiService, ApiResponse } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { parse, format, parseISO } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { ModalService } from '../../shared/modal/modal.service';
 import { AuthService } from '../../services/auth.service';
@@ -40,7 +40,7 @@ export interface Rooms {
 
 
 export class BookingsComponent {
-  roomsMock: Rooms[] = roomsMock;
+  rooms: Rooms[] = [];
 
   //Filtros
   roomFilters!: FormGroup;
@@ -49,8 +49,8 @@ export class BookingsComponent {
   initialFilterValues!: any;
 
   //Seleccion de salas
-  filteredRooms = [...this.roomsMock]; //Inicialmente muestra en la tabla todas las salas
   selectedRooms: Rooms[] = [];
+  filteredRooms = [...this.rooms]; //Inicialmente muestra en la tabla todas las salas
   roomsSelected = false;
 
   //Seleccion de horarios
@@ -71,7 +71,8 @@ export class BookingsComponent {
       priority: 1,
     });
 
-    this.selectionPropsInit()
+    this.getAllRooms();
+    this.selectionPropsInit();
   }
 
   ngOnInit() {
@@ -79,12 +80,13 @@ export class BookingsComponent {
     if (this.authService.isAuthenticated()) {
       this.authService.redirect(['/bookings'])
     }
+
     this.initialFilterValues = this.roomFilters.value;
     this.filterRooms();
   }
 
   selectionPropsInit() {
-    this.roomsMock.forEach((room) => {
+    this.rooms.forEach((room) => {
       room['selectedDate'] = this.currentDate;
       room['selectedStartTime'] = '09:00';
       room['selectedEndTime'] = '';
@@ -97,13 +99,25 @@ export class BookingsComponent {
 
 
 
-  // SORT ROOMS
+  // ROOMS
+  //Obtener la lista de rooms
+  getAllRooms() {
+    this.apiService.getAllRoomsRequest().subscribe((response: ApiResponse) => {
+      if (response.status === 200) {
+        this.rooms = response.body;
+      } else {
+        console.log(response);
+      }
+    })
+  }
+
+
   filterRooms() {
     //Ordena segun filtros
     this.sortRooms();
     //Setea la fecha actual, si no filtra por fecha
-    this.roomsMock.forEach(room => {
-      room['selectedDate'] = this.roomFilters.get('date')?.value || this.currentDate;;
+    this.rooms.forEach(room => {
+      room['selectedDate'] = this.roomFilters.get('date')?.value || this.currentDate;
     });
   }
 
@@ -115,7 +129,7 @@ export class BookingsComponent {
 
   //Ordenar las salas segun conflictos, y de no tener segun capacidad -> TODO agregar orden por cercania
   sortByConflictOrCapacity() {
-    this.roomsMock.sort((a, b) => {
+    this.rooms.sort((a, b) => {
       const selectedCapacity = this.roomFilters.get('capacity')?.value;
       if (a['conflicts'] === b['conflicts']) { //si ninguno tiene conflictos se fija en la capacidad
         return Math.abs(a['capacity'] - selectedCapacity) - Math.abs(b['capacity'] - selectedCapacity);
@@ -139,7 +153,7 @@ export class BookingsComponent {
     const startTimestamp = this.formatDate(`${date} ${startTime}`, true)
     const endTimestamp = this.formatDate(`${date} ${endTime}`, true)
 
-    this.roomsMock = this.roomsMock.map(room => {
+    this.rooms = this.rooms.map(room => {
       const conflictingBookings = room.bookings.filter(booking => {
         const bookingStartTimestamp = this.formatDate(booking.startDate, true)
         const bookingEndTimestamp = this.formatDate(booking.endDate, true)
@@ -154,7 +168,7 @@ export class BookingsComponent {
       return { ...room, conflicts: conflictingBookings.length };
     });
     this.sortByConflictOrCapacity();
-    console.log(this.roomsMock);
+    console.log(this.rooms);
   }
 
 
@@ -211,7 +225,7 @@ export class BookingsComponent {
     this.roomsSelected = false;
     this.selectionPropsInit()
     console.log('Seleccion disuelta')
-    console.log(roomsMock)
+    console.log(this.rooms)
   }
 
 

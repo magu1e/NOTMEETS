@@ -18,7 +18,7 @@ export class ApiService {
   private baseUrl = 'https://localhost:7252/api';
   private userUrl = `${this.baseUrl}/User`;
   private bookingUrl = `${this.baseUrl}/Booking`;
-  private roomsUrl = `${this.baseUrl}/Rooms`;
+  private roomsUrl = `${this.baseUrl}/Room`;
 
   constructor(private http: HttpClient) { }
 
@@ -104,15 +104,13 @@ export class ApiService {
 
   //ROOMS
   //GetAllRooms
-  // getAllRoomsRequest(): Observable<ApiResponse> {
-  //   return this.http.get<ApiResponse>(`${this.roomsUrl}/all`, { observe: 'response' })
-  //     .pipe(
-  //       catchError(error => {
-  //         return of({ status: error.status, error: error.error } as ApiResponse);
-  //       })
-  //     );
-  // }
-
-
+  getAllRoomsRequest(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.roomsUrl}`, { observe: 'response' })
+      .pipe(
+        catchError(error => {
+          return of({ status: error.status, error: error.error } as ApiResponse);
+        })
+      );
+  }
 }
 
