@@ -65,10 +65,14 @@ namespace backend.Services
             return _bookingRepository.GetBookingsForRoomAtTime(roomId, startDate, endDate).ToList();
         }
 
-        //public Booking UpdateBooking(int id, AddBookingDTO updatedBooking)
-        //{
-        //    throw new NotImplementedException();
-        //}
+    }
+}
+
+
+//public Booking UpdateBooking(int id, AddBookingDTO updatedBooking)
+//{
+//    throw new NotImplementedException();
+//}
 
 
 
